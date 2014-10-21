@@ -91,6 +91,9 @@
     <Reference Include="NLog.Contrib">
       <HintPath>..\packages\NLog.Contrib\lib\net45\NLog.Contrib.dll</HintPath>
     </Reference>
+    <Reference Include="Topshelf">
+      <HintPath>..\packages\Topshelf\lib\net40-full\Topshelf.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="web.config" />
