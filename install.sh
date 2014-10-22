@@ -20,3 +20,6 @@ mono ".nuget\NuGet.exe" "Install" "xUnit.Runners" "-OutputDirectory" "packages" 
 mono ".nuget\NuGet.exe" "Install" "FluentAssertions" "-OutputDirectory" "packages" "-ExcludeVersion"
 mono ".nuget\NuGet.exe" "Install" "AutoFixture" "-OutputDirectory" "packages" "-ExcludeVersion"
 mono ".nuget\NuGet.exe" "Install" "Topshelf" "-OutputDirectory" "packages" "-ExcludeVersion"
+
+
+mono ".nuget\NuGet.exe" "Install" "Microsoft.AspNet.WebApi.owinSelfHost" "-OutputDirectory" "packages" "-ExcludeVersion"

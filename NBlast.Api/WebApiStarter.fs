@@ -14,4 +14,4 @@ type WebApiStarter() =
                                    "api/{controller}/{id}",
                                    {id = RouteParameter.Optional}) |> ignore
         appBuilder.UseWebApi(config) |> ignore
-        appBuilder.UseNancy() |> ignore
+        //appBuilder.UseNancy() |> ignore
