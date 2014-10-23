@@ -73,13 +73,24 @@ let main args =
         runService |> service conf
 
     let configureTopShelf f =
+        (*
+        HostFactory.Run(
+            fun conf -> 
+                conf.Service<_>(new Func<_>(
+                                    fun sv -> 
+                                        runService()
+                )) |> ignore
+
+                conf.SetDisplayName("NBlast Web Api hoster")
+                conf.SetServiceName("NBlast.WebApi.Hoster")
+                conf.RunAsLocalService() |> ignore
+
+        ) |> ignore
+        *)
         HostFactory.Run(new Action<_>(f)) |> ignore
 
-    configureTopShelf <| fun conf -> (runService |> service conf)
-    (*
-    use starter = WebApp.Start<WebApiStarter>(url)
-    Console.WriteLine("Running on {0}", url)
-    Console.WriteLine("Press enter to exit")
-    Console.ReadLine() |> ignore
-    *)
+    configureTopShelf <| fun conf -> 
+        conf.SetDisplayName("NBlast Web Api hoster")
+        conf.SetServiceName("NBlast.WebApi.Hoster")
+        (runService |> service conf)
     0
