@@ -53,7 +53,7 @@ type BackgroundJob() =
         member this.Stop hc  = _context.Value.Dispose(); true
         
 
-let logger = NLog.LogManager.GetCurrentClassLogger()
+//let logger = NLog.LogManager.GetCurrentClassLogger()
 
 [<EntryPoint>]
 let main args =
@@ -61,7 +61,6 @@ let main args =
     let service (conf : HostConfigurator) (fac : (unit -> 'a)) =
         let service' = conf.Service : Func<_> -> HostConfigurator
         service' (new Func<_>(fac)) |> ignore
-
         
     HostFactory.Run(
         fun conf -> 
