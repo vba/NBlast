@@ -5,7 +5,9 @@ open System.Runtime
 open Xunit
 open FluentAssertions
 open NBlast.Storage
+open NBlast.Storage.FileSystem
 open NBlast.Storage.Core.System
+open NBlast.Storage.Core.Exceptions
 open System.IO
 open Lucene.Net.Store
 open Lucene.Net.Util
@@ -18,36 +20,42 @@ type StorageWriterTest() =
     member this.``Writer directory must be created as expected``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let sut  = (this.MakeSut false path) :> StorageWriter 
+        let sut  = (this.MakeSut false path) 
 
         // When
-        sut.InsertOne() //|> ignore
+        sut.InsertOne()
 
         // Then
         (Directory.Exists(path)).Should().Be(true, sprintf "Storage has to create its directory in %s" path)
 
     [<Fact>]
-    member this.``Writer directory must be created and unlocked as expected``() =
+    member this.``Writer directory creation must fail trying unlock locked directory``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let sut  = (this.MakeSut true path) 
         let directory = FSDirectory.Open(new DirectoryInfo(path))
-        let analyser = new StandardAnalyzer(Version.LUCENE_30)
-        let sut  = (this.MakeSut true path) :> StorageWriter 
 
         // When
-        let writer = new IndexWriter(directory, analyser, IndexWriter.MaxFieldLength.UNLIMITED)
-        writer = null |> ignore
-        sut.InsertOne() //|> ignore
+        Directory.CreateDirectory(path) |> ignore
+        directory.MakeLock(IndexWriter.WRITE_LOCK_NAME).Obtain(0L) |> ignore
+        directory.Dispose()
 
-        // Then
-        (Directory.Exists(path))
-            .Should().Be(false, sprintf "Storage has to create and unlock its directory in %s" path) |> ignore
-        (*
-        (IndexWriter.IsLocked(directory))
-            .Should().Be(false, sprintf "Directory should be unlocked in %s" path) |> ignore
-*)
+        Assert.Throws<StorageUnlockFailedException>(sut.InsertOne) 
 
-    
-    member private this.MakeSut reopenWhenLocked path = 
+    [<Fact>]
+    member this.``Writer directory creation must fail when it's already locked``() =
+        // Given
+        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let sut  = (this.MakeSut false path) 
+        let directory = FSDirectory.Open(new DirectoryInfo(path))
+
+        // When
+        Directory.CreateDirectory(path) |> ignore
+        directory.MakeLock(IndexWriter.WRITE_LOCK_NAME).Obtain(0L) |> ignore
+        directory.Dispose()
+
+        Assert.Throws<StorageLockedException>(sut.InsertOne) //|> ignore
+
+    member private this.MakeSut reopenWhenLocked path :StorageWriter =
         new StorageWriter(reopenWhenLocked, path)
         //result

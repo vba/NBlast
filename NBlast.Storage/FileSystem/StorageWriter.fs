@@ -1,6 +1,7 @@
-﻿namespace NBlast.Storage
+﻿namespace NBlast.Storage.FileSystem
 
 open NBlast.Storage.Core
+open NBlast.Storage.Core.Exceptions
 open Lucene.Net.Analysis.Standard
 open Lucene.Net.Documents
 open Lucene.Net.QueryParsers
@@ -16,14 +17,15 @@ type StorageWriter(reopenWhenLocked: bool, path: string) =
     let directory = lazy (
         let openIndex = fun x -> FSDirectory.Open(new DirectoryInfo(x))
         let tempDirectory = openIndex path
+        let isLocked = IndexWriter.IsLocked(tempDirectory)
 
-        if (reopenWhenLocked && IndexWriter.IsLocked(tempDirectory)) then 
-            IndexWriter.Unlock(tempDirectory)
-            let lockFile = Path.Combine(tempDirectory.Directory.FullName, "write.lock")
-            if (File.Exists(lockFile)) then File.Delete(lockFile)
-        else if (IndexWriter.IsLocked(tempDirectory)) then
-            let message = sprintf "Index directory is already locked in %s" tempDirectory.Directory.FullName
-            raise(new System.InvalidOperationException(message))
+        if (reopenWhenLocked && isLocked) then
+            try
+                tempDirectory.ClearLock(IndexWriter.WRITE_LOCK_NAME) 
+            with :? System.IO.IOException | :? LockObtainFailedException -> 
+                raise(new StorageUnlockFailedException(tempDirectory.Directory.FullName))
+        else if (isLocked) then
+            raise(new StorageLockedException(tempDirectory.Directory.FullName))
         tempDirectory
     )
     do

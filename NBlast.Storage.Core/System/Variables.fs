@@ -14,3 +14,12 @@ module Variables =
             then raise(new InvalidOperationException("Impossible to go further with an empty temp path"))
         result
     )
+
+    let RealOperatingSystem = 
+        not(
+            Environment
+                .OSVersion
+                .ToString()
+                .ToUpperInvariant()
+                .Contains("WINDOWS")
+        )

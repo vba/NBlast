@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -32,7 +32,17 @@
     <ConsolePause>false</ConsolePause>
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="FileSystem\StorageWriterTest.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
+      <Name>NBlast.Storage.Core</Name>
+      <Project>{ccc4baec-229a-4676-a86a-df7da54ecfe7}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
@@ -57,23 +67,9 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog\lib\net40\NLog.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="FileSystem\StorageWriterTest.fs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
-  <ItemGroup>
-    <Folder Include="FileSystem\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage\NBlast.Storage.fsproj">
       <Project>{380FD59D-7C02-4E4D-BD30-17661159B830}</Project>
       <Name>NBlast.Storage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
-      <Project>{CCC4BAEC-229A-4676-A86A-DF7DA54ECFE7}</Project>
-      <Name>NBlast.Storage.Core</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

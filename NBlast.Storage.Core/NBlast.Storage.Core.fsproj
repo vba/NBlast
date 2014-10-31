@@ -43,6 +43,8 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="IStorageWriter.fs" />
     <Compile Include="System\Variables.fs" />
+    <Compile Include="Exceptions\StorageLockedException.fs" />
+    <Compile Include="Exceptions\StorageUnlockFailedException.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
