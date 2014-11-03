@@ -11,4 +11,4 @@ mono ".nuget\NuGet.exe" "Install" "AutoFixture" "-OutputDirectory" "packages" "-
 mono ".nuget\NuGet.exe" "Install" "Topshelf" "-OutputDirectory" "packages" "-ExcludeVersion"
 
 mono ".nuget\NuGet.exe" "Install" "Microsoft.AspNet.WebApi.owinSelfHost" "-OutputDirectory" "packages" "-ExcludeVersion"
-mono ".nuget\NuGet.exe" "Install" "Lucene.Net.Linq" "-OutputDirectory" "packages" "-ExcludeVersion"
+mono ".nuget\NuGet.exe" "Install" "Lucene.Net" "-OutputDirectory" "packages" "-ExcludeVersion"

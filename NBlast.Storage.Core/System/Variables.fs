@@ -15,6 +15,8 @@ module Variables =
         result
     )
 
+    let UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+
     let RealOperatingSystem = 
         not(
             Environment
