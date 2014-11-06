@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -32,22 +32,23 @@
     <ConsolePause>false</ConsolePause>
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Env\Variables.fs" />
+    <Compile Include="Exceptions\StorageLockedException.fs" />
+    <Compile Include="Exceptions\StorageUnlockFailedException.fs" />
+    <Compile Include="IStorageWriter.fs" />
+    <Compile Include="IStorageDocument.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\packages\Lucene.Net\lib\NET40\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="IStorageWriter.fs" />
-    <Compile Include="System\Variables.fs" />
-    <Compile Include="Exceptions\StorageLockedException.fs" />
-    <Compile Include="Exceptions\StorageUnlockFailedException.fs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
-  <ItemGroup>
-    <Folder Include="System\" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace NBlast.Storage.Core.System
+﻿namespace NBlast.Storage.Core.Env
 
 open System
 

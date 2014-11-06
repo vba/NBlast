@@ -1,5 +1,6 @@
 ﻿namespace NBlast.Storage
 
+open NBlast.Storage.Core
 open Lucene.Net.Documents
 open Lucene.Net
 open System
@@ -53,18 +54,24 @@ type DateTimeField(name        : string,
             let value = DateTools.DateToString(value, DateTools.Resolution.SECOND)
             FieldUtils.toLuceneField name value storageType
 
-type LogDocument = 
-    { message   : TextField
-      logger    : TextField
-      level     : TextField
-      error     : TextField
-      createdAt : DateTimeField }
+type LogDocument ( message   : TextField,
+                   logger    : TextField,
+                   level     : TextField,
+                   error     : TextField,
+                   createdAt : DateTimeField ) =
+    
+    member this.Message with get() = message :> IField<string>
+    member this.Logger with get() = logger :> IField<string>
+    member this.Error with get() = error :> IField<string>
+    member this.Level with get() = level :> IField<string>
+    member this.CreatedAt with get() = createdAt :> IField<DateTime>
 
-    member this.ToLuceneDocument() = 
-        let document = new Document() 
-        (this.message :> IField<string>).ToLuceneField() |> document.Add
-        (this.logger :> IField<string>).ToLuceneField() |> document.Add
-        (this.level :> IField<string>).ToLuceneField() |> document.Add
-        (this.error :> IField<string>).ToLuceneField() |> document.Add
-        (this.createdAt :> IField<DateTime>).ToLuceneField() |> document.Add
-        document
+    interface IStorageDocument with
+        member this.ToLuceneDocument() = 
+            let document = new Document() 
+            this.Message.ToLuceneField() |> document.Add
+            this.Logger.ToLuceneField() |> document.Add
+            this.Level.ToLuceneField() |> document.Add
+            this.Error.ToLuceneField() |> document.Add
+            this.CreatedAt.ToLuceneField() |> document.Add
+            document

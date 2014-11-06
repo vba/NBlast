@@ -1,5 +1,6 @@
 ﻿namespace NBlast.Storage.FileSystem
 
+open NBlast.Storage
 open NBlast.Storage.Core
 open NBlast.Storage.Core.Exceptions
 open Lucene.Net.Analysis.Standard
@@ -42,11 +43,7 @@ type StorageWriter(reopenWhenLocked: bool, path: string) =
     // add entry to index
     writer.AddDocument(doc);
     *)
-    member this.InsertOne() = 
-        let analyser = new StandardAnalyzer(Version.LUCENE_30)
+    member this.InsertOne(document: IStorageDocument) = 
+        use analyser = new StandardAnalyzer(Version.LUCENE_30)
         use writer = new IndexWriter(directory.Value, analyser, IndexWriter.MaxFieldLength.UNLIMITED)
-        let document = new Document()
-        document.Add(new Field("Id", System.Guid.NewGuid().ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED))
-        writer.AddDocument(document)
-        analyser.Close()
-        writer.Dispose()
+        writer.AddDocument(document.ToLuceneDocument())
