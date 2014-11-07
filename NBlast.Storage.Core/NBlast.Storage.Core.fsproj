@@ -40,6 +40,7 @@
     <Compile Include="Exceptions\StorageUnlockFailedException.fs" />
     <Compile Include="IStorageDocument.fs" />
     <Compile Include="IStorageWriter.fs" />
+    <Compile Include="IStorageReader.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Lucene.Net">
