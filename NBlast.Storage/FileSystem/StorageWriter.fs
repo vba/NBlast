@@ -43,7 +43,9 @@ type StorageWriter(reopenWhenLocked: bool, path: string) =
     // add entry to index
     writer.AddDocument(doc);
     *)
-    member this.InsertOne(document: IStorageDocument) = 
-        use analyser = new StandardAnalyzer(Version.LUCENE_30)
-        use writer = new IndexWriter(directory.Value, analyser, IndexWriter.MaxFieldLength.UNLIMITED)
-        writer.AddDocument(document.ToLuceneDocument())
+
+    interface IStorageWriter with
+        member this.InsertOne(document: IStorageDocument) = 
+            use analyser = new StandardAnalyzer(Version.LUCENE_30)
+            use writer = new IndexWriter(directory.Value, analyser, IndexWriter.MaxFieldLength.UNLIMITED)
+            writer.AddDocument(document.ToLuceneDocument())

@@ -2,5 +2,6 @@
 
 open Lucene.Net.Documents
 
-type IStorageDocument = 
+type IStorageDocument = interface
     abstract member ToLuceneDocument : unit -> Document
+end
