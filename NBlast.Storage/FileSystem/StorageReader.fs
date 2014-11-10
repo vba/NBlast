@@ -2,11 +2,15 @@
 
 open System.IO
 open Lucene.Net
+open Lucene.Net.QueryParsers
+open Lucene.Net.Util
 open Lucene.Net.Search
 open Lucene.Net.Store
+open Lucene.Net.Analysis.Standard
 
 type StorageReader(path: string) = 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
+    static let version = Version.LUCENE_30
     let directory = lazy(FSDirectory.Open(new DirectoryInfo(path)))
 (*
 private static IEnumerable<SampleData> _search
@@ -44,6 +48,11 @@ private static IEnumerable<SampleData> _search
     }
 } 
 *)
-    member this.Search() =
+    member this.Search fieldName query =
+        use indexSearcher = new IndexSearcher(directory.Value, true)
+        use analyser = new StandardAnalyzer(version)
+        
+        let parser = new QueryParser(version, fieldName, analyser)
+        //new QueryParser(Version.LUCENE_30) 
         0
 
