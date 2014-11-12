@@ -7,6 +7,15 @@ open Lucene.Net.Util
 open Lucene.Net.Search
 open Lucene.Net.Store
 open Lucene.Net.Analysis.Standard
+open Lucene.Net.Linq.Fluent
+
+type LogDocumentHit = 
+    { Sender: string
+      Error: string
+      Message: string
+      Boost: float32
+      Score: float
+      Content: string }
 
 type StorageReader(path: string) = 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
@@ -17,7 +26,6 @@ type StorageReader(path: string) =
             parser.Parse(query)
         with
             | :? ParseException -> parser.Parse(QueryParser.Escape(query.Trim()))
-
 
     let directory = lazy(FSDirectory.Open(new DirectoryInfo(path)))
 (*
@@ -58,6 +66,11 @@ private static IEnumerable<SampleData> _search
 *)
 
     member this.GetAllRecords () =
+        let map = new ClassMap<LogDocumentHit>(version)
+        map.Property(fun hit -> hit.Content :> obj).AnalyzeWith(new StandardAnalyzer(version)) |> ignore
+        map.Score(fun hit -> hit.Score :> obj)
+        map.DocumentBoost(fun hit -> hit.Boost)
+        
         []
 
     member this.Search fieldName query =
