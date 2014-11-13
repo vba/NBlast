@@ -1,7 +1,9 @@
 ﻿namespace NBlast.Storage.FileSystem
 
 open System.IO
+open System.Linq
 open Lucene.Net
+open Lucene.Net.Linq
 open Lucene.Net.QueryParsers
 open Lucene.Net.Util
 open Lucene.Net.Search
@@ -20,6 +22,7 @@ type LogDocumentHit =
 type StorageReader(path: string) = 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     static let version = Version.LUCENE_30
+    static let paginationAmount = 15
 
     static let _parseQuery = fun query (parser: QueryParser) ->
         try
@@ -63,22 +66,35 @@ private static IEnumerable<SampleData> _search
         }
     }
 } 
+
+
+
 *)
 
     member this.GetAllRecords () =
-        let map = new ClassMap<LogDocumentHit>(version)
-        map.Property(fun hit -> hit.Content :> obj).AnalyzeWith(new StandardAnalyzer(version)) |> ignore
-        map.Score(fun hit -> hit.Score :> obj)
-        map.DocumentBoost(fun hit -> hit.Boost)
-        
         []
 
-    member this.Search fieldName query =
+
+    member this.Search (fieldName, query, page) =
         use indexSearcher = new IndexSearcher(directory.Value, true)
         use analyzer = new StandardAnalyzer(version)
-
         let query = _parseQuery query (new QueryParser(version, fieldName, analyzer))
-        let docs = indexSearcher.Search(query, null, System.Int32.MaxValue, Sort.RELEVANCE).ScoreDocs
+        let itemsAmount = (page + 1) * paginationAmount
+        let topDocs = indexSearcher.Search(query, null, itemsAmount, Sort.RELEVANCE)
+        
+        let k = seq {
+            for i in ((page * paginationAmount) + 1) .. (if (paginationAmount < topDocs.TotalHits) 
+                                                            then (page + 1) * paginationAmount 
+                                                            else topDocs.TotalHits ) 
+            -> i
+        }
+
+        // seq {for i in ((page * 10)+1) ..  (if ((page + 1)*10 < total) then (page + 1)*10 else total) -> i} ;;
+        //let take = if (totalSkip >= paginationAmount) then paginationAmount else totalSkip
+
+        //seq {for i in skip to  }
         //new QueryParser(Version.LUCENE_30) 
         []
+
+    member this.Search (fieldName, query) = this.Search(fieldName, query, 1)
 
