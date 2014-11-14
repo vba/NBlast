@@ -3,8 +3,6 @@
 open NBlast.Storage.Core
 open Lucene.Net.Documents
 open Lucene.Net
-open Lucene.Net.Linq
-open Lucene.Net.Linq.Mapping
 open System
 
 type StorageType = 

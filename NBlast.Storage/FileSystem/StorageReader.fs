@@ -3,26 +3,32 @@
 open System.IO
 open System.Linq
 open Lucene.Net
-open Lucene.Net.Linq
+open NBlast.Storage
+open NBlast.Storage.Core
 open Lucene.Net.QueryParsers
 open Lucene.Net.Util
 open Lucene.Net.Search
+open Lucene.Net.Documents
 open Lucene.Net.Store
 open Lucene.Net.Analysis.Standard
-open Lucene.Net.Linq.Fluent
+open Lucene.Net.Index
 
 type LogDocumentHit = 
     { Sender: string
       Error: string
       Message: string
+      Logger: string
+      Level: string
       Boost: float32
-      Score: float
-      Content: string }
+      CreatedAt: System.DateTime
+      Score: float32 }
 
 type StorageReader(path: string) = 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     static let version = Version.LUCENE_30
     static let itemsPerPage = 15
+    
+    let paginator = new Paginator() :> IPaginator
 
     static let _parseQuery = fun query (parser: QueryParser) ->
         try
@@ -42,16 +48,6 @@ private static IEnumerable<SampleData> _search
         var hits_limit = 1000;
         var analyzer = new StandardAnalyzer(Version.LUCENE_30);
 
-        // search by single field
-        if (!string.IsNullOrEmpty(searchField)) {
-            var parser = new QueryParser(Version.LUCENE_30, searchField, analyzer);
-            var query = parseQuery(searchQuery, parser);
-            var hits = searcher.Search(query, hits_limit).ScoreDocs;
-            var results = _mapLuceneToDataList(hits, searcher);
-            analyzer.Close();            
-            searcher.Dispose();
-            return results;
-        }
         // search by multiple fields (ordered by RELEVANCE)
         else {
             var parser = new MultiFieldQueryParser
@@ -74,6 +70,20 @@ private static IEnumerable<SampleData> _search
     member this.GetAllRecords () =
         []
 
+    member private this.HitToDocument (pair: Document * float32) = 
+        let doc = fst pair
+        let score = snd pair
+        { 
+          Score     = score; 
+          Boost     = doc.Boost;
+          Sender    = doc.Get("sender");
+          Error     = doc.Get("error");
+          Message   = doc.Get("message");
+          Logger    = doc.Get("logger");
+          Level     = doc.Get("level");
+          CreatedAt = DateTools.StringToDate(doc.Get("createdAt"));
+        }
+        
 
     member this.Search (fieldName, query, ?skipOp, ?takeOp) =
         use indexSearcher = new IndexSearcher(directory.Value, true)
@@ -82,14 +92,13 @@ private static IEnumerable<SampleData> _search
         let skip = if(skipOp.IsNone) then 0 else skipOp.Value
         let take = if(takeOp.IsNone) then itemsPerPage else takeOp.Value
         let topDocs = indexSearcher.Search(query, null, skip + take, Sort.RELEVANCE)
-       
+        let getHit = fun (id) -> 
+            let sd = topDocs.ScoreDocs.[id] 
+            (indexSearcher.Doc(sd.Doc), sd.Score)        
 
-        // seq {for i in ((page * 10)+1) ..  (if ((page + 1)*10 < total) then (page + 1)*10 else total) -> i} ;;
-        //let take = if (totalSkip >= paginationAmount) then paginationAmount else totalSkip
+        let hitsSection = paginator.GetFollowingSection skip take topDocs.TotalHits 
 
-        //seq {for i in skip to  }
-        //new QueryParser(Version.LUCENE_30) 
-        []
+        hitsSection |> Seq.map (getHit >> this.HitToDocument) |> Seq.toList
 
-    member this.Search (fieldName, query) = this.Search(fieldName, query, 1)
+    //member this.Search (fieldName, query) = this.Search(fieldName, query, 0, itemsPerPage)
 
