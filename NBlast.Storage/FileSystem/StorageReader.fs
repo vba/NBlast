@@ -22,7 +22,7 @@ type LogDocumentHit =
 type StorageReader(path: string) = 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     static let version = Version.LUCENE_30
-    static let paginationAmount = 15
+    static let itemsPerPage = 15
 
     static let _parseQuery = fun query (parser: QueryParser) ->
         try
@@ -75,19 +75,14 @@ private static IEnumerable<SampleData> _search
         []
 
 
-    member this.Search (fieldName, query, page) =
+    member this.Search (fieldName, query, ?skipOp, ?takeOp) =
         use indexSearcher = new IndexSearcher(directory.Value, true)
         use analyzer = new StandardAnalyzer(version)
         let query = _parseQuery query (new QueryParser(version, fieldName, analyzer))
-        let itemsAmount = (page + 1) * paginationAmount
-        let topDocs = indexSearcher.Search(query, null, itemsAmount, Sort.RELEVANCE)
-        
-        let k = seq {
-            for i in ((page * paginationAmount) + 1) .. (if (paginationAmount < topDocs.TotalHits) 
-                                                            then (page + 1) * paginationAmount 
-                                                            else topDocs.TotalHits ) 
-            -> i
-        }
+        let skip = if(skipOp.IsNone) then 0 else skipOp.Value
+        let take = if(takeOp.IsNone) then itemsPerPage else takeOp.Value
+        let topDocs = indexSearcher.Search(query, null, skip + take, Sort.RELEVANCE)
+       
 
         // seq {for i in ((page * 10)+1) ..  (if ((page + 1)*10 < total) then (page + 1)*10 else total) -> i} ;;
         //let take = if (totalSkip >= paginationAmount) then paginationAmount else totalSkip
