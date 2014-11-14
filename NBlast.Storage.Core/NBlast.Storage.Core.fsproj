@@ -38,6 +38,7 @@
     <Compile Include="Env\Variables.fs" />
     <Compile Include="Exceptions\StorageLockedException.fs" />
     <Compile Include="Exceptions\StorageUnlockFailedException.fs" />
+    <Compile Include="LogDocumentHit.fs" />
     <Compile Include="IStorageDocument.fs" />
     <Compile Include="IStorageWriter.fs" />
     <Compile Include="IStorageReader.fs" />

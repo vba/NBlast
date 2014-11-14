@@ -13,16 +13,6 @@ open Lucene.Net.Store
 open Lucene.Net.Analysis.Standard
 open Lucene.Net.Index
 
-type LogDocumentHit = 
-    { Sender: string
-      Error: string
-      Message: string
-      Logger: string
-      Level: string
-      Boost: float32
-      CreatedAt: System.DateTime
-      Score: float32 }
-
 type StorageReader(path: string) = 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     static let version = Version.LUCENE_30
@@ -62,9 +52,6 @@ private static IEnumerable<SampleData> _search
         }
     }
 } 
-
-
-
 *)
 
     member this.GetAllRecords () =
@@ -84,21 +71,20 @@ private static IEnumerable<SampleData> _search
           CreatedAt = DateTools.StringToDate(doc.Get("createdAt"));
         }
         
+    interface IStorageReader with
+        member this.Search fieldName query skipOp takeOp =
+            use indexSearcher = new IndexSearcher(directory.Value, true)
+            use analyzer = new StandardAnalyzer(version)
+            let query = _parseQuery query (new QueryParser(version, fieldName, analyzer))
+            let skip = if(skipOp.IsNone) then 0 else skipOp.Value
+            let take = if(takeOp.IsNone) then itemsPerPage else takeOp.Value
+            let topDocs = indexSearcher.Search(query, null, skip + take, Sort.RELEVANCE)
+            let getHit = fun (id) -> 
+                let sd = topDocs.ScoreDocs.[id] 
+                (indexSearcher.Doc(sd.Doc), sd.Score)        
 
-    member this.Search (fieldName, query, ?skipOp, ?takeOp) =
-        use indexSearcher = new IndexSearcher(directory.Value, true)
-        use analyzer = new StandardAnalyzer(version)
-        let query = _parseQuery query (new QueryParser(version, fieldName, analyzer))
-        let skip = if(skipOp.IsNone) then 0 else skipOp.Value
-        let take = if(takeOp.IsNone) then itemsPerPage else takeOp.Value
-        let topDocs = indexSearcher.Search(query, null, skip + take, Sort.RELEVANCE)
-        let getHit = fun (id) -> 
-            let sd = topDocs.ScoreDocs.[id] 
-            (indexSearcher.Doc(sd.Doc), sd.Score)        
+            let hitsSection = paginator.GetFollowingSection skip take topDocs.TotalHits 
 
-        let hitsSection = paginator.GetFollowingSection skip take topDocs.TotalHits 
+            hitsSection |> Seq.map (getHit >> this.HitToDocument) |> Seq.toList
 
-        hitsSection |> Seq.map (getHit >> this.HitToDocument) |> Seq.toList
-
-    //member this.Search (fieldName, query) = this.Search(fieldName, query, 0, itemsPerPage)
-
+        //member this.Search (fieldName, query) = this.Search(fieldName, query, 0, 15)
