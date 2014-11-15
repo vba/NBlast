@@ -12,13 +12,16 @@ open Lucene.Net.Util
 open Lucene.Net.Index
 open System.IO
 
-type StorageWriter(reopenWhenLocked: bool, path: string) = 
+type StorageWriter(path: string, ?reopenWhenLockedOp: bool) = 
 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     let directory = lazy (
         let openIndex = fun x -> FSDirectory.Open(new DirectoryInfo(x))
         let tempDirectory = openIndex path
         let isLocked = IndexWriter.IsLocked(tempDirectory)
+        let reopenWhenLocked = if (reopenWhenLockedOp.IsSome) 
+                                then reopenWhenLockedOp.Value 
+                                else false
 
         if (reopenWhenLocked && isLocked) then
             try

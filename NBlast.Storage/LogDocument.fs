@@ -64,31 +64,50 @@ type LevelField (value: string) = inherit TextField("level", value)
 type CreatedAtField (value: DateTime) = inherit DateTimeField("createdAt", value)
 
 
-type LogDocument ( sender    : SenderField,
-                   message   : MessageField,
-                   logger    : LoggerField,
-                   level     : LevelField,
-                   error     : ErrorField,
-                   createdAt : CreatedAtField ) =
+type LogDocument ( sender     : SenderField,
+                   message    : MessageField,
+                   logger     : LoggerField,
+                   level      : LevelField,
+                   ?error     : ErrorField,
+                   ?createdAt : CreatedAtField ) =
     
-    member this.Sender with get() = sender :> IField<string>
-    member this.Message with get() = message :> IField<string>
-    member this.Logger with get() = logger :> IField<string>
-    member this.Error with get() = error :> IField<string>
-    member this.Level with get() = level :> IField<string>
-    member this.CreatedAt with get() = createdAt :> IField<DateTime>
+    new ( sender    : string,
+          message   : string,
+          logger    : string,
+          level     : string,
+          ?error    : string,
+          ?createdAt: DateTime) = 
+            let sf = new SenderField(sender)
+            let mf = new MessageField(message)
+            let lf = new LoggerField(logger)
+            let lg = new LevelField(level)
+            
+            match (error, createdAt) with
+                | (Some error, None) -> 
+                    LogDocument(sf, mf, lf, lg, new ErrorField(error))
+                | (Some error, Some createdAt) -> 
+                    LogDocument(sf, mf, lf, lg, new ErrorField(error), new CreatedAtField(createdAt))
+                | (None, Some createdAt) -> 
+                    LogDocument(sf, mf, lf, lg, createdAt = new CreatedAtField(createdAt))
+                | _ -> LogDocument(sf, mf, lf, lg)
 
     interface IStorageDocument with
         member this.ToLuceneDocument() = 
             let document = new Document() 
-            this.Sender.ToLuceneField() |> document.Add
-            this.Message.ToLuceneField() |> document.Add
-            this.Logger.ToLuceneField() |> document.Add
-            this.Level.ToLuceneField() |> document.Add
-            this.Error.ToLuceneField() |> document.Add
-            this.CreatedAt.ToLuceneField() |> document.Add
-
-            let content = this.Message.Value+" "+this.Error.Value
+            (sender :> IField<string>).ToLuceneField() |> document.Add
+            (message :> IField<string>).ToLuceneField() |> document.Add
+            (logger :> IField<string>).ToLuceneField() |> document.Add
+            (level :> IField<string>).ToLuceneField() |> document.Add
+            
+            if (error.IsSome) then
+                (error.Value :> IField<string>).ToLuceneField() |> document.Add
+            if (createdAt.IsSome) then
+                (createdAt.Value :> IField<DateTime>).ToLuceneField() |> document.Add
+            
+            let content = 
+                if (error.IsSome) 
+                    then (message :> IField<_>).Value+" "+(error.Value :> IField<_>).Value
+                    else (message :> IField<_>).Value
 
             ((new TextField("content", content, StorageType.StoredAndAnalysed)) :> IField<string>)
                 .ToLuceneField() |> document.Add
