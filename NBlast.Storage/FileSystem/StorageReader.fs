@@ -1,5 +1,6 @@
 ﻿namespace NBlast.Storage.FileSystem
 
+open System
 open System.IO
 open System.Linq
 open Lucene.Net
@@ -80,8 +81,9 @@ private static IEnumerable<SampleData> _search
             let take = if(takeOp.IsNone) then itemsPerPage else takeOp.Value
             let topDocs = indexSearcher.Search(query, null, skip + take, Sort.RELEVANCE)
             let getHit = fun (id) -> 
-                let sd = topDocs.ScoreDocs.[id] 
-                (indexSearcher.Doc(sd.Doc), sd.Score)        
+                let sd = topDocs.ScoreDocs.[id]
+                let score = if (Single.IsNaN(sd.Score)) then 0.0f else sd.Score 
+                (indexSearcher.Doc(sd.Doc), score)
 
             let hitsSection = paginator.GetFollowingSection skip take topDocs.TotalHits 
 

@@ -16,17 +16,20 @@ type StorageReaderTest() =
     member this.``Reader must work as expected in the case of a banal search``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let directory = FSDirectory.Open(new DirectoryInfo(path))
         let writer = new StorageWriter(path) :> IStorageWriter
-        let logDocument = new LogDocument("sender", "1", "log", "debug", "", DateTime.Now)
-        writer.InsertOne(logDocument :> IStorageDocument)
-
-        //let sut  = (this.MakeSut false path)
+        new LogDocument("sender", "1 A", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "2 B", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "3 A", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "4 B", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "5 A", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "6 B", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
+        let sut = this.MakeSut path
 
         // When
-//        Directory.CreateDirectory(path) |> ignore
-//        directory.MakeLock(IndexWriter.WRITE_LOCK_NAME).Obtain(0L) |> ignore
-//        directory.Dispose()
+        let actuals = sut.Search "content" "B" None None
+
+        // Then
+        (actuals |> List.length).Should().Be(3, "Only 3 documents must be found") |> ignore
 
 
     member private this.MakeSut path :IStorageReader =
