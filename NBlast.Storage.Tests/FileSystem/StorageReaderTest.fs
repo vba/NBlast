@@ -17,12 +17,12 @@ type StorageReaderTest() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
         let writer = new StorageWriter(path) :> IStorageWriter
-        new LogDocument("sender", "1 A", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "2 B", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "3 A", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "4 B", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "5 A", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "6 B", "log", "debug", createdAt = DateTime.Now) :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "1 A", "log", "debug") :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "2 B", "log", "debug") :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "3 A", "log", "debug") :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "4 B", "log", "debug") :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "5 A", "log", "debug") :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "6 B", "log", "debug") :> IStorageDocument |> writer.InsertOne
         let sut = this.MakeSut path
 
         // When

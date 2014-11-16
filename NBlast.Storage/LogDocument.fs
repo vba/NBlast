@@ -70,26 +70,42 @@ type LogDocument ( sender     : SenderField,
                    level      : LevelField,
                    ?error     : ErrorField,
                    ?createdAt : CreatedAtField ) =
-    
+
     new ( sender    : string,
           message   : string,
           logger    : string,
           level     : string,
-          ?error    : string,
-          ?createdAt: DateTime) = 
+          error     : string,
+          createdAt : DateTime ) = 
             let sf = new SenderField(sender)
             let mf = new MessageField(message)
             let lf = new LoggerField(logger)
             let lg = new LevelField(level)
-            
-            match (error, createdAt) with
-                | (Some error, None) -> 
-                    LogDocument(sf, mf, lf, lg, new ErrorField(error))
-                | (Some error, Some createdAt) -> 
-                    LogDocument(sf, mf, lf, lg, new ErrorField(error), new CreatedAtField(createdAt))
-                | (None, Some createdAt) -> 
-                    LogDocument(sf, mf, lf, lg, createdAt = new CreatedAtField(createdAt))
-                | _ -> LogDocument(sf, mf, lf, lg)
+            LogDocument(sf, mf, lf, lg)
+
+    new (sender    : string,
+         message   : string,
+         logger    : string,
+         level     : string) = LogDocument(sender, message, logger, level, DateTime.Now)
+
+    new (sender    : string,
+         message   : string,
+         logger    : string,
+         level     : string,
+         error     : string) = LogDocument(sender, message, logger, level, error, DateTime.Now)
+
+    new (sender    : string,
+         message   : string,
+         logger    : string,
+         level     : string,
+         createdAt : DateTime) =
+            let sf = new SenderField(sender)
+            let mf = new MessageField(message)
+            let lf = new LoggerField(logger)
+            let lg = new LevelField(level)
+            let ca = new CreatedAtField(createdAt)
+            LogDocument(sf, mf, lf, lg, createdAt = ca)
+
 
     interface IStorageDocument with
         member this.ToLuceneDocument() = 
@@ -109,7 +125,7 @@ type LogDocument ( sender     : SenderField,
                     then (message :> IField<_>).Value+" "+(error.Value :> IField<_>).Value
                     else (message :> IField<_>).Value
 
-            ((new TextField("content", content, StorageType.StoredAndAnalysed)) :> IField<string>)
+            ((new TextField("content", content, StorageType.Analysed)) :> IField<string>)
                 .ToLuceneField() |> document.Add
 
             document
