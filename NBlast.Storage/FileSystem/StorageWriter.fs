@@ -1,7 +1,7 @@
 ﻿namespace NBlast.Storage.FileSystem
 
 open NBlast.Storage
-open NBlast.Storage.Core
+open NBlast.Storage.Core.Index
 open NBlast.Storage.Core.Exceptions
 open Lucene.Net.Analysis.Standard
 open Lucene.Net.Documents

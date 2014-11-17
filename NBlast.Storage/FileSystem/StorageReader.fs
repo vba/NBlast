@@ -5,7 +5,9 @@ open System.IO
 open System.Linq
 open Lucene.Net
 open NBlast.Storage
+open NBlast.Storage.Core.Extensions
 open NBlast.Storage.Core
+open NBlast.Storage.Core.Index
 open Lucene.Net.QueryParsers
 open Lucene.Net.Util
 open Lucene.Net.Search
@@ -14,11 +16,11 @@ open Lucene.Net.Store
 open Lucene.Net.Analysis.Standard
 open Lucene.Net.Index
 
-type StorageReader(path: string) = 
+type StorageReader(path: string, ?itemsPerPage: int) = 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     static let version = Version.LUCENE_30
-    static let itemsPerPage = 15
     
+    let itemsPerPage = itemsPerPage |? 15
     let paginator = new Paginator() :> IPaginator
 
     static let _parseQuery = fun query (parser: QueryParser) ->

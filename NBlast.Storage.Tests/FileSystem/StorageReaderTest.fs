@@ -5,6 +5,8 @@ open System.IO
 open Lucene.Net.Store
 open NBlast.Storage
 open NBlast.Storage.Core
+open NBlast.Storage.Core.Extensions
+open NBlast.Storage.Core.Index
 open NBlast.Storage.Core.Env
 open NBlast.Storage.FileSystem
 open Xunit
@@ -14,16 +16,11 @@ open FluentAssertions
 type StorageReaderTest() = 
 
     [<Fact>]
-    member this.``Reader must work as expected in the case of a banal search``() =
+    member this.``Reader must work as expected in the case of a banal search by field``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
         let writer = new StorageWriter(path) :> IStorageWriter
-        new LogDocument("sender", "1 C C", "log", "debug") :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "2 B", "log", "debug") :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "3 C", "log", "debug") :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "4 B", "log", "debug") :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "5 C", "log", "debug") :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "6 B", "log", "debug") :> IStorageDocument |> writer.InsertOne
+        this.``gimme 6 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut path
 
         // When
@@ -41,7 +38,49 @@ type StorageReaderTest() =
             actual.Score.IsNone.Should().BeFalse("Score must be present") |> ignore
         )
 
+    [<Fact>]
+    member this.``Reader must find and paginate the results in the case of a banal search``() =
+        // Given
+        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let writer = new StorageWriter(path) :> IStorageWriter
+        this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
+        let sut = this.MakeSut (path, 5)
+        
+        // When
+        let actuals = sut.Search "content" "c" (Some 1) None
 
-    member private this.MakeSut path :IStorageReader =
-        new StorageReader(path) :> IStorageReader
+        // Then
+        (actuals |> List.length).Should().Be(5, "Only 5 documents must be found") |> ignore
+        actuals.Head.Message.Should().Be("3 C", "First element must be skiped") |> ignore
+
+
+    member private this.``gimme 6 fake documents`` () = 
+        [ new LogDocument("sender", "1 C C", "log", "debug");
+          new LogDocument("sender", "2 B", "log", "debug");
+          new LogDocument("sender", "3 C", "log", "debug");
+          new LogDocument("sender", "4 B", "log", "debug");
+          new LogDocument("sender", "5 C", "log", "debug");
+          new LogDocument("sender", "6 B", "log", "debug"); ] 
+            |> List.map (fun x -> x :> IStorageDocument)
+
+    member private this.``gimme 15 fake documents`` () = 
+        [ new LogDocument("sender", "1 C C", "log", "debug");
+          new LogDocument("sender", "2 B", "log", "debug");
+          new LogDocument("sender", "3 C", "log", "debug");
+          new LogDocument("sender", "4 B", "log", "debug");
+          new LogDocument("sender", "5 C", "log", "debug");
+          new LogDocument("sender", "6 B", "log", "debug"); 
+          new LogDocument("sender", "7 C", "log", "debug"); 
+          new LogDocument("sender", "8 B", "log", "debug"); 
+          new LogDocument("sender", "9 C", "log", "debug"); 
+          new LogDocument("sender", "10 B", "log", "debug"); 
+          new LogDocument("sender", "11 C", "log", "debug"); 
+          new LogDocument("sender", "12 B", "log", "debug"); 
+          new LogDocument("sender", "13 C", "log", "debug"); 
+          new LogDocument("sender", "14 B", "log", "debug"); 
+          new LogDocument("sender", "15 C", "log", "debug"); ] 
+            |> List.map (fun x -> x :> IStorageDocument)
+
+    member private this.MakeSut(path, ?itemsPerPage) :IStorageReader =
+        new StorageReader(path, itemsPerPage |? 15) :> IStorageReader
 

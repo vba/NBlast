@@ -1,6 +1,6 @@
 ﻿namespace NBlast.Storage
 
-open NBlast.Storage.Core
+open NBlast.Storage.Core.Index
 
 
 type Paginator() =

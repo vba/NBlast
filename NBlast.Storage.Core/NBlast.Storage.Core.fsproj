@@ -35,14 +35,15 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Extensions\OptionOperators.fs" />
     <Compile Include="Env\Variables.fs" />
     <Compile Include="Exceptions\StorageLockedException.fs" />
     <Compile Include="Exceptions\StorageUnlockFailedException.fs" />
-    <Compile Include="LogDocumentHit.fs" />
-    <Compile Include="IStorageDocument.fs" />
-    <Compile Include="IStorageWriter.fs" />
-    <Compile Include="IStorageReader.fs" />
-    <Compile Include="IPaginator.fs" />
+    <Compile Include="Index\LogDocumentHit.fs" />
+    <Compile Include="Index\IStorageDocument.fs" />
+    <Compile Include="Index\IStorageWriter.fs" />
+    <Compile Include="Index\IStorageReader.fs" />
+    <Compile Include="Index\IPaginator.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Lucene.Net">

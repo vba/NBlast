@@ -5,7 +5,7 @@ open System.Runtime
 open Xunit
 open FluentAssertions
 open NBlast.Storage
-open NBlast.Storage.Core
+open NBlast.Storage.Core.Index
 
 type PaginatorTest() = 
 

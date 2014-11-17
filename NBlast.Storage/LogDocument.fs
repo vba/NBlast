@@ -1,6 +1,7 @@
 ﻿namespace NBlast.Storage
 
 open NBlast.Storage.Core
+open NBlast.Storage.Core.Index
 open Lucene.Net.Documents
 open Lucene.Net
 open System

@@ -7,6 +7,7 @@ open FluentAssertions
 open NBlast.Storage
 open NBlast.Storage.FileSystem
 open NBlast.Storage.Core
+open NBlast.Storage.Core.Index
 open NBlast.Storage.Core.Env
 open NBlast.Storage.Core.Exceptions
 open System.IO
