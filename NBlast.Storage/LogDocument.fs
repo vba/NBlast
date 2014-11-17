@@ -75,7 +75,7 @@ type LogDocument ( sender     : string,
     member me.Sender with get() = new SenderField(sender)  :> IField<string>
     member me.Message with get() = new MessageField(message)  :> IField<string>
     member me.Logger with get() = new LoggerField(logger)  :> IField<string>
-    member me.Level with get() = new LoggerField(level)  :> IField<string>
+    member me.Level with get() = new LevelField(level)  :> IField<string>
     member me.Content with get() = new ContentField(if (error.IsSome) then message + " " + error.Value else message ) :> IField<string>
     member me.CreatedAt with get() = new CreatedAtField(if (createdAt.IsSome) then createdAt.Value else DateTime.Now)  :> IField<DateTime>
     member me.Error with get() =  if (error.IsSome) 

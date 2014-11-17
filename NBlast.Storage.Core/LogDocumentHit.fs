@@ -8,5 +8,5 @@ type LogDocumentHit =
       Level    : string
       Boost    : float32
       CreatedAt: System.DateTime
-      Score    : float32 }
+      Score    : float32 option }
 

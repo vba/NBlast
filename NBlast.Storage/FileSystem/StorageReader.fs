@@ -58,7 +58,7 @@ private static IEnumerable<SampleData> _search
     member this.GetAllRecords () =
         []
 
-    member private this.HitToDocument (pair: Document * float32) = 
+    member private this.HitToDocument (pair: Document * float32 option) = 
         let doc = fst pair
         let score = snd pair
         { 
@@ -79,14 +79,12 @@ private static IEnumerable<SampleData> _search
             let query = _parseQuery query (new QueryParser(version, fieldName, analyzer))
             let skip = if(skipOp.IsNone) then 0 else skipOp.Value
             let take = if(takeOp.IsNone) then itemsPerPage else takeOp.Value
-            let topDocs = indexSearcher.Search(query, null, skip + take, Sort.RELEVANCE)
-            let getHit = fun (id) -> 
-                let sd = topDocs.ScoreDocs.[id - 1]
-                let score = if (Single.IsNaN(sd.Score)) then 0.0f else sd.Score 
+            let topDocs = indexSearcher.Search(query, null, skip + take)
+            let getHit = fun (index) -> 
+                let sd = topDocs.ScoreDocs.[index - 1]
+                let score = if (Single.IsNaN(sd.Score)) then None else Some(sd.Score)
                 (indexSearcher.Doc(sd.Doc), score)
 
             let hitsSection = paginator.GetFollowingSection skip take topDocs.TotalHits 
 
             hitsSection |> Seq.map (getHit >> this.HitToDocument) |> Seq.toList
-
-        //member this.Search (fieldName, query) = this.Search(fieldName, query, 0, 15)
