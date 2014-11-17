@@ -35,18 +35,6 @@ type StorageWriter(path: string, ?reopenWhenLockedOp: bool) =
     do
         logger.Debug("Initialization is over")
 
-    (*
-    var doc = new Document();
-
-    // add lucene fields mapped to db fields
-    doc.Add(new Field("Id", sampleData.Id.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-    doc.Add(new Field("Name", sampleData.Name, Field.Store.YES, Field.Index.ANALYZED));
-    doc.Add(new Field("Description", sampleData.Description, Field.Store.YES, Field.Index.ANALYZED));
-
-    // add entry to index
-    writer.AddDocument(doc);
-    *)
-
     interface IStorageWriter with
         member this.InsertOne(document: IStorageDocument) = 
             use analyser = new StandardAnalyzer(Version.LUCENE_30)

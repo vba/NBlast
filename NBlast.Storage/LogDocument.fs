@@ -62,70 +62,38 @@ type ErrorField (value: string) = inherit TextField("error", value)
 type MessageField (value: string) = inherit TextField("message", value)
 type LevelField (value: string) = inherit TextField("level", value)
 type CreatedAtField (value: DateTime) = inherit DateTimeField("createdAt", value)
+type ContentField (value: string) = inherit TextField("content", value, StorageType.Analysed)
 
 
-type LogDocument ( sender     : SenderField,
-                   message    : MessageField,
-                   logger     : LoggerField,
-                   level      : LevelField,
-                   ?error     : ErrorField,
-                   ?createdAt : CreatedAtField ) =
+type LogDocument ( sender     : string,
+                   message    : string,
+                   logger     : string,
+                   level      : string,
+                   ?error     : string,
+                   ?createdAt : DateTime ) =
 
-    new ( sender    : string,
-          message   : string,
-          logger    : string,
-          level     : string,
-          error     : string,
-          createdAt : DateTime ) = 
-            let sf = new SenderField(sender)
-            let mf = new MessageField(message)
-            let lf = new LoggerField(logger)
-            let lg = new LevelField(level)
-            LogDocument(sf, mf, lf, lg)
-
-    new (sender    : string,
-         message   : string,
-         logger    : string,
-         level     : string) = LogDocument(sender, message, logger, level, DateTime.Now)
-
-    new (sender    : string,
-         message   : string,
-         logger    : string,
-         level     : string,
-         error     : string) = LogDocument(sender, message, logger, level, error, DateTime.Now)
-
-    new (sender    : string,
-         message   : string,
-         logger    : string,
-         level     : string,
-         createdAt : DateTime) =
-            let sf = new SenderField(sender)
-            let mf = new MessageField(message)
-            let lf = new LoggerField(logger)
-            let lg = new LevelField(level)
-            let ca = new CreatedAtField(createdAt)
-            LogDocument(sf, mf, lf, lg, createdAt = ca)
+    member me.Sender with get() = new SenderField(sender)  :> IField<string>
+    member me.Message with get() = new MessageField(message)  :> IField<string>
+    member me.Logger with get() = new LoggerField(logger)  :> IField<string>
+    member me.Level with get() = new LoggerField(level)  :> IField<string>
+    member me.Content with get() = new ContentField(if (error.IsSome) then message + " " + error.Value else message ) :> IField<string>
+    member me.CreatedAt with get() = new CreatedAtField(if (createdAt.IsSome) then createdAt.Value else DateTime.Now)  :> IField<DateTime>
+    member me.Error with get() =  if (error.IsSome) 
+                                    then Some(new ErrorField(error.Value)  :> IField<string>)
+                                    else None
 
 
     interface IStorageDocument with
-        member this.ToLuceneDocument() = 
-            let document = new Document() 
-            (sender :> IField<string>).ToLuceneField() |> document.Add
-            (message :> IField<string>).ToLuceneField() |> document.Add
-            (logger :> IField<string>).ToLuceneField() |> document.Add
-            (level :> IField<string>).ToLuceneField() |> document.Add
+        member me.ToLuceneDocument() = 
+            let document = new Document()
+            me.Sender.ToLuceneField() |> document.Add
+            me.Message.ToLuceneField() |> document.Add
+            me.Logger.ToLuceneField() |> document.Add
+            me.Level.ToLuceneField() |> document.Add
+            me.CreatedAt.ToLuceneField() |> document.Add
+            me.Content.ToLuceneField() |> document.Add
             
             if (error.IsSome) then
-                (error.Value :> IField<string>).ToLuceneField() |> document.Add
-            if (createdAt.IsSome) then
-                (createdAt.Value :> IField<DateTime>).ToLuceneField() |> document.Add
-            
-            let content = 
-                if (error.IsSome) 
-                    then (message :> IField<_>).Value+" "+(error.Value :> IField<_>).Value
-                    else (message :> IField<_>).Value
-
-            ((new TextField("content", content, StorageType.Analysed)) :> IField<string>)
-                .ToLuceneField() |> document.Add
+                me.Error.Value.ToLuceneField() |> document.Add
 
             document

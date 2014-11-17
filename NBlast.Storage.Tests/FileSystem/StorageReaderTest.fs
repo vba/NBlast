@@ -10,6 +10,7 @@ open NBlast.Storage.FileSystem
 open Xunit
 open FluentAssertions
 
+
 type StorageReaderTest() = 
 
     [<Fact>]
@@ -17,16 +18,16 @@ type StorageReaderTest() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
         let writer = new StorageWriter(path) :> IStorageWriter
-        new LogDocument("sender", "1 A", "log", "debug") :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "1 C", "log", "debug") :> IStorageDocument |> writer.InsertOne
         new LogDocument("sender", "2 B", "log", "debug") :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "3 A", "log", "debug") :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "3 C", "log", "debug") :> IStorageDocument |> writer.InsertOne
         new LogDocument("sender", "4 B", "log", "debug") :> IStorageDocument |> writer.InsertOne
-        new LogDocument("sender", "5 A", "log", "debug") :> IStorageDocument |> writer.InsertOne
+        new LogDocument("sender", "5 C", "log", "debug") :> IStorageDocument |> writer.InsertOne
         new LogDocument("sender", "6 B", "log", "debug") :> IStorageDocument |> writer.InsertOne
         let sut = this.MakeSut path
 
         // When
-        let actuals = sut.Search "content" "B" None None
+        let actuals = sut.Search "content" "c" None None
 
         // Then
         (actuals |> List.length).Should().Be(3, "Only 3 documents must be found") |> ignore
