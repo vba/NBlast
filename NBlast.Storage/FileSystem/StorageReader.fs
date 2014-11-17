@@ -75,12 +75,12 @@ private static IEnumerable<SampleData> _search
         }
         
     interface IStorageReader with
-        member this.Search fieldName query skipOp takeOp =
+        member this.Search fieldName query ?skipOp ?takeOp =
             use indexSearcher = new IndexSearcher(directory.Value, true)
             use analyzer = new StandardAnalyzer(version)
             let query = _parseQuery query (new QueryParser(version, fieldName, analyzer))
-            let skip = if(skipOp.IsNone) then 0 else skipOp.Value
-            let take = if(takeOp.IsNone) then itemsPerPage else takeOp.Value
+            let skip = skipOp |? 0
+            let take = takeOp |? itemsPerPage
             let topDocs = indexSearcher.Search(query, null, skip + take)
             let getHit = fun (index) -> 
                 let sd = topDocs.ScoreDocs.[index - 1]

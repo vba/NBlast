@@ -39,7 +39,7 @@ type StorageReaderTest() =
         )
 
     [<Fact>]
-    member this.``Reader must find and paginate the results in the case of a banal search``() =
+    member this.``Reader must find and paginate results in the case of a banal search``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
         let writer = new StorageWriter(path) :> IStorageWriter
@@ -52,6 +52,37 @@ type StorageReaderTest() =
         // Then
         (actuals |> List.length).Should().Be(5, "Only 5 documents must be found") |> ignore
         actuals.Head.Message.Should().Be("3 C", "First element must be skiped") |> ignore
+
+    [<Fact>]
+    member this.``Reader must find and paginate in the end of found result slot``() =
+        // Given
+        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let writer = new StorageWriter(path) :> IStorageWriter
+        this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
+        let sut = this.MakeSut (path, 5)
+        
+        // When
+        let actuals = sut.Search "level" "debug" (Some 13) None
+
+        // Then
+        (actuals |> List.length).Should().Be(2, "Only 2 documents must be found") |> ignore
+        actuals.Head.Message.Should().Be("14 B", "First elements must be skiped") |> ignore
+
+    [<Fact>]
+    member this.``Reader must find and paginate in the middle of found result slot``() =
+        // Given
+        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let writer = new StorageWriter(path) :> IStorageWriter
+        this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
+        let sut = this.MakeSut (path, 5)
+        
+        // When
+        let actuals = sut.Search "level" "debug" (Some 10) None
+
+        // Then
+        (actuals |> List.length).Should().Be(5, "5 documents must be found") |> ignore
+        actuals.Head.Message.Should().Be("11 C", "First element must be as expected") |> ignore
+        (actuals |> List.rev).Head.Message.Should().Be("15 C", "Last element must be as expected") |> ignore
 
 
     member private this.``gimme 6 fake documents`` () = 
@@ -83,4 +114,3 @@ type StorageReaderTest() =
 
     member private this.MakeSut(path, ?itemsPerPage) :IStorageReader =
         new StorageReader(path, itemsPerPage |? 15) :> IStorageReader
-
