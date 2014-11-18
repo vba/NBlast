@@ -39,12 +39,12 @@ type StorageReader(path: string, ?itemsPerPage: int) =
         { 
           Score     = score; 
           Boost     = doc.Boost;
-          Sender    = doc.Get("sender");
-          Error     = doc.Get("error");
-          Message   = doc.Get("message");
-          Logger    = doc.Get("logger");
-          Level     = doc.Get("level");
-          CreatedAt = DateTools.StringToDate(doc.Get("createdAt"));
+          Sender    = doc.Get(LogField.Sender.GetName());
+          Error     = doc.Get(LogField.Error.GetName());
+          Message   = doc.Get(LogField.Message.GetName());
+          Logger    = doc.Get(LogField.Logger.GetName());
+          Level     = doc.Get(LogField.Level.GetName());
+          CreatedAt = DateTools.StringToDate(doc.Get(LogField.CreatedAt.GetName()));
         }
 
     interface IStorageReader with
@@ -52,8 +52,7 @@ type StorageReader(path: string, ?itemsPerPage: int) =
             use indexSearcher = new IndexSearcher(directory.Value, true)
             use analyzer = new StandardAnalyzer(version)
             let (skip, take) = (skipOp |? 0, takeOp |? itemsPerPage)
-            let fields = [|"sender"; "error"; "message"; "logger"; "level"; "createdAt"|]
-            let parser = new MultiFieldQueryParser(version, fields, analyzer)
+            let parser = new MultiFieldQueryParser(version, LogField.Names, analyzer)
             let query = _parseQuery query parser
             let sw = new Stopwatch()
 

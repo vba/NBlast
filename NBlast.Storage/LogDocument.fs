@@ -57,13 +57,13 @@ type DateTimeField(name        : string,
             let value = DateTools.DateToString(value, DateTools.Resolution.SECOND)
             FieldUtils.toLuceneField name value storageType
 
-type SenderField (value: string) = inherit TextField("sender", value)
-type LoggerField (value: string) = inherit TextField("logger", value)
-type ErrorField (value: string) = inherit TextField("error", value)
-type MessageField (value: string) = inherit TextField("message", value)
-type LevelField (value: string) = inherit TextField("level", value)
-type CreatedAtField (value: DateTime) = inherit DateTimeField("createdAt", value)
-type ContentField (value: string) = inherit TextField("content", value, StorageType.Analysed)
+type SenderField (value: string)      = inherit TextField(LogField.Sender.GetName(), value)
+type LoggerField (value: string)      = inherit TextField(LogField.Logger.GetName(), value)
+type ErrorField (value: string)       = inherit TextField(LogField.Error.GetName(), value)
+type MessageField (value: string)     = inherit TextField(LogField.Message.GetName(), value)
+type LevelField (value: string)       = inherit TextField(LogField.Level.GetName(), value)
+type CreatedAtField (value: DateTime) = inherit DateTimeField(LogField.CreatedAt.GetName(), value)
+type ContentField (value: string)     = inherit TextField(LogField.Content.GetName(), value, StorageType.Analysed)
 
 
 type LogDocument ( sender     : string,

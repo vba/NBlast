@@ -24,7 +24,7 @@ type StorageReaderTest() =
         let sut = this.MakeSut path
 
         // When
-        let actuals = (sut.SearchByField "content:c" None None).Hits 
+        let actuals = (sut.SearchByField (Content.QueryWith "c") None None).Hits 
 
         // Then
         (actuals |> List.length).Should().Be(3, "Only 3 documents must be found") |> ignore
@@ -47,7 +47,7 @@ type StorageReaderTest() =
         let sut = this.MakeSut (path, 5)
         
         // When
-        let actuals = (sut.SearchByField "content:c" (Some 1) None).Hits 
+        let actuals = (sut.SearchByField (Content.QueryWith "c") (Some 1) None).Hits 
 
         // Then
         (actuals |> List.length).Should().Be(5, "Only 5 documents must be found") |> ignore
@@ -62,7 +62,7 @@ type StorageReaderTest() =
         let sut = this.MakeSut (path, 5)
         
         // When
-        let actuals = (sut.SearchByField "level:debug" (Some 13) None).Hits 
+        let actuals = (sut.SearchByField (Level.QueryWith "debug") (Some 13) None).Hits 
 
         // Then
         (actuals |> List.length).Should().Be(2, "Only 2 documents must be found") |> ignore
@@ -77,7 +77,7 @@ type StorageReaderTest() =
         let sut = this.MakeSut (path, 5)
         
         // When
-        let actuals = (sut.SearchByField "level:debug" (Some 10) None).Hits
+        let actuals = (sut.SearchByField (Level.QueryWith "debug") (Some 10) None).Hits
 
         // Then
         (actuals |> List.length).Should().Be(5, "5 documents must be found") |> ignore
