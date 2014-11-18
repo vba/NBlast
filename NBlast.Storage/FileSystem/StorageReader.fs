@@ -59,9 +59,9 @@ type StorageReader(path: string, ?itemsPerPage: int) =
             sw.Start()
             let topDocs = indexSearcher.Search(query, null, skip + take)
             sw.Stop()
-            
+
             let getHit = fun (index) -> 
-                let sd = topDocs.ScoreDocs.[index - 1]
+                let sd    = topDocs.ScoreDocs.[index - 1]
                 let score = if (Single.IsNaN(sd.Score)) then None else Some(sd.Score)
                 (indexSearcher.Doc(sd.Doc), score)
 
@@ -70,8 +70,13 @@ type StorageReader(path: string, ?itemsPerPage: int) =
                         |> Seq.map (getHit >> this.HitToDocument) // TODO Weak place, needs to be processed with parallel sequences
                         |> Seq.toList 
 
-            { Hits = hits; QueryDuration = sw.ElapsedMilliseconds }
+            { Hits          = hits; 
+              Total         = topDocs.TotalHits; 
+              QueryDuration = sw.ElapsedMilliseconds }
 
-        member me.FindAll ?skipOp ?takeOp = (me :> IStorageReader).SearchByField "*:*" skipOp takeOp
+        member me.FindAll ?skipOp ?takeOp = 
+            (me :> IStorageReader).SearchByField "*:*" skipOp takeOp
 
-        member me.CountAll() = bigint 0
+        member me.CountAll() = 
+            use indexReader = IndexReader.Open(directory.Value, true)
+            indexReader.NumDocs()

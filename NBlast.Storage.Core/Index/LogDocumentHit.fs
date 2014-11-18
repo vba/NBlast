@@ -44,4 +44,5 @@ type LogDocumentHit =
 
 type LogDocumentHits = 
     { Hits          : List<LogDocumentHit>
+      Total         : int32
       QueryDuration : int64 }

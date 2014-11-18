@@ -39,6 +39,37 @@ type StorageReaderTest() =
         )
 
     [<Fact>]
+    member this.``Reader must search and collect expected amount of total documents``() =
+        // Given
+        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let writer = new StorageWriter(path) :> IStorageWriter
+        this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
+        this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
+        let sut = this.MakeSut (path, 5)
+        
+        // When
+        let actuals = (sut.SearchByField (Content.QueryWith "b") (Some 0) (Some 1))
+
+        // Then
+        (actuals.Hits |> List.length).Should().Be(1, "Only 1 documents must be returned") |> ignore
+        actuals.Total.Should().Be(14, "Total must be equal to 7*2") |> ignore
+
+    [<Fact>]
+    member this.``Reader must count all documents as expected``() =
+        // Given
+        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let writer = new StorageWriter(path) :> IStorageWriter
+        this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
+        this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
+        let sut = this.MakeSut (path, 5)
+        
+        // When
+        let actualTotal = sut.CountAll()
+
+        // Then
+        actualTotal.Should().Be(30, "Total must be equal to 30") |> ignore
+
+    [<Fact>]
     member this.``Reader must find and paginate results in the case of a banal search``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
