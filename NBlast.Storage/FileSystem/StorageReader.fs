@@ -3,6 +3,7 @@
 open System
 open System.IO
 open System.Linq
+open System.Diagnostics
 open Lucene.Net
 open NBlast.Storage
 open NBlast.Storage.Core.Extensions
@@ -15,6 +16,7 @@ open Lucene.Net.Documents
 open Lucene.Net.Store
 open Lucene.Net.Analysis.Standard
 open Lucene.Net.Index
+open FSharp.Collections.ParallelSeq
 
 type StorageReader(path: string, ?itemsPerPage: int) = 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
@@ -30,35 +32,6 @@ type StorageReader(path: string, ?itemsPerPage: int) =
             | :? ParseException -> parser.Parse(QueryParser.Escape(query.Trim()))
 
     let directory = lazy(FSDirectory.Open(new DirectoryInfo(path)))
-(*
-private static IEnumerable<SampleData> _search
-    (string searchQuery, string searchField = "") {
-    // validation
-    if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<SampleData>();
-
-    // set up lucene searcher
-    using (var searcher = new IndexSearcher(_directory, false)) {
-        var hits_limit = 1000;
-        var analyzer = new StandardAnalyzer(Version.LUCENE_30);
-
-        // search by multiple fields (ordered by RELEVANCE)
-        else {
-            var parser = new MultiFieldQueryParser
-                (Version.LUCENE_30, new[] { "Id", "Name", "Description" }, analyzer);
-            var query = parseQuery(searchQuery, parser);
-            var hits = searcher.Search
-            (query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
-            var results = _mapLuceneToDataList(hits, searcher);
-            analyzer.Close();            
-            searcher.Dispose();
-            return results;
-        }
-    }
-} 
-*)
-
-    member this.GetAllRecords () =
-        []
 
     member private this.HitToDocument (pair: Document * float32 option) = 
         let doc = fst pair
@@ -73,20 +46,33 @@ private static IEnumerable<SampleData> _search
           Level     = doc.Get("level");
           CreatedAt = DateTools.StringToDate(doc.Get("createdAt"));
         }
-        
+
     interface IStorageReader with
-        member this.Search fieldName query ?skipOp ?takeOp =
+        member this.SearchByField query ?skipOp ?takeOp =
             use indexSearcher = new IndexSearcher(directory.Value, true)
             use analyzer = new StandardAnalyzer(version)
-            let query = _parseQuery query (new QueryParser(version, fieldName, analyzer))
-            let skip = skipOp |? 0
-            let take = takeOp |? itemsPerPage
+            let (skip, take) = (skipOp |? 0, takeOp |? itemsPerPage)
+            let fields = [|"sender"; "error"; "message"; "logger"; "level"; "createdAt"|]
+            let parser = new MultiFieldQueryParser(version, fields, analyzer)
+            let query = _parseQuery query parser
+            let sw = new Stopwatch()
+
+            sw.Start()
             let topDocs = indexSearcher.Search(query, null, skip + take)
+            sw.Stop()
+            
             let getHit = fun (index) -> 
                 let sd = topDocs.ScoreDocs.[index - 1]
                 let score = if (Single.IsNaN(sd.Score)) then None else Some(sd.Score)
                 (indexSearcher.Doc(sd.Doc), score)
 
             let hitsSection = paginator.GetFollowingSection skip take topDocs.TotalHits 
+            let hits = hitsSection 
+                        |> Seq.map (getHit >> this.HitToDocument) // TODO Weak place, needs to be processed with parallel sequences
+                        |> Seq.toList 
 
-            hitsSection |> Seq.map (getHit >> this.HitToDocument) |> Seq.toList
+            { Hits = hits; QueryDuration = sw.ElapsedMilliseconds }
+
+        member me.FindAll ?skipOp ?takeOp = (me :> IStorageReader).SearchByField "*:*" skipOp takeOp
+
+        member me.CountAll() = bigint 0

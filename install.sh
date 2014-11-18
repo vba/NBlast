@@ -12,3 +12,4 @@ mono ".nuget\NuGet.exe" "Install" "Topshelf" "-OutputDirectory" "packages" "-Exc
 
 mono ".nuget\NuGet.exe" "Install" "Microsoft.AspNet.WebApi.owinSelfHost" "-OutputDirectory" "packages" "-ExcludeVersion"
 mono ".nuget\NuGet.exe" "Install" "Lucene.Net" "-OutputDirectory" "packages" "-ExcludeVersion"
+mono ".nuget\NuGet.exe" "Install" "FSharp.Collections.ParallelSeq" "-OutputDirectory" "packages" "-ExcludeVersion"

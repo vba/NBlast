@@ -1,5 +1,7 @@
 ﻿namespace NBlast.Storage.Core.Index
 
 type IStorageReader = interface
-    abstract member Search : string -> string -> int option -> int option -> LogDocumentHit list
+    abstract member SearchByField : string -> int option -> int option -> LogDocumentHits
+    abstract member FindAll: int option -> int option -> LogDocumentHits
+    abstract member CountAll: unit -> bigint
     end

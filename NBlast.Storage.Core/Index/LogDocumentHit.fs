@@ -10,3 +10,6 @@ type LogDocumentHit =
       CreatedAt: System.DateTime
       Score    : float32 option }
 
+type LogDocumentHits = 
+    { Hits          : List<LogDocumentHit>
+      QueryDuration : int64 }

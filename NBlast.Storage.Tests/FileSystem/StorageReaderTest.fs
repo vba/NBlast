@@ -24,7 +24,7 @@ type StorageReaderTest() =
         let sut = this.MakeSut path
 
         // When
-        let actuals = sut.Search "content" "c" None None
+        let actuals = (sut.SearchByField "content:c" None None).Hits 
 
         // Then
         (actuals |> List.length).Should().Be(3, "Only 3 documents must be found") |> ignore
@@ -47,7 +47,7 @@ type StorageReaderTest() =
         let sut = this.MakeSut (path, 5)
         
         // When
-        let actuals = sut.Search "content" "c" (Some 1) None
+        let actuals = (sut.SearchByField "content:c" (Some 1) None).Hits 
 
         // Then
         (actuals |> List.length).Should().Be(5, "Only 5 documents must be found") |> ignore
@@ -62,7 +62,7 @@ type StorageReaderTest() =
         let sut = this.MakeSut (path, 5)
         
         // When
-        let actuals = sut.Search "level" "debug" (Some 13) None
+        let actuals = (sut.SearchByField "level:debug" (Some 13) None).Hits 
 
         // Then
         (actuals |> List.length).Should().Be(2, "Only 2 documents must be found") |> ignore
@@ -77,13 +77,26 @@ type StorageReaderTest() =
         let sut = this.MakeSut (path, 5)
         
         // When
-        let actuals = sut.Search "level" "debug" (Some 10) None
+        let actuals = (sut.SearchByField "level:debug" (Some 10) None).Hits
 
         // Then
         (actuals |> List.length).Should().Be(5, "5 documents must be found") |> ignore
         actuals.Head.Message.Should().Be("11 C", "First element must be as expected") |> ignore
         (actuals |> List.rev).Head.Message.Should().Be("15 C", "Last element must be as expected") |> ignore
 
+    [<Fact>]
+    member this.``Reader must find all when it's requested``() =
+        // Given
+        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let writer = new StorageWriter(path) :> IStorageWriter
+        this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
+        let sut = this.MakeSut (path, 5)
+        
+        // When
+        let actuals = (sut.FindAll None (Some Int32.MaxValue)).Hits 
+
+        // Then
+        (actuals |> List.length).Should().Be(15, "15 documents must be found") |> ignore
 
     member private this.``gimme 6 fake documents`` () = 
         [ new LogDocument("sender", "1 C C", "log", "debug");
