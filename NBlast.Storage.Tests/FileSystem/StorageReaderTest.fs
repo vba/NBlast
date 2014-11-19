@@ -30,7 +30,7 @@ type StorageReaderTest() =
         (actuals |> List.length).Should().Be(3, "Only 3 documents must be found") |> ignore
         actuals |> Seq.iter (fun actual -> 
             actual.Message.EndsWith("C").Should().BeTrue("Message must end with C") |> ignore
-            actual.Sender.Should().Be("sender", "Sender value must be returned") |> ignore
+            actual.Sender.Should().StartWith("sender", "Sender value should start with 'sender'") |> ignore
             actual.Logger.Should().Be("log", "Logger value must be returned") |> ignore
             actual.Level.Should().Be("debug", "Debug value must be returned") |> ignore
             actual.CreatedAt.Should().BeBefore(DateTime.Now, "created at must respect specified interval") |> ignore
@@ -129,31 +129,50 @@ type StorageReaderTest() =
         // Then
         (actuals |> List.length).Should().Be(15, "15 documents must be found") |> ignore
 
+    [<Fact>]
+    member this.``Reader must group index results by requested field as expected``() =
+        // Given
+        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let writer = new StorageWriter(path) :> IStorageWriter
+        this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
+        let sut = this.MakeSut (path, 5)
+        
+        // When
+        let actualFacets = (sut.GroupWith LogField.Sender).Facets |> List.toArray
+
+        // Then
+        (actualFacets |> Array.length).Should().Be(3, "3 facet must be found") |> ignore
+        actualFacets |> Seq.iteri (fun i x -> 
+            x.Name.Should().StartWith("sender", "Facet name must start with sender") |> ignore
+            x.Count.Should().Be(int64 5, "Each group must count 5 documents") |> ignore
+        )
+
+
     member private this.``gimme 6 fake documents`` () = 
-        [ new LogDocument("sender", "1 C C", "log", "debug");
-          new LogDocument("sender", "2 B", "log", "debug");
-          new LogDocument("sender", "3 C", "log", "debug");
-          new LogDocument("sender", "4 B", "log", "debug");
-          new LogDocument("sender", "5 C", "log", "debug");
-          new LogDocument("sender", "6 B", "log", "debug"); ] 
+        [ new LogDocument("sender1", "1 C C", "log", "debug");
+          new LogDocument("sender1", "2 B", "log", "debug");
+          new LogDocument("sender1", "3 C", "log", "debug");
+          new LogDocument("sender2", "4 B", "log", "debug");
+          new LogDocument("sender2", "5 C", "log", "debug");
+          new LogDocument("sender2", "6 B", "log", "debug"); ] 
             |> List.map (fun x -> x :> IStorageDocument)
 
     member private this.``gimme 15 fake documents`` () = 
-        [ new LogDocument("sender", "1 C C", "log", "debug");
-          new LogDocument("sender", "2 B", "log", "debug");
-          new LogDocument("sender", "3 C", "log", "debug");
-          new LogDocument("sender", "4 B", "log", "debug");
-          new LogDocument("sender", "5 C", "log", "debug");
-          new LogDocument("sender", "6 B", "log", "debug"); 
-          new LogDocument("sender", "7 C", "log", "debug"); 
-          new LogDocument("sender", "8 B", "log", "debug"); 
-          new LogDocument("sender", "9 C", "log", "debug"); 
-          new LogDocument("sender", "10 B", "log", "debug"); 
-          new LogDocument("sender", "11 C", "log", "debug"); 
-          new LogDocument("sender", "12 B", "log", "debug"); 
-          new LogDocument("sender", "13 C", "log", "debug"); 
-          new LogDocument("sender", "14 B", "log", "debug"); 
-          new LogDocument("sender", "15 C", "log", "debug"); ] 
+        [ new LogDocument("sender1", "1 C C", "log", "debug");
+          new LogDocument("sender1", "2 B", "log", "debug");
+          new LogDocument("sender1", "3 C", "log", "debug");
+          new LogDocument("sender1", "4 B", "log", "debug");
+          new LogDocument("sender1", "5 C", "log", "debug");
+          new LogDocument("sender2", "6 B", "log", "debug"); 
+          new LogDocument("sender2", "7 C", "log", "debug"); 
+          new LogDocument("sender2", "8 B", "log", "debug"); 
+          new LogDocument("sender2", "9 C", "log", "debug"); 
+          new LogDocument("sender2", "10 B", "log", "debug"); 
+          new LogDocument("sender3", "11 C", "log", "debug"); 
+          new LogDocument("sender3", "12 B", "log", "debug"); 
+          new LogDocument("sender3", "13 C", "log", "debug"); 
+          new LogDocument("sender3", "14 B", "log", "debug"); 
+          new LogDocument("sender3", "15 C", "log", "debug"); ] 
             |> List.map (fun x -> x :> IStorageDocument)
 
     member private this.MakeSut(path, ?itemsPerPage) :IStorageReader =

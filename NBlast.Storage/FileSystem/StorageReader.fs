@@ -34,6 +34,7 @@ type StorageReader(path: string, ?itemsPerPage: int) =
     let directory = lazy(FSDirectory.Open(new DirectoryInfo(path)))
     let indexReader = lazy(IndexReader.Open(directory.Value, true))
 
+
     member private this.HitToDocument (pair: Document * float32 option) = 
         let doc = fst pair
         let score = snd pair
@@ -48,11 +49,25 @@ type StorageReader(path: string, ?itemsPerPage: int) =
           CreatedAt = DateTools.StringToDate(doc.Get(LogField.CreatedAt.GetName()));
         }
 
-    member private me.GroupByFields() =
-        
-        []
-
     interface IStorageReader with
+        member me.GroupWith (field: LogField) =
+            use analyzer = new StandardAnalyzer(version)
+            use facetedSearcher = new SimpleFacetedSearch(indexReader.Value, LogField.Sender.GetName())
+            let parser = new MultiFieldQueryParser(version, LogField.Names, analyzer)
+            let query = _parseQuery "*:*" parser
+            let sw = new Stopwatch()
+
+            sw.Start()
+            let hits = facetedSearcher.Search(query)
+            sw.Stop()
+
+            let facets = hits.HitsPerFacet 
+                         |> Seq.map (fun x -> {Name = x.Name.ToString(); Count = x.HitCount }) 
+                         |> Seq.toList
+
+            { Facets        = facets
+              QueryDuration = sw.ElapsedMilliseconds }
+
         member this.SearchByField query ?skipOp ?takeOp =
             use indexSearcher = new IndexSearcher(directory.Value, true)
             use analyzer = new StandardAnalyzer(version)
