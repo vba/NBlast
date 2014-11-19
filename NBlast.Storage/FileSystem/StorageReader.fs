@@ -32,6 +32,7 @@ type StorageReader(path: string, ?itemsPerPage: int) =
             | :? ParseException -> parser.Parse(QueryParser.Escape(query.Trim()))
 
     let directory = lazy(FSDirectory.Open(new DirectoryInfo(path)))
+    let indexReader = lazy(IndexReader.Open(directory.Value, true))
 
     member private this.HitToDocument (pair: Document * float32 option) = 
         let doc = fst pair
@@ -46,6 +47,10 @@ type StorageReader(path: string, ?itemsPerPage: int) =
           Level     = doc.Get(LogField.Level.GetName());
           CreatedAt = DateTools.StringToDate(doc.Get(LogField.CreatedAt.GetName()));
         }
+
+    member private me.GroupByFields() =
+        
+        []
 
     interface IStorageReader with
         member this.SearchByField query ?skipOp ?takeOp =
@@ -77,6 +82,4 @@ type StorageReader(path: string, ?itemsPerPage: int) =
         member me.FindAll ?skipOp ?takeOp = 
             (me :> IStorageReader).SearchByField "*:*" skipOp takeOp
 
-        member me.CountAll() = 
-            use indexReader = IndexReader.Open(directory.Value, true)
-            indexReader.NumDocs()
+        member me.CountAll() = indexReader.Value.NumDocs()
