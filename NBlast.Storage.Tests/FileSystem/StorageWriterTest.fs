@@ -67,5 +67,5 @@ type StorageWriterTest() =
         Assert.Throws<StorageLockedException>(fun () -> sut.InsertOne(FakeDocument())) //|> ignore
 
     member private this.MakeSut reopenWhenLocked path :IStorageWriter =
-        new StorageWriter(path, reopenWhenLocked) :> IStorageWriter
-        //result
+        let directoryProvider = new WriterDirectoryProvider(path, reopenWhenLocked)
+        new StorageWriter(directoryProvider) :> IStorageWriter

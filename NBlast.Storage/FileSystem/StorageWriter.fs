@@ -12,31 +12,15 @@ open Lucene.Net.Util
 open Lucene.Net.Index
 open System.IO
 
-type StorageWriter(path: string, ?reopenWhenLockedOp: bool) = 
+type StorageWriter(directoryProvider: IDirectoryProvider) = 
 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
-    let directory = lazy (
-        let openIndex = fun x -> FSDirectory.Open(new DirectoryInfo(x))
-        let tempDirectory = openIndex path
-        let isLocked = IndexWriter.IsLocked(tempDirectory)
-        let reopenWhenLocked = if (reopenWhenLockedOp.IsSome) 
-                                then reopenWhenLockedOp.Value 
-                                else false
-
-        if (reopenWhenLocked && isLocked) then
-            try
-                tempDirectory.ClearLock(IndexWriter.WRITE_LOCK_NAME) 
-            with :? System.IO.IOException | :? LockObtainFailedException -> 
-                raise(new StorageUnlockFailedException(tempDirectory.Directory.FullName))
-        else if (isLocked) then
-            raise(new StorageLockedException(tempDirectory.Directory.FullName))
-        tempDirectory
-    )
     do
         logger.Debug("Initialization is over")
 
     interface IStorageWriter with
         member this.InsertOne(document: IStorageDocument) = 
+            use directory = directoryProvider.Provide()
             use analyser = new StandardAnalyzer(Version.LUCENE_30)
-            use writer = new IndexWriter(directory.Value, analyser, IndexWriter.MaxFieldLength.UNLIMITED)
+            use writer = new IndexWriter(directory, analyser, IndexWriter.MaxFieldLength.UNLIMITED)
             writer.AddDocument(document.ToLuceneDocument())

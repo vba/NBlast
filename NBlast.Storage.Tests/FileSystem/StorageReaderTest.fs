@@ -19,7 +19,7 @@ type StorageReaderTest() =
     member this.``Reader must work as expected in the case of a banal search by field``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let writer = new StorageWriter(path) :> IStorageWriter
+        let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 6 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut path
 
@@ -42,7 +42,7 @@ type StorageReaderTest() =
     member this.``Reader must search and collect expected amount of total documents``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let writer = new StorageWriter(path) :> IStorageWriter
+        let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
@@ -58,7 +58,7 @@ type StorageReaderTest() =
     member this.``Reader must count all documents as expected``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let writer = new StorageWriter(path) :> IStorageWriter
+        let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
@@ -73,7 +73,7 @@ type StorageReaderTest() =
     member this.``Reader must find and paginate results in the case of a banal search``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let writer = new StorageWriter(path) :> IStorageWriter
+        let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
         
@@ -88,7 +88,7 @@ type StorageReaderTest() =
     member this.``Reader must find and paginate in the end of found result slot``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let writer = new StorageWriter(path) :> IStorageWriter
+        let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
         
@@ -103,7 +103,7 @@ type StorageReaderTest() =
     member this.``Reader must find and paginate in the middle of found result slot``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let writer = new StorageWriter(path) :> IStorageWriter
+        let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
         
@@ -119,7 +119,7 @@ type StorageReaderTest() =
     member this.``Reader must find all when it's requested``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let writer = new StorageWriter(path) :> IStorageWriter
+        let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
         
@@ -133,7 +133,7 @@ type StorageReaderTest() =
     member this.``Reader must group index results by requested field as expected``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
-        let writer = new StorageWriter(path) :> IStorageWriter
+        let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
         
@@ -175,5 +175,12 @@ type StorageReaderTest() =
           new LogDocument("sender3", "15 C", "log", "debug"); ] 
             |> List.map (fun x -> x :> IStorageDocument)
 
+    member private me.MakeDirectoryProvider(path) = new ReaderDirectoryProvider(path)
+
     member private this.MakeSut(path, ?itemsPerPage) :IStorageReader =
-        new StorageReader(path, itemsPerPage |? 15) :> IStorageReader
+        let directoryProvider = this.MakeDirectoryProvider(path)
+        
+//        { 
+//            new IDirectoryProvider with member me.Provide() = new RAMDirectory() :> Directory
+//        }
+        new StorageReader(directoryProvider, itemsPerPage |? 15) :> IStorageReader

@@ -45,6 +45,7 @@
     <Compile Include="Index\IStorageWriter.fs" />
     <Compile Include="Index\IStorageReader.fs" />
     <Compile Include="Index\IPaginator.fs" />
+    <Compile Include="Index\IDirectoryProvider.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Lucene.Net">

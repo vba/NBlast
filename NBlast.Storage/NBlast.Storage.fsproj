@@ -38,6 +38,8 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="LogDocument.fs" />
     <Compile Include="Paginator.fs" />
+    <Compile Include="FileSystem\WriterDirectoryProvider.fs" />
+    <Compile Include="FileSystem\ReaderDirectoryProvider.fs" />
     <Compile Include="FileSystem\StorageWriter.fs" />
     <Compile Include="FileSystem\StorageReader.fs" />
   </ItemGroup>

@@ -18,7 +18,7 @@ open Lucene.Net.Analysis.Standard
 open Lucene.Net.Index
 open FSharp.Collections.ParallelSeq
 
-type StorageReader(path: string, ?itemsPerPage: int) = 
+type StorageReader(directoryProvider: IDirectoryProvider, ?itemsPerPage: int) = 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     static let version = Version.LUCENE_30
     
@@ -30,9 +30,6 @@ type StorageReader(path: string, ?itemsPerPage: int) =
             parser.Parse(query)
         with
             | :? ParseException -> parser.Parse(QueryParser.Escape(query.Trim()))
-
-    let directory = lazy(FSDirectory.Open(new DirectoryInfo(path)))
-    let indexReader = lazy(IndexReader.Open(directory.Value, true))
 
 
     member private this.HitToDocument (pair: Document * float32 option) = 
@@ -51,8 +48,10 @@ type StorageReader(path: string, ?itemsPerPage: int) =
 
     interface IStorageReader with
         member me.GroupWith (field: LogField) =
+            use directory = directoryProvider.Provide()
+            use indexReader = IndexReader.Open(directory, true)
             use analyzer = new StandardAnalyzer(version)
-            use facetedSearcher = new SimpleFacetedSearch(indexReader.Value, LogField.Sender.GetName())
+            use facetedSearcher = new SimpleFacetedSearch(indexReader, LogField.Sender.GetName())
             let parser = new MultiFieldQueryParser(version, LogField.Names, analyzer)
             let query = _parseQuery "*:*" parser
             let sw = new Stopwatch()
@@ -69,7 +68,8 @@ type StorageReader(path: string, ?itemsPerPage: int) =
               QueryDuration = sw.ElapsedMilliseconds }
 
         member this.SearchByField query ?skipOp ?takeOp =
-            use indexSearcher = new IndexSearcher(directory.Value, true)
+            use directory = directoryProvider.Provide()
+            use indexSearcher = new IndexSearcher(directory, true)
             use analyzer = new StandardAnalyzer(version)
             let (skip, take) = (skipOp |? 0, takeOp |? itemsPerPage)
             let parser = new MultiFieldQueryParser(version, LogField.Names, analyzer)
@@ -97,4 +97,7 @@ type StorageReader(path: string, ?itemsPerPage: int) =
         member me.FindAll ?skipOp ?takeOp = 
             (me :> IStorageReader).SearchByField "*:*" skipOp takeOp
 
-        member me.CountAll() = indexReader.Value.NumDocs()
+        member me.CountAll() = 
+            use directory = directoryProvider.Provide()
+            use indexReader = IndexReader.Open(directory, true)
+            indexReader.NumDocs()
