@@ -1,0 +1,54 @@
+﻿namespace NBlast.Api
+
+open NBlast.Storage.Core
+open NBlast.Storage.Core.Index
+open NBlast.Storage
+open NBlast.Storage.FileSystem
+open Microsoft.Practices.Unity
+open System.Web.Http.Dependencies
+open System.Configuration
+open System
+
+    type AppSettingNotFoundException = 
+        inherit InvalidOperationException
+        new (key) = { inherit InvalidOperationException(sprintf "App setting not found for key %s" key) } 
+
+    type AppSettingTryCastException = 
+        inherit InvalidOperationException
+        new (key, ``type``) = { inherit InvalidOperationException(sprintf "Cannot conver setting %s to %A" key ``type``) } 
+
+    module UnityConfig = 
+        let private ReadConfig (key: string) =
+            try
+                ConfigurationManager.AppSettings.[key]
+            with
+            | _ -> raise (new AppSettingNotFoundException(key))
+
+        let private ReadConfigAsInt key =
+            match ReadConfig key |> Int32.TryParse with
+            | (false, _) -> raise (new AppSettingTryCastException(key, int32.GetType()))
+            | (true, value) -> value
+
+        let Configure() =
+            let container = new UnityContainer()
+            let directoryPath = "NBlast.directoryPath" |> ReadConfig
+            
+            container.RegisterInstance<IPaginator>(new Paginator()) |> ignore
+
+            container
+                .RegisterInstance<IDirectoryProvider>("ReaderDirectoryProvider", 
+                                                      new ReaderDirectoryProvider(directoryPath)) |> ignore 
+            container
+                .RegisterInstance<IDirectoryProvider>("WriterDirectoryProvider", 
+                                                      new WriterDirectoryProvider(directoryPath)) |> ignore
+            container
+                .RegisterInstance<IStorageReader>(
+                    new StorageReader(container.Resolve<IDirectoryProvider>("ReaderDirectoryProvider"),
+                                      container.Resolve<IPaginator>())
+                ) |> ignore
+            container
+                .RegisterInstance<IStorageWriter>(
+                    new StorageWriter(container.Resolve<IDirectoryProvider>("ReaderDirectoryProvider"))
+                ) |> ignore
+
+            new UnityResolver(container) :> IDependencyResolver

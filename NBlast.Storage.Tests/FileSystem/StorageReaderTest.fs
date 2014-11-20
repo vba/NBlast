@@ -186,8 +186,8 @@ type StorageReaderTest() =
 
     member private this.MakeSut(path, ?itemsPerPage) :IStorageReader =
         let directoryProvider = this.MakeDirectoryProvider(path)
-        
+        let paginator = new Paginator() :> IPaginator
 //        { 
 //            new IDirectoryProvider with member me.Provide() = new RAMDirectory() :> Directory
 //        }
-        new StorageReader(directoryProvider, itemsPerPage |? 15) :> IStorageReader
+        new StorageReader(directoryProvider, paginator, itemsPerPage |? 15) :> IStorageReader

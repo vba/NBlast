@@ -48,6 +48,7 @@
     <Compile Include="Controllers\LogController.fs" />
     <Compile Include="Controllers\HomeController.fs" />
     <Compile Include="UnityResolver.fs" />
+    <Compile Include="UnityConfig.fs" />
     <Compile Include="WebApiStarter.fs" />
     <Compile Include="Program.fs" />
     <Content Include="App.config">
@@ -63,6 +64,7 @@
       <HintPath>..\packages\NLog\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
@@ -96,20 +98,23 @@
     <Reference Include="System.Net.Http.Formatting">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
-    <Reference Include="Lucene.Net.Linq">
-      <HintPath>..\packages\Lucene.Net.Linq\lib\net40\Lucene.Net.Linq.dll</HintPath>
-    </Reference>
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net\lib\NET40\Lucene.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Linq">
-      <HintPath>..\packages\Remotion.Linq\lib\net35\Remotion.Linq.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging.Core">
-      <HintPath>..\packages\Common.Logging.Core\lib\net40\Common.Logging.Core.dll</HintPath>
-    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
+      <Name>NBlast.Storage.Core</Name>
+      <Project>{ccc4baec-229a-4676-a86a-df7da54ecfe7}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\NBlast.Storage\NBlast.Storage.fsproj">
+      <Name>NBlast.Storage</Name>
+      <Project>{380fd59d-7c02-4e4d-bd30-17661159b830}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 </Project>

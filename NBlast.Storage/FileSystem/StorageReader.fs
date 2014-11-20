@@ -18,12 +18,15 @@ open Lucene.Net.Analysis.Standard
 open Lucene.Net.Index
 open FSharp.Collections.ParallelSeq
 
-type StorageReader(directoryProvider: IDirectoryProvider, ?itemsPerPage: int) = 
+type StorageReader (directoryProvider: IDirectoryProvider,
+                    paginator: IPaginator, 
+                    ?itemsPerPage: int) = 
+
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     static let version = Version.LUCENE_30
     
     let itemsPerPage = itemsPerPage |? 15
-    let paginator = new Paginator() :> IPaginator
+    //let paginator = new Paginator() :> IPaginator
 
     static let _parseQuery = fun query (parser: QueryParser) ->
         try
