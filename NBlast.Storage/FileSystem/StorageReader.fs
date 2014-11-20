@@ -67,13 +67,13 @@ type StorageReader(directoryProvider: IDirectoryProvider, ?itemsPerPage: int) =
             { Facets        = facets
               QueryDuration = sw.ElapsedMilliseconds }
 
-        member this.SearchByField query ?skipOp ?takeOp =
+        member this.SearchByField searchQuery =
             use directory = directoryProvider.Provide()
             use indexSearcher = new IndexSearcher(directory, true)
             use analyzer = new StandardAnalyzer(version)
-            let (skip, take) = (skipOp |? 0, takeOp |? itemsPerPage)
+            let (skip, take) = (searchQuery.Skip |? 0, searchQuery.Take |? itemsPerPage)
             let parser = new MultiFieldQueryParser(version, LogField.Names, analyzer)
-            let query = _parseQuery query parser
+            let query = _parseQuery searchQuery.Expression parser
             let sw = new Stopwatch()
 
             sw.Start()
@@ -95,7 +95,11 @@ type StorageReader(directoryProvider: IDirectoryProvider, ?itemsPerPage: int) =
               QueryDuration = sw.ElapsedMilliseconds }
 
         member me.FindAll ?skipOp ?takeOp = 
-            (me :> IStorageReader).SearchByField "*:*" skipOp takeOp
+            let query = { (SearchQuery.GetOnlyExpression "*:*") 
+                            with Skip = skipOp
+                                 Take = takeOp }
+
+            (me :> IStorageReader).SearchByField query
 
         member me.CountAll() = 
             use directory = directoryProvider.Provide()

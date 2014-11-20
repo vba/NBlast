@@ -22,9 +22,10 @@ type StorageReaderTest() =
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 6 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut path
+        let query = SearchQuery.GetOnlyExpression (Content.QueryWith "c")
 
         // When
-        let actuals = (sut.SearchByField (Content.QueryWith "c") None None).Hits 
+        let actuals = (sut.SearchByField query).Hits 
 
         // Then
         (actuals |> List.length).Should().Be(3, "Only 3 documents must be found") |> ignore
@@ -46,9 +47,12 @@ type StorageReaderTest() =
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
+        let query = { SearchQuery.GetOnlyExpression (Content.QueryWith "b") 
+                        with Skip = Some 0 
+                             Take = Some 1 }
         
         // When
-        let actuals = (sut.SearchByField (Content.QueryWith "b") (Some 0) (Some 1))
+        let actuals = sut.SearchByField query
 
         // Then
         (actuals.Hits |> List.length).Should().Be(1, "Only 1 documents must be returned") |> ignore
@@ -76,9 +80,10 @@ type StorageReaderTest() =
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
+        let query = { SearchQuery.GetOnlyExpression (Content.QueryWith "c") with Skip = Some 1 }
         
         // When
-        let actuals = (sut.SearchByField (Content.QueryWith "c") (Some 1) None).Hits 
+        let actuals = (sut.SearchByField query).Hits 
 
         // Then
         (actuals |> List.length).Should().Be(5, "Only 5 documents must be found") |> ignore
@@ -91,9 +96,10 @@ type StorageReaderTest() =
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
+        let query = { SearchQuery.GetOnlyExpression (Level.QueryWith "debug") with Skip = Some 13 }
         
         // When
-        let actuals = (sut.SearchByField (Level.QueryWith "debug") (Some 13) None).Hits 
+        let actuals = (sut.SearchByField query).Hits 
 
         // Then
         (actuals |> List.length).Should().Be(2, "Only 2 documents must be found") |> ignore
@@ -106,9 +112,10 @@ type StorageReaderTest() =
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
+        let query = { SearchQuery.GetOnlyExpression (Level.QueryWith "debug") with Skip = Some 10 }
         
         // When
-        let actuals = (sut.SearchByField (Level.QueryWith "debug") (Some 10) None).Hits
+        let actuals = (sut.SearchByField query).Hits
 
         // Then
         (actuals |> List.length).Should().Be(5, "5 documents must be found") |> ignore
