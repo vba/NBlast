@@ -47,6 +47,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Controllers\LogController.fs" />
     <Compile Include="Controllers\HomeController.fs" />
+    <Compile Include="UnityResolver.fs" />
     <Compile Include="WebApiStarter.fs" />
     <Compile Include="Program.fs" />
     <Content Include="App.config">
@@ -54,6 +55,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="NLog">
       <HintPath>..\packages\NLog\lib\net40\NLog.dll</HintPath>
