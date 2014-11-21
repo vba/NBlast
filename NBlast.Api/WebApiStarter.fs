@@ -23,6 +23,6 @@ type WebApiStarter() =
                 fun t -> t.MediaType = "application/xml"
         )
         config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType) |> ignore
-        config.DependencyResolver = UnityConfig.Configure() |> ignore
+        config.DependencyResolver <- UnityConfig.Configure()
 
         appBuilder.UseWebApi(config) |> ignore
