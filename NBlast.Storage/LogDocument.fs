@@ -70,8 +70,8 @@ type LogDocument ( sender     : string,
                    message    : string,
                    logger     : string,
                    level      : string,
-                   ?error     : string,
-                   ?createdAt : DateTime ) =
+                   error      : string option,
+                   createdAt  : DateTime option ) =
 
     member me.Sender with get() = new SenderField(sender)  :> IField<string>
     member me.Message with get() = new MessageField(message)  :> IField<string>
@@ -82,7 +82,24 @@ type LogDocument ( sender     : string,
     member me.Error with get() =  if (error.IsSome) 
                                     then Some(new ErrorField(error.Value)  :> IField<string>)
                                     else None
+                                     
+    new ( sender  : string,
+          message : string,
+          logger  : string,
+          level   : string ) = LogDocument(sender, message, logger, level, None, None)
 
+    new ( sender  : string,
+          message : string,
+          logger  : string,
+          level   : string,
+          error   : string ) = LogDocument(sender, message, logger, level, Some error, None)
+
+    new ( sender    : string,
+          message   : string,
+          logger    : string,
+          level     : string,
+          error     : string,
+          createdAt : DateTime ) = LogDocument(sender, message, logger, level, Some error, Some createdAt)
 
     interface IStorageDocument with
         member me.ToLuceneDocument() = 

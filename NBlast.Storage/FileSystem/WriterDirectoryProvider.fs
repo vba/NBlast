@@ -20,6 +20,9 @@ type WriterDirectoryProvider(path: string, ?reopenWhenLockedOp: bool) =
                                     then reopenWhenLockedOp.Value 
                                     else false
 
+            if (Directory.Exists(path)) 
+                then Directory.CreateDirectory(path) |> ignore
+
             if (reopenWhenLocked && isLocked) then
                 try
                     result.ClearLock(IndexWriter.WRITE_LOCK_NAME) 

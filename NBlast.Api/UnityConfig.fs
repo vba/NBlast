@@ -8,6 +8,7 @@ open Microsoft.Practices.Unity
 open System.Web.Http.Dependencies
 open System.Configuration
 open System
+open System.IO
 
     type AppSettingNotFoundException = 
         inherit InvalidOperationException
@@ -20,7 +21,7 @@ open System
     module UnityConfig = 
         let private ReadConfig (key: string) =
             try
-                ConfigurationManager.AppSettings.[key]
+                ConfigurationManager.AppSettings.[key] |> Environment.ExpandEnvironmentVariables
             with
             | _ -> raise (new AppSettingNotFoundException(key))
 
@@ -31,7 +32,7 @@ open System
 
         let Configure() =
             let container = new UnityContainer()
-            let directoryPath = "NBlast.directoryPath" |> ReadConfig
+            let directoryPath = "NBlast.directoryPath" |> ReadConfig |> Path.GetFullPath
             
             container.RegisterInstance<IPaginator>(new Paginator()) |> ignore
 
