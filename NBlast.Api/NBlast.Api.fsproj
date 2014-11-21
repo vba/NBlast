@@ -48,6 +48,7 @@
     <Compile Include="Controllers\LogController.fs" />
     <Compile Include="Controllers\HomeController.fs" />
     <Compile Include="Controllers\SearcherController.fs" />
+    <Compile Include="Controllers\IndexerController.fs" />
     <Compile Include="UnityResolver.fs" />
     <Compile Include="UnityConfig.fs" />
     <Compile Include="WebApiStarter.fs" />
