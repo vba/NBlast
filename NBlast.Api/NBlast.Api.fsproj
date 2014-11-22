@@ -45,6 +45,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Models\LogModel.fs" />
     <Compile Include="Controllers\LogController.fs" />
     <Compile Include="Controllers\HomeController.fs" />
     <Compile Include="Controllers\SearcherController.fs" />
@@ -66,6 +67,7 @@
       <HintPath>..\packages\NLog\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />

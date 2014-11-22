@@ -1,4 +1,4 @@
-﻿namespace NBlast.Api
+﻿namespace NBlast.Api.Controllers
 
 open System.Web.Http
 
