@@ -15,3 +15,4 @@ mono ".nuget\NuGet.exe" "Install" "Lucene.Net" "-OutputDirectory" "packages" "-E
 mono ".nuget\NuGet.exe" "Install" "Lucene.Net.Contrib" "-OutputDirectory" "packages" "-ExcludeVersion"
 mono ".nuget\NuGet.exe" "Install" "FSharp.Collections.ParallelSeq" "-OutputDirectory" "packages" "-ExcludeVersion"
 mono ".nuget\NuGet.exe" "Install" "Unity" "-OutputDirectory" "packages" "-ExcludeVersion"
+mono ".nuget\NuGet.exe" "Install" "AutoFixture" "-OutputDirectory" "packages" "-ExcludeVersion"
