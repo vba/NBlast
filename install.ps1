@@ -13,3 +13,4 @@
 & ".nuget\NuGet.exe" "Install" "FSharp.Collections.ParallelSeq" "-OutputDirectory" "packages" "-ExcludeVersion"
 & ".nuget\NuGet.exe" "Install" "Unity" "-OutputDirectory" "packages" "-ExcludeVersion"
 & ".nuget\NuGet.exe" "Install" "AutoFixture" "-OutputDirectory" "packages" "-ExcludeVersion"
+& ".nuget\NuGet.exe" "Install" "FluentScheduler" "-OutputDirectory" "packages" "-ExcludeVersion"

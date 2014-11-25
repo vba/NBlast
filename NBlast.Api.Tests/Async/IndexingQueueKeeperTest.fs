@@ -38,6 +38,22 @@ type IndexingQueueKeeperTest() =
         // Then
         sut.Count().Should().Be(10, "Queue count must be 10")
 
+
+    [<Fact>]
+    member me.``Keeper must peek model and leave it in queue``() =
+        // Given
+        let sut = me.MakeSut()
+        let models = me.``Gimme N log models``()
+        
+        // When
+        models |> List.iter (fun x -> sut.Enqueue(x)) 
+        let actual = sut.Peek()
+
+        // Then
+        sut.Count().Should().Be(10, "Queue count must be 10") |> ignore
+        actual.IsSome.Should().BeTrue("Actual cannot be None") |> ignore
+        actual.Value.Should().Be(models.Head, "List head and peeken element is the same")
+
     [<Fact>]
     member me.``Keeper must consume models in the ordinary context``() =
         // Given

@@ -13,7 +13,10 @@ type IQueueKeeper<'a> = interface
     abstract member Enqueue : 'a -> unit
     abstract member Consume : unit -> 'a option
     abstract member ConsumeMany : int option -> seq<'a>
+    abstract member Peek : unit -> 'a option
     abstract member Count : unit -> int 
+    abstract member ToArray : unit -> array<'a>
+
 end
 
 type IndexingQueueKeeper() =
@@ -22,6 +25,12 @@ type IndexingQueueKeeper() =
 
     interface IQueueKeeper<LogModel> with
         member me.Count() = queue |> Seq.length 
+        member me.ToArray() = queue.ToArray()
+        member me.Peek() =  
+            match queue.TryPeek() with 
+            | (false, _) -> None
+            | (true, model) -> Some model
+
         member me.Enqueue model = 
                 model |> sprintf "Enqueuing model %A" |> logger.Debug
                 queue.Enqueue(model)
