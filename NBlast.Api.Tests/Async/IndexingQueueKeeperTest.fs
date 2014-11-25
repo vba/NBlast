@@ -38,6 +38,50 @@ type IndexingQueueKeeperTest() =
         // Then
         sut.Count().Should().Be(10, "Queue count must be 10")
 
+    [<Fact>]
+    member me.``Keeper must consume models in the ordinary context``() =
+        // Given
+        let sut = me.MakeSut()
+        let models = me.``Gimme N log models``(2)
+        
+        // When
+        models |> Seq.iter (fun x -> sut.Enqueue(x).Wait() |> ignore)
+        let actuals = [sut.Consume(); sut.Consume(); sut.Consume()]
+
+        // Then
+        sut.Count().Should().Be(0, "Queue count must remain 0 after consumption") |> ignore
+        (actuals |> List.head |> Option.isSome).Should().BeTrue("First element of actuals cannot be None") |> ignore
+        ((actuals |> List.toArray).[1] |> Option.isSome).Should().BeTrue("Second element of actuals cannot be None") |> ignore
+        ((actuals |> List.toArray).[2] |> Option.isNone).Should().BeTrue("Third element of actuals must be None") |> ignore
+
+
+    [<Fact>]
+    member me.``Keeper must consume many models in the ordinary context``() =
+        // Given
+        let sut = me.MakeSut()
+        let models = me.``Gimme N log models``(5)
+        
+        // When
+        models |> Seq.iter (fun x -> sut.Enqueue(x).Wait() |> ignore)
+        let actuals = sut.ConsumeMany(Some 4) |> Seq.toList
+
+        // Then
+        (actuals |> List.length).Should().Be(4, "Consume many must extract exactly 4 models") |> ignore
+        sut.Count().Should().Be(1, "Queue count must be equal 1") |> ignore
+        actuals |> List.iter (fun x -> (x).Should().NotBeNull("") |> ignore)
+
+    [<Fact>]
+    member me.``Keeper must try to consume many models and return nothing with an empty keeper``() =
+        // Given
+        let sut = me.MakeSut()
+        let models = me.``Gimme N log models``(5)
+        
+        // When
+        let actuals = sut.ConsumeMany(Some 5) |> Seq.toList
+
+        // Then
+        (actuals |> List.length).Should().Be(0, "Consume many must extract nothing") |> ignore
+        sut.Count().Should().Be(0, "Queue must remain empty") |> ignore
 
     
     member private me.``Gimme N log models`` ?x =
