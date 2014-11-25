@@ -5,7 +5,7 @@ open System.Web.Http.Dependencies
 open Microsoft.Practices.Unity
 
 type UnityResolver(container: IUnityContainer) =
-
+    member me.Container with get() = container
     interface IDependencyResolver with 
         member me.GetService (serviceType: Type) =
             try

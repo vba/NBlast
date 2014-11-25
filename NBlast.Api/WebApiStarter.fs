@@ -18,11 +18,12 @@ type WebApiStarter() =
                                    "api/{controller}/{id}",
                                    {id = RouteParameter.Optional}) |> ignore
 
+        let unityResolver = UnityConfig.Configure()
         let appXmlType = 
             config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(
                 fun t -> t.MediaType = "application/xml"
         )
         config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType) |> ignore
-        config.DependencyResolver <- UnityConfig.Configure()
+        config.DependencyResolver <- unityResolver //:> IDependencyResolver
 
         appBuilder.UseWebApi(config) |> ignore

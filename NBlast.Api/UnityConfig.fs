@@ -52,4 +52,4 @@ open System.IO
                     new StorageWriter(container.Resolve<IDirectoryProvider>("ReaderDirectoryProvider"))
                 ) |> ignore
 
-            new UnityResolver(container) :> IDependencyResolver
+            new UnityResolver(container)
