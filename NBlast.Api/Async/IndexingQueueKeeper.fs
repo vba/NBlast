@@ -5,10 +5,12 @@ open NBlast.Storage
 open NBlast.Storage.Core.Index
 open NBlast.Storage.Core.Extensions
 open System.Collections.Concurrent
+open System.Collections.Generic
 open System.Threading.Tasks
+open System
 
 type IQueueKeeper<'a> = interface
-    abstract member Enqueue : 'a -> Task<unit>
+    abstract member Enqueue : 'a -> unit
     abstract member Consume : unit -> 'a option
     abstract member ConsumeMany : int option -> seq<'a>
     abstract member Count : unit -> int 
@@ -21,11 +23,8 @@ type IndexingQueueKeeper() =
     interface IQueueKeeper<LogModel> with
         member me.Count() = queue |> Seq.length 
         member me.Enqueue model = 
-            async {
                 model |> sprintf "Enqueuing model %A" |> logger.Debug
                 queue.Enqueue(model)
-            } 
-            |> Async.StartAsTask
 
         member me.Consume() = 
             match queue.TryDequeue() with

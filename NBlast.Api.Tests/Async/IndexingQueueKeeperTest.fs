@@ -1,7 +1,8 @@
-namespace NBlast.Api.Tests.Async
+﻿namespace NBlast.Api.Tests.Async
 
 open NBlast.Api.Async
 open NBlast.Api.Models
+open NBlast.Storage.Core.Extensions
 open System
 open System.Runtime
 open Xunit
@@ -20,7 +21,7 @@ type IndexingQueueKeeperTest() =
         let models = me.``Gimme N log models``()
         
         // When
-        models |> Seq.iter (fun x -> sut.Enqueue(x).Wait())
+        models |> Seq.iter (fun x -> sut.Enqueue(x))
          
         // Then
         sut.Count().Should().Be(10, "Queue count must be 10")
@@ -32,8 +33,7 @@ type IndexingQueueKeeperTest() =
         let models = me.``Gimme N log models``()
         
         // When
-        models |> PSeq.iter (fun x -> sut.Enqueue(x) |> ignore)
-        System.Threading.Thread.Sleep(500)
+        models |> PSeq.iter (fun x -> sut.Enqueue(x))
 
         // Then
         sut.Count().Should().Be(10, "Queue count must be 10")
@@ -45,7 +45,7 @@ type IndexingQueueKeeperTest() =
         let models = me.``Gimme N log models``(2)
         
         // When
-        models |> Seq.iter (fun x -> sut.Enqueue(x).Wait() |> ignore)
+        models |> Seq.iter (fun x -> sut.Enqueue(x))
         let actuals = [sut.Consume(); sut.Consume(); sut.Consume()]
 
         // Then
@@ -56,13 +56,28 @@ type IndexingQueueKeeperTest() =
 
 
     [<Fact>]
+    member me.``Keeper must consume models in parallel context as well and without locking``() =
+        // Given
+        let sut = me.MakeSut()
+        let models = me.``Gimme N log models``(100)
+        
+        // When
+        let actuals = models 
+                    |> PSeq.map (fun x -> sut.Enqueue(x) ; sut.Consume()) 
+                    |> Seq.toList 
+                    |> List.filter (fun x -> x.IsSome && x.Value |> ``is ∅`` |> not)
+        
+        // Then
+        (actuals |> List.length).Should().Be(100, "Actual models count must be equal 100") |> ignore
+
+    [<Fact>]
     member me.``Keeper must consume many models in the ordinary context``() =
         // Given
         let sut = me.MakeSut()
         let models = me.``Gimme N log models``(5)
         
         // When
-        models |> Seq.iter (fun x -> sut.Enqueue(x).Wait() |> ignore)
+        models |> Seq.iter (fun x -> sut.Enqueue(x) |> ignore)
         let actuals = sut.ConsumeMany(Some 4) |> Seq.toList
 
         // Then

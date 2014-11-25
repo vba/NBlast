@@ -41,6 +41,11 @@
     <Compile Include="Controllers\HomeControllerSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
+      <Name>NBlast.Storage.Core</Name>
+      <Project>{ccc4baec-229a-4676-a86a-df7da54ecfe7}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <Reference Include="FSharp.Collections.ParallelSeq">
       <HintPath>..\packages\FSharp.Collections.ParallelSeq\lib\net40\FSharp.Collections.ParallelSeq.dll</HintPath>
     </Reference>
