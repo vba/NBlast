@@ -13,6 +13,8 @@ type RouteConfig = {
 type WebApiStarter() =
     member me.Configuration (appBuilder: IAppBuilder): unit =
         let config = new HttpConfiguration()
+        
+        config.MapHttpAttributeRoutes()
 
         config.Routes.MapHttpRoute("DefaultApi",
                                    "api/{controller}/{id}",

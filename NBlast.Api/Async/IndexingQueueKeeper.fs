@@ -44,7 +44,7 @@ type IndexingQueueKeeper() =
                 Some model
 
         member me.ConsumeMany ?amount =
-            let consume = (me :> IQueueKeeper<LogModel>).Consume
+            let consume = (me :> IIndexingQueueKeeper).Consume
             [ 0 .. (amount |? 10) - 1 ] |> Seq.map (fun x -> consume()) 
                 |> Seq.filter Option.isSome 
                 |> Seq.map Option.get 

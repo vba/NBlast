@@ -9,9 +9,11 @@ open NBlast.Storage.Core.Index
 type SearcherController(storageReader: IStorageReader) = 
     inherit ApiController()
 
-    [<HttpGet()>]
+    static let logger = NLog.LogManager.GetCurrentClassLogger()
+
+    [<HttpGet>]
     member me.Search (q: string) =
         let result = storageReader.SearchByField(SearchQuery.GetOnlyExpression q)
-        printfn "search result: %A" result
+        result |> sprintf "search result: %A" |> logger.Debug
         result
 
