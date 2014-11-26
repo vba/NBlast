@@ -26,4 +26,6 @@ type WebApiStarter() =
         config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType) |> ignore
         config.DependencyResolver <- unityResolver //:> IDependencyResolver
 
+        SchedulerConfig.Configure(unityResolver.Container)
+
         appBuilder.UseWebApi(config) |> ignore
