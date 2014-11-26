@@ -118,5 +118,5 @@ type IndexingQueueKeeperTest() =
     member private me.``Gimme N log models`` ?x =
         (new Fixture() :> IFixture).CreateMany<LogModel>(defaultArg x 10) |> Seq.toList
 
-    member private me.MakeSut(): IQueueKeeper<LogModel> = 
-        new IndexingQueueKeeper() :> IQueueKeeper<LogModel>
+    member private me.MakeSut(): IIndexingQueueKeeper = 
+        new IndexingQueueKeeper() :> IIndexingQueueKeeper

@@ -20,6 +20,7 @@ type StorageWriter(directoryProvider: IDirectoryProvider) =
 
     interface IStorageWriter with
         member this.InsertOne(document: IStorageDocument) = 
+            document |> sprintf "Indexing %A" |> logger.Debug
             use directory = directoryProvider.Provide()
             use analyser = new StandardAnalyzer(Version.LUCENE_30)
             use writer = new IndexWriter(directory, analyser, IndexWriter.MaxFieldLength.UNLIMITED)

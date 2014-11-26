@@ -16,14 +16,15 @@ type IQueueKeeper<'a> = interface
     abstract member Peek : unit -> 'a option
     abstract member Count : unit -> int 
     abstract member ToArray : unit -> array<'a>
-
 end
+
+type IIndexingQueueKeeper = inherit IQueueKeeper<LogModel>
 
 type IndexingQueueKeeper() =
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     let queue = new ConcurrentQueue<LogModel>()
 
-    interface IQueueKeeper<LogModel> with
+    interface IIndexingQueueKeeper with
         member me.Count() = queue |> Seq.length 
         member me.ToArray() = queue.ToArray()
         member me.Peek() =  

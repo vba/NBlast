@@ -55,9 +55,9 @@ open System.IO
                     new StorageWriter(container.Resolve<IDirectoryProvider>("ReaderDirectoryProvider"))
                 ) |> ignore
 
-            container.RegisterInstance<IQueueKeeper<LogModel>>(new IndexingQueueKeeper()) |> ignore
+            container.RegisterInstance<IIndexingQueueKeeper>(new IndexingQueueKeeper()) |> ignore
             container.RegisterInstance<ITask>(
-                new QueueProcessingTask(container.Resolve<IQueueKeeper<LogModel>>(), container.Resolve<IStorageWriter>())
+                new QueueProcessingTask(container.Resolve<IIndexingQueueKeeper>(), container.Resolve<IStorageWriter>())
             ) |> ignore
 
             new UnityResolver(container)

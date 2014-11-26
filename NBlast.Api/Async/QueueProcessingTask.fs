@@ -7,7 +7,7 @@ open NBlast.Storage
 open NBlast.Storage.Core.Index
 
 
-type QueueProcessingTask(queueKeeper: IQueueKeeper<LogModel>, 
+type QueueProcessingTask(queueKeeper: IIndexingQueueKeeper, 
                          storageWriter: IStorageWriter) =
     
     static let logger = NLog.LogManager.GetCurrentClassLogger()
@@ -26,6 +26,6 @@ type QueueProcessingTask(queueKeeper: IQueueKeeper<LogModel>,
         )
     interface ITask with 
         member me.Execute() =
-            logger.Debug("Scheduled task executed, queue contains {0} elements", queueKeeper.Count())
+            logger.Debug("Scheduled task executed, queue contains {0} element(s)", queueKeeper.Count())
             queueKeeper.ConsumeMany(Some 10) |> me.ProcessModels |> ignore  
 
