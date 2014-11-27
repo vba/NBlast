@@ -27,5 +27,5 @@ type QueueProcessingTask(queueKeeper: IIndexingQueueKeeper,
     interface ITask with 
         member me.Execute() =
             logger.Debug("Scheduled task executed, queue contains {0} element(s)", queueKeeper.Count())
-            queueKeeper.ConsumeMany(Some 20) |> me.ProcessModels |> ignore  
+            //queueKeeper.ConsumeMany(Some 20) |> me.ProcessModels |> ignore  
 

@@ -5,7 +5,7 @@ open System.Web.Http
 open System.Net.Http.Formatting
 open NBlast.Storage.Core.Index
 
-//[<RoutePrefix("api/log-search")>]
+[<RoutePrefix("api/searcher")>]
 type SearcherController(storageReader: IStorageReader) = 
     inherit ApiController()
 
@@ -16,4 +16,9 @@ type SearcherController(storageReader: IStorageReader) =
         let result = storageReader.SearchByField(SearchQuery.GetOnlyExpression q)
         result |> sprintf "search result: %A" |> logger.Debug
         result
+
+    [<HttpGet>]
+    [<Route("count-all")>]
+    member me.CountAll () =
+        storageReader.CountAll()
 

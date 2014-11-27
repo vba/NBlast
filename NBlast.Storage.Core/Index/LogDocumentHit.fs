@@ -1,5 +1,7 @@
 ﻿namespace NBlast.Storage.Core.Index
 
+open Newtonsoft.Json
+
 type DocumentField = {Name : string}
 
 type LogField = 
@@ -33,16 +35,16 @@ type LogField =
                LogField.Error.GetName(); |]
 
 type LogDocumentHit = 
-    { Sender   : string
-      Error    : string
-      Message  : string
-      Logger   : string
-      Level    : string
-      Boost    : float32
-      CreatedAt: System.DateTime
-      Score    : float32 option }
+    { [<field: JsonProperty("sender")>]    Sender   : string
+      [<field: JsonProperty("error")>]     Error    : string
+      [<field: JsonProperty("message")>]   Message  : string
+      [<field: JsonProperty("logger")>]    Logger   : string
+      [<field: JsonProperty("level")>]     Level    : string
+      [<field: JsonProperty("boost")>]     Boost    : float32
+      [<field: JsonProperty("createdAt")>] CreatedAt: System.DateTime
+      [<field: JsonProperty("score")>]     Score    : float32 option }
 
 type LogDocumentHits = 
-    { Hits          : List<LogDocumentHit>
-      Total         : int32
-      QueryDuration : int64 }
+    { [<field: JsonProperty("hits")>]          Hits          : List<LogDocumentHit>
+      [<field: JsonProperty("total")>]         Total         : int32
+      [<field: JsonProperty("queryDuration")>] QueryDuration : int64 }
