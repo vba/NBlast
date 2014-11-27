@@ -1,6 +1,7 @@
 ﻿namespace NBlast.Storage
 
 open NBlast.Storage.Core
+open NBlast.Storage.Core.Extensions
 open NBlast.Storage.Core.Index
 open Lucene.Net.Documents
 open Lucene.Net
@@ -78,7 +79,7 @@ type LogDocument ( sender     : string,
     member me.Logger with get() = new LoggerField(logger)  :> IField<string>
     member me.Level with get() = new LevelField(level)  :> IField<string>
     member me.Content with get() = new ContentField(if (error.IsSome) then message + " " + error.Value else message ) :> IField<string>
-    member me.CreatedAt with get() = new CreatedAtField(if (createdAt.IsSome) then createdAt.Value else DateTime.Now)  :> IField<DateTime>
+    member me.CreatedAt with get() = new CreatedAtField(if (createdAt.IsSome) then createdAt.Value else DateTime.Now) :> IField<DateTime>
     member me.Error with get() =  if (error.IsSome) 
                                     then Some(new ErrorField(error.Value)  :> IField<string>)
                                     else None

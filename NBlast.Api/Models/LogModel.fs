@@ -6,11 +6,6 @@ open System.ComponentModel.DataAnnotations
 
 
 type LogModel () =
-    [<field: JsonIgnore>]
-    let mutable error: string option = None
-    
-    [<field: JsonIgnore>]
-    let mutable createdAt: DateTime option = None
 
     [<Required>]
     [<field: JsonProperty("sender")>]
@@ -27,19 +22,15 @@ type LogModel () =
     [<Required>]
     [<field: JsonProperty("level")>]
     member val Level: string = null with get, set
-    
-    [<JsonIgnore>]
-    member me.Error 
-        with set (value: string) = 
-          error <- if(String.IsNullOrEmpty(value)) then None else Some value
-    
-    [<JsonIgnore>]
-    member me.CreatedAt 
-        with set (value: Nullable<DateTime>) = 
-          createdAt <- if(value.HasValue) then Some value.Value else None
 
-    [<JsonProperty("error")>]
-    member me.ErrorOp with get() = error
+    [<field: JsonProperty("error")>]
+    member val Error: string = null with get, set 
 
-    [<JsonProperty("createdAt")>]
-    member me.CreatedAtOp with get() = createdAt
+    [<field: JsonProperty("createdAt")>]
+    member val CreatedAt: Nullable<DateTime> = Unchecked.defaultof<_> with get, set 
+
+    [<JsonIgnore>]
+    member me.ErrorOp with get() = if(String.IsNullOrEmpty(me.Error)) then None else Some me.Error
+
+    [<JsonIgnore>]
+    member me.CreatedAtOp with get() = if (me.CreatedAt.HasValue) then Some me.CreatedAt.Value else None

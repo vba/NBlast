@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Async\IndexingQueueKeeperTest.fs" />
+    <Compile Include="Async\QueueProcessingTaskTests.fs" />
     <Compile Include="Controllers\HomeControllerSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -46,8 +47,22 @@
       <Project>{ccc4baec-229a-4676-a86a-df7da54ecfe7}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\NBlast.Storage\NBlast.Storage.fsproj">
+      <Name>NBlast.Storage</Name>
+      <Project>{380fd59d-7c02-4e4d-bd30-17661159b830}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <Reference Include="FluentScheduler">
+      <HintPath>..\packages\FluentScheduler\lib\net40\FluentScheduler.dll</HintPath>
+    </Reference>
     <Reference Include="FSharp.Collections.ParallelSeq">
       <HintPath>..\packages\FSharp.Collections.ParallelSeq\lib\net40\FSharp.Collections.ParallelSeq.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\packages\Lucene.Net\lib\NET40\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />

@@ -17,3 +17,4 @@ mono ".nuget\NuGet.exe" "Install" "FSharp.Collections.ParallelSeq" "-OutputDirec
 mono ".nuget\NuGet.exe" "Install" "Unity" "-OutputDirectory" "packages" "-ExcludeVersion"
 mono ".nuget\NuGet.exe" "Install" "AutoFixture" "-OutputDirectory" "packages" "-ExcludeVersion"
 mono ".nuget\NuGet.exe" "Install" "FluentScheduler" "-OutputDirectory" "packages" "-ExcludeVersion"
+mono ".nuget\NuGet.exe" "Install" "Moq" "-OutputDirectory" "packages" "-ExcludeVersion"

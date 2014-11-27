@@ -29,4 +29,3 @@ type IndexerController(queueKeeper: IIndexingQueueKeeper) =
     [<Route("queue-content")>]
     member me.QueueContent() =
         queueKeeper.ToArray()
-        //me.Ok(queueKeeper.Count())
