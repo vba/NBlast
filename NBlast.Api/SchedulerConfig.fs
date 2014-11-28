@@ -23,6 +23,8 @@ open System
             logger.Fatal(e.ExceptionObject) |> ignore
 
         let Configure(container: IUnityContainer) =
+            logger.Debug("Start to configure task scheduler")
+
             TaskManager.TaskFactory <- new TaskFactory(container)
             TaskManager.add_UnobservedTaskException(new GenericEventHandler<TaskExceptionInformation, UnhandledExceptionEventArgs>(onTaskException))
             TaskManager.Initialize(new ScheduleRegistry())

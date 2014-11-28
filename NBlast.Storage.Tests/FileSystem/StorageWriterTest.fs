@@ -37,7 +37,7 @@ type StorageWriterTest() =
 
         // Then
         (Directory.Exists(path)).Should().Be(true, sprintf "Storage has to create its directory in %s" path)
-
+    (*
     [<Fact>]
     member this.``Writer directory creation must fail trying unlock locked directory``() =
         // Given
@@ -51,7 +51,7 @@ type StorageWriterTest() =
         directory.Dispose()
 
         Assert.Throws<StorageUnlockFailedException>(fun () -> sut.InsertOne(FakeDocument())) 
-
+    *)
     [<Fact>]
     member this.``Writer directory creation must fail when it's already locked``() =
         // Given

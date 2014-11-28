@@ -22,6 +22,8 @@ open System.IO
         new (key, ``type``) = { inherit InvalidOperationException(sprintf "Cannot conver setting %s to %A" key ``type``) } 
 
     module UnityConfig = 
+        let private logger = NLog.LogManager.GetCurrentClassLogger()
+
         let private ReadConfig (key: string) =
             try
                 ConfigurationManager.AppSettings.[key] |> Environment.ExpandEnvironmentVariables
@@ -34,6 +36,8 @@ open System.IO
             | (true, value) -> value
 
         let Configure() =
+            logger.Debug("Start to configure IoC container")
+
             let container = new UnityContainer()
             let directoryPath = "NBlast.directoryPath" |> ReadConfig |> Path.GetFullPath
             

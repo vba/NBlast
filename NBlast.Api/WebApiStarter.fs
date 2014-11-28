@@ -11,7 +11,13 @@ type RouteConfig = {
 }
 
 type WebApiStarter() =
+
+    static let logger = NLog.LogManager.GetCurrentClassLogger()
+
     member me.Configuration (appBuilder: IAppBuilder): unit =
+
+        logger.Debug("Start self contained WebApi configuration")
+
         let config = new HttpConfiguration()
         
         config.MapHttpAttributeRoutes()
@@ -19,7 +25,7 @@ type WebApiStarter() =
         config.Routes.MapHttpRoute("DefaultApi",
                                    "api/{controller}/{id}",
                                    {id = RouteParameter.Optional}) |> ignore
-
+        
         let unityResolver = UnityConfig.Configure()
         let appXmlType = 
             config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(

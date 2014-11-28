@@ -28,7 +28,7 @@ let main args =
     let service (conf : HostConfigurator) (fac : (unit -> 'a)) =
         let service' = conf.Service : Func<_> -> HostConfigurator
         service' (new Func<_>(fac)) |> ignore
-        
+    
     HostFactory.Run(
         fun conf -> 
             conf.Service<_>(new Func<_>(fun sv -> new BackgroundJob())) |> ignore
