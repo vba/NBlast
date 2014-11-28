@@ -1,0 +1,30 @@
+{
+    // REQUIRE
+
+    "requireCurlyBraces": [ "if", "else", "for", "while", "do", "try", "catch" ],
+    "requireSpaceAfterKeywords": [ "if", "else", "for", "while", "do", "switch", "return", "try", "catch", "function" ],
+    "requireMultipleVarDecl": true,
+    //"requireCamelCaseOrUpperCaseIdentifiers": true,
+    "requireCommaBeforeLineBreak": true,
+    "requireBlocksOnNewline": true,
+    "requireSpaceAfterBinaryOperators": [
+        "=", ",", "+", "-", "/", "*", "==", "===", "!=", "!=="
+    ],
+    "requireSpaceBeforeBinaryOperators": [
+        "=", "+", "-", "/", "*", "==", "===", "!=", "!=="
+    ],
+
+
+    // DISALLOW
+
+    "disallowCommaBeforeLineBreak": null,
+    "disallowDanglingUnderscores": true,
+    "disallowEmptyBlocks": true,
+    "disallowImplicitTypeConversion": [ "string" ],
+    "disallowKeywordsOnNewLine": [ "else" ],
+    "disallowKeywords": [ "with" ],
+    "disallowMixedSpacesAndTabs": true,
+    "disallowQuotedKeysInObjects": true,
+    "disallowSpaceAfterBinaryOperators": null,
+    "excludeFiles": [ ]
+}
