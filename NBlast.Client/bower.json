@@ -1,6 +1,8 @@
 {
-    "name": "NBlast.Client",
-    "dependencies": {
-        "ember": "~1.8"
-    }
+  "name": "NBlast.Client",
+  "dependencies": {
+    "angular": "~1.3.4",
+    "jquery": "~2.1.1",
+    "bootstrap": "~3.3.1"
+  }
 }

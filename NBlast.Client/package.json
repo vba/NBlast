@@ -1,0 +1,33 @@
+{
+  "name": "NBlast.Client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "gulp": "^3.8.10"
+  },
+  "devDependencies": {
+    "http-server": "0.7.3",
+    "karma": "0.12.28",
+    "protractor": "1.4.0"
+  },
+  "scripts": {
+    "test": "node node_modules/karma/bin/karma start test/karma.conf.js",
+    "test-single-run": "node node_modules/karma/bin/karma start test/karma.conf.js --single-run",
+    "start": "http-server -a 0.0.0.0 -p 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:vba/NBlast.git"
+  },
+  "keywords": [
+    "log",
+    "ui"
+  ],
+  "author": "Victor Bartel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vba/NBlast/issues"
+  },
+  "homepage": "https://github.com/vba/NBlast"
+}
