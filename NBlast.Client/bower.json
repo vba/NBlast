@@ -1,0 +1,6 @@
+{
+    "name": "NBlast.Client",
+    "dependencies": {
+        "ember": "~1.8"
+    }
+}

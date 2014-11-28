@@ -127,7 +127,7 @@ publish/
 # Publish Web Output
 *.[Pp]ublish.xml
 *.azurePubxml
-# TODO: Comment the next line if you want to checkin your web deploy settings 
+# TODO: Comment the next line if you want to checkin your web deploy settings
 # but database connection strings (with potential passwords) will be unencrypted
 *.pubxml
 *.publishproj
@@ -190,3 +190,12 @@ obj/
 packages/
 *.userprefs
 *.DS_Store
+
+# Bower / Node
+node_modules
+npm-debug.log
+test/assets/package-*/
+test/assets/temp-*/
+test/reports
+test/tmp/
+bower_components
