@@ -4,10 +4,12 @@ open NBlast.Api.Models
 open FluentScheduler
 open NBlast.Storage
 open NBlast.Storage.Core.Index
+open NBlast.Storage.Core.Extensions
 
 
 type QueueProcessingTask(queueKeeper: IIndexingQueueKeeper, 
-                         storageWriter: IStorageWriter) =
+                         storageWriter: IStorageWriter,
+                         ?indexingLimit: int) =
     
     static let logger = NLog.LogManager.GetCurrentClassLogger()
 
@@ -26,5 +28,5 @@ type QueueProcessingTask(queueKeeper: IIndexingQueueKeeper,
     interface ITask with 
         member me.Execute() =
             logger.Debug("Scheduled task executed, queue contains {0} element(s)", queueKeeper.Count())
-            queueKeeper.ConsumeMany(Some 20) |> me.ProcessModels |> ignore  
+            queueKeeper.ConsumeMany(Some (indexingLimit |? 400)) |> me.ProcessModels |> ignore  
 

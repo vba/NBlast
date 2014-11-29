@@ -35,7 +35,7 @@ type QueueProcessingTaskTests() =
         let mutable collector: LogDocument list = List.empty
 
         queueKeeper
-            .Setup<seq<LogModel>>(fun x -> x.ConsumeMany(Some actualAmount))
+            .Setup<seq<LogModel>>(fun x -> x.ConsumeMany(It.IsAny<int option>()))
             .Returns(fun () -> 
                 [0 .. actualAmount - 1] |> List.map (fun x -> 
                     new LogModel(Sender=fixture.Create(), 
@@ -76,7 +76,7 @@ type QueueProcessingTaskTests() =
         let mutable collector: LogDocument list = List.empty
 
         queueKeeper
-            .Setup<seq<LogModel>>(fun x -> x.ConsumeMany(Some actualAmount))
+            .Setup<seq<LogModel>>(fun x -> x.ConsumeMany(It.IsAny<int option>()))
             .Returns(fun () -> 
                 [0 .. actualAmount - 1] |> List.map (fun x -> 
                     new LogModel(Sender=fixture.Create(), 
@@ -120,7 +120,7 @@ type QueueProcessingTaskTests() =
         let mutable collector: LogDocument list = List.empty
 
         queueKeeper
-            .Setup<seq<LogModel>>(fun x -> x.ConsumeMany(Some actualAmount))
+            .Setup<seq<LogModel>>(fun x -> x.ConsumeMany(It.IsAny<int option>()))
             .Returns(fun () -> 
                 [0 .. actualAmount - 1] |> List.map (fun x -> 
                     new LogModel(Sender=fixture.Create(), 

@@ -53,13 +53,17 @@
     <None Include="app.config" />
     <Compile Include="Program.fs" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\NBlast.Api\NBlast.Api.fsproj">
+      <Name>NBlast.Api</Name>
+      <Project>{096351ce-7e17-4d2d-a758-378e354fe977}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
-      <Project>{CCC4BAEC-229A-4676-A86A-DF7DA54ECFE7}</Project>
       <Name>NBlast.Storage.Core</Name>
+      <Project>{ccc4baec-229a-4676-a86a-df7da54ecfe7}</Project>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
 </Project>

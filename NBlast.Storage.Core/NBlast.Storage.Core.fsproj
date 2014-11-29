@@ -37,6 +37,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Extensions\OptionOperators.fs" />
     <Compile Include="Extensions\ObjectOperators.fs" />
+    <Compile Include="Env\ConfigReader.fs" />
     <Compile Include="Env\Variables.fs" />
     <Compile Include="Exceptions\StorageLockedException.fs" />
     <Compile Include="Exceptions\StorageUnlockFailedException.fs" />
@@ -48,7 +49,6 @@
     <Compile Include="Index\IStorageReader.fs" />
     <Compile Include="Index\IPaginator.fs" />
     <Compile Include="Index\IDirectoryProvider.fs" />
-    <Compile Include="Env\ConfigReader.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Lucene.Net">
