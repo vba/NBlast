@@ -48,6 +48,7 @@
     <Compile Include="Index\IStorageReader.fs" />
     <Compile Include="Index\IPaginator.fs" />
     <Compile Include="Index\IDirectoryProvider.fs" />
+    <Compile Include="Env\ConfigReader.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Lucene.Net">
@@ -61,5 +62,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 </Project>

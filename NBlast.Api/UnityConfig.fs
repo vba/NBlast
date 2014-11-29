@@ -13,55 +13,37 @@ open System.Configuration
 open System
 open System.IO
 
-    type AppSettingNotFoundException = 
-        inherit InvalidOperationException
-        new (key) = { inherit InvalidOperationException(sprintf "App setting not found for key %s" key) } 
+module UnityConfig = 
+    let private logger = NLog.LogManager.GetCurrentClassLogger()
+    let private configReader = new ConfigReader() :> IConfigReader
 
-    type AppSettingTryCastException = 
-        inherit InvalidOperationException
-        new (key, ``type``) = { inherit InvalidOperationException(sprintf "Cannot conver setting %s to %A" key ``type``) } 
+    let Configure() =
+        logger.Debug("Start to configure IoC container")
 
-    module UnityConfig = 
-        let private logger = NLog.LogManager.GetCurrentClassLogger()
+        let container = new UnityContainer()
+        let directoryPath = "NBlast.directoryPath" |> configReader.Read |> Path.GetFullPath
+        
+        container.RegisterInstance<IPaginator>(new Paginator()) |> ignore
 
-        let private ReadConfig (key: string) =
-            try
-                ConfigurationManager.AppSettings.[key] |> Environment.ExpandEnvironmentVariables
-            with
-            | _ -> raise (new AppSettingNotFoundException(key))
-
-        let private ReadConfigAsInt key =
-            match ReadConfig key |> Int32.TryParse with
-            | (false, _) -> raise (new AppSettingTryCastException(key, int32.GetType()))
-            | (true, value) -> value
-
-        let Configure() =
-            logger.Debug("Start to configure IoC container")
-
-            let container = new UnityContainer()
-            let directoryPath = "NBlast.directoryPath" |> ReadConfig |> Path.GetFullPath
-            
-            container.RegisterInstance<IPaginator>(new Paginator()) |> ignore
-
-            container
-                .RegisterInstance<IDirectoryProvider>("ReaderDirectoryProvider", 
-                                                      new ReaderDirectoryProvider(directoryPath)) |> ignore 
-            container
-                .RegisterInstance<IDirectoryProvider>("WriterDirectoryProvider", 
-                                                      new WriterDirectoryProvider(directoryPath)) |> ignore
-            container
-                .RegisterInstance<IStorageReader>(
-                    new StorageReader(container.Resolve<IDirectoryProvider>("ReaderDirectoryProvider"),
-                                      container.Resolve<IPaginator>())
-                ) |> ignore
-            container
-                .RegisterInstance<IStorageWriter>(
-                    new StorageWriter(container.Resolve<IDirectoryProvider>("ReaderDirectoryProvider"))
-                ) |> ignore
-
-            container.RegisterInstance<IIndexingQueueKeeper>(new IndexingQueueKeeper()) |> ignore
-            container.RegisterInstance<ITask>(
-                new QueueProcessingTask(container.Resolve<IIndexingQueueKeeper>(), container.Resolve<IStorageWriter>())
+        container
+            .RegisterInstance<IDirectoryProvider>("ReaderDirectoryProvider", 
+                                                  new ReaderDirectoryProvider(directoryPath)) |> ignore 
+        container
+            .RegisterInstance<IDirectoryProvider>("WriterDirectoryProvider", 
+                                                  new WriterDirectoryProvider(directoryPath)) |> ignore
+        container
+            .RegisterInstance<IStorageReader>(
+                new StorageReader(container.Resolve<IDirectoryProvider>("ReaderDirectoryProvider"),
+                                  container.Resolve<IPaginator>())
+            ) |> ignore
+        container
+            .RegisterInstance<IStorageWriter>(
+                new StorageWriter(container.Resolve<IDirectoryProvider>("ReaderDirectoryProvider"))
             ) |> ignore
 
-            new UnityResolver(container)
+        container.RegisterInstance<IIndexingQueueKeeper>(new IndexingQueueKeeper()) |> ignore
+        container.RegisterInstance<ITask>(
+            new QueueProcessingTask(container.Resolve<IIndexingQueueKeeper>(), container.Resolve<IStorageWriter>())
+        ) |> ignore
+
+        new UnityResolver(container)

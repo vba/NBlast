@@ -116,13 +116,11 @@
   <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
       <Name>NBlast.Storage.Core</Name>
-      <Project>{ccc4baec-229a-4676-a86a-df7da54ecfe7}</Project>
-      <Private>True</Private>
+      <Project>{CCC4BAEC-229A-4676-A86A-DF7DA54ECFE7}</Project>
     </ProjectReference>
     <ProjectReference Include="..\NBlast.Storage\NBlast.Storage.fsproj">
       <Name>NBlast.Storage</Name>
-      <Project>{380fd59d-7c02-4e4d-bd30-17661159b830}</Project>
-      <Private>True</Private>
+      <Project>{380FD59D-7C02-4E4D-BD30-17661159B830}</Project>
     </ProjectReference>
   </ItemGroup>
 </Project>

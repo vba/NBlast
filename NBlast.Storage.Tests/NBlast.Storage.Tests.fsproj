@@ -42,8 +42,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
       <Name>NBlast.Storage.Core</Name>
-      <Project>{ccc4baec-229a-4676-a86a-df7da54ecfe7}</Project>
-      <Private>True</Private>
+      <Project>{CCC4BAEC-229A-4676-A86A-DF7DA54ECFE7}</Project>
     </ProjectReference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
