@@ -21,7 +21,8 @@ module UnityConfig =
         logger.Debug("Start to configure IoC container")
 
         let container = new UnityContainer()
-        let directoryPath = "NBlast.directoryPath" |> configReader.Read |> Path.GetFullPath
+        let directoryPath = "NBlast.index.directory_path" |> configReader.Read |> Path.GetFullPath
+        let indexDocumentPerTask = "NBlast.index.documents_per_task" |> configReader.ReadAsInt
         
         container.RegisterInstance<IPaginator>(new Paginator()) |> ignore
 
@@ -43,7 +44,9 @@ module UnityConfig =
 
         container.RegisterInstance<IIndexingQueueKeeper>(new IndexingQueueKeeper()) |> ignore
         container.RegisterInstance<ITask>(
-            new QueueProcessingTask(container.Resolve<IIndexingQueueKeeper>(), container.Resolve<IStorageWriter>())
+            new QueueProcessingTask(container.Resolve<IIndexingQueueKeeper>(),
+                                    container.Resolve<IStorageWriter>(),
+                                    indexDocumentPerTask)
         ) |> ignore
 
         new UnityResolver(container)
