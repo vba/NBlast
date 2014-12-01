@@ -23,7 +23,7 @@ module App =
         request.AddParameter("level", log.Level) |> ignore
         request.AddParameter("logger", log.Logger) |> ignore
         request.AddParameter("error", log.Error) |> ignore
-        request.AddParameter("createdAt", log.CreatedAt) |> ignore
+        //request.AddParameter("createdAt", log.CreatedAt) |> ignore
         
         let response = restClient.Execute(request)
         response.StatusCode |> printfn "Response status code is %A"
