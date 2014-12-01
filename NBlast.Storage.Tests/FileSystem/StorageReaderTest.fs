@@ -31,6 +31,7 @@ type StorageReaderTest() =
         (actuals |> List.length).Should().Be(3, "Only 3 documents must be found") |> ignore
         actuals |> Seq.iter (fun actual -> 
             actual.Message.EndsWith("C").Should().BeTrue("Message must end with C") |> ignore
+            actual.Id.Should().MatchRegex("^(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,2}$", "Id must looks like an UUID") |> ignore
             actual.Sender.Should().StartWith("sender", "Sender value should start with 'sender'") |> ignore
             actual.Logger.Should().Be("log", "Logger value must be returned") |> ignore
             actual.Level.Should().Be("debug", "Debug value must be returned") |> ignore

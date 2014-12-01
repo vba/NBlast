@@ -2,19 +2,19 @@
 
 open Newtonsoft.Json
 
-type DocumentField = {Name : string}
-
 type LogField = 
-    | Sender    
-    | Content   
-    | Error     
-    | Message   
-    | Logger    
-    | Level     
-    | CreatedAt 
+    | Id
+    | Sender
+    | Content
+    | Error
+    | Message
+    | Logger
+    | Level
+    | CreatedAt
     with 
         member me.GetName() = 
             match me with
+            | Id        -> "id"
             | Sender    -> "sender"
             | Error     -> "error"
             | Message   -> "message"
@@ -27,6 +27,7 @@ type LogField =
         
         static member Names = 
             [| LogField.Sender.GetName();
+               LogField.Id.GetName();
                LogField.Content.GetName();
                LogField.Message.GetName();
                LogField.Logger.GetName();
@@ -36,6 +37,7 @@ type LogField =
 
 type LogDocumentHit = 
     { [<field: JsonProperty("sender")>]    Sender   : string
+      [<field: JsonProperty("id")>]        Id       : string
       [<field: JsonProperty("error")>]     Error    : string
       [<field: JsonProperty("message")>]   Message  : string
       [<field: JsonProperty("logger")>]    Logger   : string

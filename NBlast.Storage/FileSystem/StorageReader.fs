@@ -41,6 +41,7 @@ type StorageReader (directoryProvider: IDirectoryProvider,
         { 
           Score     = score; 
           Boost     = doc.Boost;
+          Id        = doc.Get(LogField.Id.GetName());
           Sender    = doc.Get(LogField.Sender.GetName());
           Error     = doc.Get(LogField.Error.GetName());
           Message   = doc.Get(LogField.Message.GetName());

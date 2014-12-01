@@ -74,6 +74,9 @@ type LogDocument ( sender     : string,
                    error      : string option,
                    createdAt  : DateTime option ) =
 
+    let id = Guid.NewGuid()
+
+    member me.Id with get() = new TextField(LogField.Id.GetName(), id.ToString()) :> IField<string>
     member me.Sender with get() = new SenderField(sender)  :> IField<string>
     member me.Message with get() = new MessageField(message)  :> IField<string>
     member me.Logger with get() = new LoggerField(logger)  :> IField<string>
@@ -105,6 +108,7 @@ type LogDocument ( sender     : string,
     interface IStorageDocument with
         member me.ToLuceneDocument() = 
             let document = new Document()
+            me.Id.ToLuceneField() |> document.Add
             me.Sender.ToLuceneField() |> document.Add
             me.Message.ToLuceneField() |> document.Add
             me.Logger.ToLuceneField() |> document.Add
