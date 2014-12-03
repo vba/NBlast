@@ -5,18 +5,19 @@
     <meta charset="utf-8">
     <title>NBlast.Client</title>
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.css">
-    <link rel="stylesheet" href="../bower_components/sb-admin-v2/css/sb-admin.css">
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.css">-->
     <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/sb-admin2.css">
 
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
 </head>
 
 <body>
-    <p>Nothing here {{'yet' + '!'}}</p>
+    <!-- <p>Nothing here {{'yet' + '!'}}</p>-->
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -26,36 +27,46 @@
                 </button>
                 <a class="navbar-brand" href="#">NBlast.Console</a>
             </div>
-            <div class="navbar-default navbar-static-side" role="navigation">
-                <div class="sidebar-collapse">
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="input-group custom-search-form">
-                                <input type="text" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                            </div>
-                            <!-- /input-group -->
+                        <li>
+                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="#"><i class="fa fa-table fa-fw"></i>Tables</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        </div>
+    </div>
 
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
+    <div id="pageWrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Dashboard</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3 huge">
+                                <!-- <i class="fa fa-info-circle fa-5x"></i>-->
+                                Traces
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">26</div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>
