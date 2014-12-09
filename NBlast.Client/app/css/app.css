@@ -7,11 +7,12 @@
 }
 
 .tile {
+    overflow: hidden;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
     background: none repeat scroll 0% 0% #FFF;
-    border: 1px solid #E9E9E9;
+    /*border: 1px solid #E9E9E9;*/
     border-radius: 2px;
-    padding: 1.2em;
+    padding: 1.2em 1.2em 1.2em 0;
 }
     .tile .counter {
         font-size: 25px;
@@ -20,11 +21,12 @@
         font-weight: bold;
         text-transform: uppercase;
     }
-    .tile .row .pull-left {
+    .tile .pull-left {
         margin-left: 1.5em;
     }
 
 .circle {
+    display: block;
     width: 2em;
     height: 2em;
     border-radius: 1em;
@@ -36,7 +38,24 @@
     font-weight: bold;
 }
 
-    .circle.trace {
+    .circle.info {
         background-color: #337AB7;
         border-color: #2361AE;
     }
+    .circle.trace {
+        background-color: #2DACC8;
+        border-color: #2361AE;
+    }
+    .circle.debug {
+        background-color: #23ae89;
+    }
+    .circle.error {
+        background-color:#ae2323;
+    }
+    .circle.fatal {
+        background-color:#000;
+    }
+    .circle.warn {
+        background-color: #E69D3B;
+    }
+
