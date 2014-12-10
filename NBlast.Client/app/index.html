@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app>
+<html lang="en" ng-app="nblast">
 
 <head>
     <meta charset="utf-8">
@@ -9,12 +9,12 @@
     <!-- <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.css">-->
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/sb-admin2.css">
-
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-route/angular-route.min.js"></script>
+    <script src="scripts/index.js"></script>
 </head>
 
-<body>
+<body ng-controller="indexController">
     <!-- <p>Nothing here {{'yet' + '!'}}</p>-->
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -34,7 +34,7 @@
                             <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-table fa-fw"></i>Tables</a>
+                            <a href="#"><i class="fa fa-search fa-fw"></i>Search</a>
                         </li>
                     </ul>
                 </div>
@@ -42,107 +42,11 @@
         </nav>
     </div>
 
-    <div id="pageWrapper">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Dashboard</h1>
-            </div>
-        </div>
-        <div class="row">
-            <section class="col-lg-4 col-md-5">
-                <div class="panel panel-primary tile">
-                    <div class="pull-left">
-                        <div class="circle trace">
-                            <i class="fa fa-asterisk"></i>
-                        </div>
-                    </div>
-                    <div class="pull-left">
-                        <div class="counter">60</div>
-                        <div class="title">Traces</div>
-                    </div>
-                </div>
-            </section>
-            <section class="col-lg-4 col-md-5">
-                <div class="panel panel-primary tile">
-                    <div class="pull-left">
-                        <div class="circle debug">
-                            <i class="fa fa-cog"></i>
-                        </div>
-                    </div>
-                    <div class="pull-left">
-                        <div class="counter">60</div>
-                        <div class="title">Debug</div>
-                    </div>
-                </div>
-            </section>
-            <section class="col-lg-4 col-md-5">
-                <div class="panel panel-primary tile">
-                    <div class="pull-left">
-                        <div class="circle info">
-                            <i class="fa fa-info"></i>
-                        </div>
-                    </div>
-                    <div class="pull-left">
-                        <div class="counter">60</div>
-                        <div class="title">Info</div>
-                    </div>
-                </div>
-            </section>
-        </div>
-        <div class="row">
-            <section class="col-lg-4 col-md-5">
-                <div class="panel panel-primary tile">
-                    <div class="pull-left">
-                        <div class="circle warn">
-                            <i class="fa fa-warning"></i>
-                        </div>
-                    </div>
-                    <div class="pull-left">
-                        <div class="counter">60</div>
-                        <div class="title">Warn</div>
-                    </div>
-                </div>
-            </section>
-            <section class="col-lg-4 col-md-5">
-                <div class="panel panel-primary tile">
-                    <div class="pull-left">
-                        <div class="circle error">
-                            <i class="fa fa-flash"></i>
-                        </div>
-                    </div>
-                    <div class="pull-left">
-                        <div class="counter">60</div>
-                        <div class="title">Error</div>
-                    </div>
-                </div>
-            </section>
-            <section class="col-lg-4 col-md-5">
-                <div class="panel panel-primary tile">
-                    <div class="pull-left">
-                        <div class="circle fatal">
-                            <i class="fa fa-fire"></i>
-                        </div>
-                    </div>
-                    <div class="pull-left">
-                        <div class="counter">60</div>
-                        <div class="title">Fatal</div>
-                    </div>
-                </div>
-            </section>
-        </div>
+    <div ng-view>
+    </div>
 
-       <div class="row">
-          <div class="col-lg-8">
-               <section class="panel panel-default">
-                    <header class="panel-heading"><i class="fa fa-send fa-fw"></i>Senders</header>
-                    <div class="panel-body">
-                        Senders ...
-                    </div>
-               </section>
-           </div>
-       </div>
-    </div>
-    </div>
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>
