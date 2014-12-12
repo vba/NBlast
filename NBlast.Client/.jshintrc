@@ -79,7 +79,7 @@
     // Custom Globals
     "globals"       : {
         "NBlast" : false,
-        "Ember" : false,
+        "angular" : false,
         // require.js
         "define" : false,
         "require": false,
