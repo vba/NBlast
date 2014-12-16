@@ -1,5 +1,5 @@
 
-angular.module('nblast', ['ngRoute'])
+angular.module('nblast', ['ngRoute', 'ngResource'])
     .config(['$routeProvider',
         function($routeProvider) {
             'use strict';
