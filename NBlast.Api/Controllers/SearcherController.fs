@@ -4,8 +4,10 @@
 open System.Web.Http
 open System.Net.Http.Formatting
 open NBlast.Storage.Core.Index
+open System.Web.Http.Cors
 
 [<RoutePrefix("api/searcher")>]
+[<EnableCors("*", "X-NBLAST-CLIENT", "GET")>]
 type SearcherController(storageReader: IStorageReader) = 
     inherit ApiController()
 
@@ -14,7 +16,7 @@ type SearcherController(storageReader: IStorageReader) =
     [<HttpGet>]
     member me.Search (q: string) =
         let result = storageReader.SearchByField(SearchQuery.GetOnlyExpression q)
-        result |> sprintf "search result: %A" |> logger.Debug
+        //result |> sprintf "search result: %A" |> logger.Debug
         result
 
     [<HttpGet>]

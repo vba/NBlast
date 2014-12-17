@@ -8,6 +8,7 @@
 & ".nuget\NuGet.exe" "Install" "AutoFixture" "-OutputDirectory" "packages" "-ExcludeVersion"
 & ".nuget\NuGet.exe" "Install" "Topshelf" "-OutputDirectory" "packages" "-ExcludeVersion"
 & ".nuget\NuGet.exe" "Install" "Microsoft.AspNet.WebApi.owinSelfHost" "-OutputDirectory" "packages" "-ExcludeVersion"
+& ".nuget\NuGet.exe" "Install" "Microsoft.AspNet.WebApi.Cors" "-OutputDirectory" "packages" "-ExcludeVersion"
 & ".nuget\NuGet.exe" "Install" "Lucene.Net" "-OutputDirectory" "packages" "-ExcludeVersion"
 & ".nuget\NuGet.exe" "Install" "Lucene.Net.Contrib" "-OutputDirectory" "packages" "-ExcludeVersion"
 & ".nuget\NuGet.exe" "Install" "FSharp.Collections.ParallelSeq" "-OutputDirectory" "packages" "-ExcludeVersion"

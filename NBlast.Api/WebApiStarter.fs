@@ -5,6 +5,7 @@ open System.Web.Http
 open System.Linq
 open Microsoft.Practices.Unity
 open System.Web.Http.Dependencies
+open System.Web.Http.Cors
 
 type RouteConfig = {
     id : RouteParameter
@@ -19,7 +20,7 @@ type WebApiStarter() =
         logger.Debug("Start self contained WebApi configuration")
 
         let config = new HttpConfiguration()
-        
+        config.EnableCors()
         config.MapHttpAttributeRoutes()
 
         config.Routes.MapHttpRoute("DefaultApi",
