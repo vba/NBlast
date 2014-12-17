@@ -7,7 +7,7 @@ open NBlast.Storage.Core.Index
 open System.Web.Http.Cors
 
 [<RoutePrefix("api/searcher")>]
-[<EnableCors("*", "X-NBLAST-CLIENT", "GET")>]
+[<EnableCors("*", "*", "GET")>]
 type SearcherController(storageReader: IStorageReader) = 
     inherit ApiController()
 

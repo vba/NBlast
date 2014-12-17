@@ -39,6 +39,7 @@ module App =
                 |> PSeq.map (fun log -> log |> index)
                 |> PSeq.filter (fun status -> status = HttpStatusCode.OK) 
                 |> PSeq.toList
-        processed.Length |> printfn "%d records were indexed successfully"
+        processed.Length |> printfn "%d records were indexed successfully, Press any key for exit"
+        System.Console.ReadLine() |> ignore
         0
 

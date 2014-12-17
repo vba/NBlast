@@ -20,8 +20,8 @@ type WebApiStarter() =
         logger.Debug("Start self contained WebApi configuration")
 
         let config = new HttpConfiguration()
-        config.EnableCors()
         config.MapHttpAttributeRoutes()
+        config.EnableCors()
 
         config.Routes.MapHttpRoute("DefaultApi",
                                    "api/{controller}/{id}",

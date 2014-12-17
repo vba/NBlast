@@ -1,7 +1,8 @@
-
 angular.module('nblast', ['ngRoute', 'ngResource'])
-    .config(['$routeProvider',
-        function($routeProvider) {
+    .config([
+        '$routeProvider',
+        '$httpProvider',
+        function($routeProvider, $httpProvider) {
             'use strict';
             $routeProvider
                 .when('/', {
@@ -15,5 +16,8 @@ angular.module('nblast', ['ngRoute', 'ngResource'])
                 .otherwise({
                     redirectTo: '/'
                 });
+
+            delete $httpProvider.defaults.headers.common['X-Requested-With'];
+            $httpProvider.defaults.headers.common['X-NBlast-Client'] = 'angular-client-app';
         }
     ]);
