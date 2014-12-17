@@ -17,7 +17,6 @@ angular.module('nblast', ['ngRoute', 'ngResource'])
                     redirectTo: '/'
                 });
 
-            delete $httpProvider.defaults.headers.common['X-Requested-With'];
             $httpProvider.defaults.headers.common['X-NBlast-Client'] = 'angular-client-app';
         }
     ]);
