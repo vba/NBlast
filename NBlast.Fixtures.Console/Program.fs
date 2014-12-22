@@ -30,7 +30,11 @@ module App =
         response.StatusCode
 
     let generate () =
-        fixture.CreateMany<LogModel>(fixturesLimit)
+        let levels = ["fatal"; "error"; "warn"; "info"; "debug"; "trace"]
+        fixture.CreateMany<LogModel>(fixturesLimit) |> PSeq.map (fun x -> 
+            x.Level <- levels.[(new System.Random()).Next(levels.Length)]
+            x
+        )
 
     [<EntryPoint>]
     let main argv = 

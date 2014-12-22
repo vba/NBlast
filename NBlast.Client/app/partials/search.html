@@ -8,16 +8,28 @@
     <div class="col-lg-8">
         <div class="input-group">
             <form action="#" name="searchForm"></form>
-            <input type="text" class="form-control" placeholder="Enter your serach query here">
+            <input type="text" class="form-control" placeholder="Enter your serach query here" ng-model="searchQuery">
             <span class="input-group-btn">
-                <button class="btn btn-primary" type="button">Search</button>
+                <button class="btn btn-primary" type="button" ng-click="search()">Search</button>
             </span>
         </div>
     </div>
 </div>
 <div class="row">
-   <div class="col-lg-8">
-        <section class="list-group search-result">
+    <div class="col-lg-8">
+        <section class="list-group search-result" ng-model="searchResult">
+            <article class="list-group-item" ng-repeat="hit in searchResult.hits">
+                
+                
+
+                <span class="pull-right fatal">
+                    {{hit.level}} <i class="fa fa-fire"></i>
+                </span>
+                <h4 class="list-group-item-heading">{{hit.sender}}</h4>
+                <p class="list-group-item-text">{{hit.message}}</p>
+                <p class="list-group-item-text date">Created on {{hit.createdAt}}</p>
+            </article>
+
             <article class="list-group-item">
                 <span class="pull-right fatal">
                     FATAL <i class="fa fa-fire"></i>
