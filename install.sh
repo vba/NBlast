@@ -20,3 +20,5 @@ mono ".nuget\NuGet.exe" "Install" "AutoFixture" "-OutputDirectory" "packages" "-
 mono ".nuget\NuGet.exe" "Install" "FluentScheduler" "-OutputDirectory" "packages" "-ExcludeVersion"
 mono ".nuget\NuGet.exe" "Install" "Moq" "-OutputDirectory" "packages" "-ExcludeVersion"
 mono ".nuget\NuGet.exe" "Install" "RestSharp" "-OutputDirectory" "packages" "-ExcludeVersion"
+
+mono ".nuget\NuGet.exe" "Install" "WebApiContrib.Formatting.Jsonp" "-OutputDirectory" "packages" "-ExcludeVersion"

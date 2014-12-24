@@ -118,6 +118,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="WebApiContrib.Formatting.Jsonp">
+      <HintPath>..\packages\WebApiContrib.Formatting.Jsonp\lib\net45\WebApiContrib.Formatting.Jsonp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
