@@ -5,6 +5,11 @@ html, body {
 .search-result {
     margin: 1.5em 0;
 }
+    .search-result .no-result {
+        font-size: 0.9em;
+        color: gray;
+        font-style: italic;
+    }
     .search-result .list-group-item {
         border-radius: 0;
         border: 0;

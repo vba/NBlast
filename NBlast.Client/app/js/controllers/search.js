@@ -16,6 +16,17 @@
 //                        });
 //                    });
                 };
+
+                $scope.defineFoundIcon = function(level) {
+                    return {
+                        'DEBUG' : 'cog',
+                        'INFO' : 'info',
+                        'WARN' : 'warning',
+                        'ERROR' : 'bolt',
+                        'FATAL' : 'fire'
+                    }[level.toUpperCase()] || 'asterisk';
+
+                };
             }
         ]);
 })();

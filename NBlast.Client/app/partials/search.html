@@ -19,69 +19,17 @@
     <div class="col-lg-8">
         <section class="list-group search-result" ng-model="searchResult">
             <article class="list-group-item" ng-repeat="hit in searchResult.hits">
-                
-                
-
-                <span class="pull-right fatal">
-                    {{hit.level}} <i class="fa fa-fire"></i>
+                <span class="pull-right {{ hit.level | lowercase }}">
+                    {{hit.level}} <i class="fa fa-{{ defineFoundIcon(hit.level) }}"></i>
                 </span>
                 <h4 class="list-group-item-heading">{{hit.sender}}</h4>
                 <p class="list-group-item-text">{{hit.message}}</p>
-                <p class="list-group-item-text date">Created on {{hit.createdAt}}</p>
+                <p class="list-group-item-text date">
+                    Created on {{hit.createdAt | date:'medium'}}
+                </p>
             </article>
-
-            <article class="list-group-item">
-                <span class="pull-right fatal">
-                    FATAL <i class="fa fa-fire"></i>
-                </span>
-                <h4 class="list-group-item-heading">Sender.sender1</h4>
-                <p class="list-group-item-text">Message here</p>
-                <p class="list-group-item-text date">Created on January 22, 2009, at 9:47 am</p>
-            </article>
-
-            <article class="list-group-item">
-                <span class="pull-right error">
-                    ERROR <i class="fa fa-bolt"></i>
-                </span>
-                <h4 class="list-group-item-heading">Sender.sender1</h4>
-                <p class="list-group-item-text">Message here</p>
-                <p class="list-group-item-text date">Created on January 22, 2009, at 9:47 am</p>
-            </article>
-
-            <article class="list-group-item">
-                <span class="pull-right warn">
-                    WARN <i class="fa fa-warning"></i>
-                </span>
-                <h4 class="list-group-item-heading">Sender.sender1</h4>
-                <p class="list-group-item-text">Message here</p>
-                <p class="list-group-item-text date">Created on January 22, 2009, at 9:47 am</p>
-            </article>
-
-            <article class="list-group-item">
-                <span class="pull-right info">
-                    INFO <i class="fa fa-info"></i>
-                </span>
-                <h4 class="list-group-item-heading">Sender.sender1</h4>
-                <p class="list-group-item-text">Message here</p>
-                <p class="list-group-item-text date">Created on January 22, 2009, at 9:47 am</p>
-            </article>
-
-            <article class="list-group-item">
-                <span class="pull-right debug">
-                    DEBUG <i class="fa fa-cog"></i>
-                </span>
-                <h4 class="list-group-item-heading">Sender.sender1</h4>
-                <p class="list-group-item-text">Message here</p>
-                <p class="list-group-item-text date">January 22, 2009, at 9:47 am</p>
-            </article>
-
-            <article class="list-group-item">
-                <span class="pull-right trace">
-                    TRACE <i class="fa fa-asterisk"></i>
-                </span>
-                <h4 class="list-group-item-heading">Sender.sender1</h4>
-                <p class="list-group-item-text">Message here</p>
-                <p class="list-group-item-text date">January 22, 2009, at 9:47 am</p>
+            <article ng-if="searchResult.hits.length === 0" class="no-result">
+                Nothing were found
             </article>
         </section>
     </div>
