@@ -2,18 +2,21 @@ html, body {
     height: 100%;
 }
 
-.search-result {
-    margin: 1.5em 0;
+.result-count {
+    margin-top: .5em;
+    color: gray;
+    font-size: 0.8em;
+    font-style: italic;
 }
-    .search-result .no-result {
-        font-size: 0.9em;
-        color: gray;
-        font-style: italic;
-    }
+
+.search-result {
+    margin: 0 0 1.5em 0;
+}
     .search-result .list-group-item {
         border-radius: 0;
         border: 0;
         padding: 10px 0;
+        cursor: pointer;
     }
         .search-result .list-group-item .date {
             font-style: italic;

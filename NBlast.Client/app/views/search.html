@@ -17,8 +17,11 @@
 </div>
 <div class="row">
     <div class="col-lg-8">
+        <div class="result-count" ng-if="searchResult.hits">
+            {{searchResult.total}} record(s) found in {{searchResult.queryDuration}} ms
+        </div>
         <section class="list-group search-result" ng-model="searchResult">
-            <article class="list-group-item" ng-repeat="hit in searchResult.hits">
+            <article class="list-group-item" ng-repeat="hit in searchResult.hits" ng-click="onHitClick(hit)">
                 <span class="pull-right {{ hit.level | lowercase }}">
                     {{hit.level}} <i class="fa fa-{{ defineFoundIcon(hit.level) }}"></i>
                 </span>
@@ -27,9 +30,6 @@
                 <p class="list-group-item-text date">
                     Created on {{hit.createdAt | date:'medium'}}
                 </p>
-            </article>
-            <article ng-if="searchResult.hits.length === 0" class="no-result">
-                Nothing were found
             </article>
         </section>
     </div>

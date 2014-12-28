@@ -78,6 +78,7 @@
 
     // Custom Globals
     "globals"       : {
+        "_" : false,
         "NBlast" : false,
         "angular" : false,
         // require.js

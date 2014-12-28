@@ -5,16 +5,21 @@
     angular.module('nblast')
         .controller('searchController', [
             '$scope',
+            '$route',
+            '$location',
             'searchService',
-            function ($scope, searchService) {
+            function ($scope, $route, $location, searchService) {
+                var query = $route.current.params.query;
+
+                if (!_.isEmpty(query)) {
+                    var searchQuery = { q: decodeURIComponent(query) };
+                    $scope.searchQuery = searchQuery.q;
+                    $scope.searchResult = searchService.search(searchQuery);
+                }
+
                 $scope.search = function () {
-                    var params = { q: $scope.searchQuery || '*:*' };
-                    $scope.searchResult = searchService.search(params);
-//                    searchService.search(params).$promise.then(function (data) {
-//                        $scope.searchResult = _.omit(data, function (value, key) {
-//                            return key.slice(0, 1) === '$' || key.toUpperCase() === 'TOJSON';
-//                        });
-//                    });
+                    var searchQuery = encodeURIComponent($scope.searchQuery || '*:*');
+                    $location.path(['/search/', searchQuery].join(''));
                 };
 
                 $scope.defineFoundIcon = function(level) {
@@ -25,7 +30,11 @@
                         'ERROR' : 'bolt',
                         'FATAL' : 'fire'
                     }[level.toUpperCase()] || 'asterisk';
+                };
 
+                $scope.onHitClick = function(hit) {
+                    localStorage.setItem(hit.id, JSON.stringify(hit));
+                    $location.path(['/details/', hit.id].join(''));
                 };
             }
         ]);

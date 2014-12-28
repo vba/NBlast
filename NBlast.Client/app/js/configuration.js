@@ -6,12 +6,20 @@ angular.module('nblast', ['ngRoute', 'ngResource', 'angular-underscore'])
             'use strict';
             $routeProvider
                 .when('/', {
-                    templateUrl: 'partials/dashboard.html',
+                    templateUrl: 'app/views/dashboard.html',
                     controller: 'indexController'
                 })
                 .when('/search', {
-                    templateUrl: 'partials/search.html',
+                    templateUrl: 'app/views/search.html',
                     controller: 'searchController'
+                })
+                .when('/search/:query', {
+                    templateUrl: 'app/views/search.html',
+                    controller: 'searchController'
+                })
+                .when('/details/:hitId', {
+                    templateUrl: 'app/views/details.html',
+                    controller: 'detailsController'
                 })
                 .otherwise({
                     redirectTo: '/'
