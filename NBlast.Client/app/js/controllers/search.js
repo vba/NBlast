@@ -33,7 +33,6 @@
                 };
 
                 $scope.onHitClick = function(hit) {
-                    localStorage.setItem(hit.id, JSON.stringify(hit));
                     $location.path(['/details/', hit.id].join(''));
                 };
             }

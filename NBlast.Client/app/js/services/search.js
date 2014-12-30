@@ -13,6 +13,12 @@
                         }
                     });
 
-                return _.extend({}, xhr);
+                return _.extend({
+                    getById: function(id) {
+                        return $resource(configService.appendToBackendUrl('searcher/'+id+'/get'),
+                                         configService.getJsonFormat(),
+                                         {get: {'method': 'JSONP'}}).get();
+                    }
+                }, xhr);
         }]);
 })();

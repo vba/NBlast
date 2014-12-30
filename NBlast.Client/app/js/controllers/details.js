@@ -4,11 +4,14 @@
         .controller('detailsController', [
             '$scope',
             '$route',
-            function($scope, $route) {
-                var hitId = $route.current.params.hitId,
-                    hit = JSON.parse(localStorage.getItem(hitId));
-                localStorage.removeItem(hitId);
-
-                $scope.hit = hit;
+            'searchService',
+            function($scope, $route, searchService) {
+                var hitId = $route.current.params.hitId;
+                searchService.getById(hitId).$promise.then(function(data){
+                    if (_.isEmpty(data.hits)) {
+                        return; // Notify user about error
+                    }
+                    $scope.hit = data.hits[0];
+                });
         }]);
 })();
