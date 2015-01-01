@@ -44,7 +44,7 @@ type LogDocumentHit =
       [<field: JsonProperty("level")>]     Level    : string
       [<field: JsonProperty("boost")>]     Boost    : float32
       [<field: JsonProperty("createdAt")>] CreatedAt: System.DateTime
-      [<field: JsonProperty("score")>]     Score    : float32 option }
+      [<field: JsonProperty("score")>]     Score    : float32 } 
 
 type LogDocumentHits = 
     { [<field: JsonProperty("hits")>]          Hits          : List<LogDocumentHit>

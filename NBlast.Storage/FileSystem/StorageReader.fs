@@ -39,7 +39,9 @@ type StorageReader (directoryProvider: IDirectoryProvider,
         let doc = fst pair
         let score = snd pair
         { 
-          Score     = score; 
+          Score     = match score with 
+                        | Some x -> x 
+                        | _ -> 0.0f
           Boost     = doc.Boost;
           Id        = doc.Get(LogField.Id.GetName());
           Sender    = doc.Get(LogField.Sender.GetName());

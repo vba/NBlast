@@ -37,7 +37,7 @@ type StorageReaderTest() =
             actual.Level.Should().Be("debug", "Debug value must be returned") |> ignore
             actual.CreatedAt.Should().BeBefore(DateTime.Now, "created at must respect specified interval") |> ignore
             actual.CreatedAt.Should().BeAfter(DateTime.Now.AddMinutes(-2.), "created at must respect specified interval") |> ignore
-            actual.Score.IsNone.Should().BeFalse("Score must be present") |> ignore
+            actual.Score.Should().BeGreaterThan(0.0f, "Score must be present") |> ignore
         )
 
     [<Fact>]
