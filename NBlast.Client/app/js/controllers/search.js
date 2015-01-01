@@ -5,11 +5,11 @@
     angular.module('nblast')
         .controller('searchController', [
             '$scope',
-            '$route',
+            '$routeParams',
             '$location',
             'searchService',
-            function ($scope, $route, $location, searchService) {
-                var query = $route.current.params.query;
+            function ($scope, $routeParams, $location, searchService) {
+                var query = $routeParams.query;
 
                 if (!_.isEmpty(query)) {
                     var searchQuery = { q: decodeURIComponent(query) };

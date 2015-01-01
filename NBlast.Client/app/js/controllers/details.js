@@ -3,10 +3,10 @@
     angular.module('nblast')
         .controller('detailsController', [
             '$scope',
-            '$route',
+            '$routeParams',
             'searchService',
-            function($scope, $route, searchService) {
-                var hitId = $route.current.params.hitId;
+            function($scope, $routeParams, searchService) {
+                var hitId = $routeParams.hitId;
                 searchService.getById(hitId).$promise.then(function(data){
                     if (_.isEmpty(data.hits)) {
                         return; // Notify user about error
