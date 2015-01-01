@@ -22,7 +22,7 @@ html, body {
             font-style: italic;
         }
         .search-result .list-group-item .pull-right {
-            font-weight: bold;
+/*            font-weight: bold;*/
             text-transform: uppercase;
         }
         .search-result .list-group-item .fatal {
@@ -43,6 +43,13 @@ html, body {
         .search-result .list-group-item .trace {
             color: #2DACC8;
         }
+        .search-result .score {
+            color: gray;
+            font-size: .8em;
+            font-weight: normal;
+            font-style: italic;
+        }
+
 
 
 #pageWrapper {

@@ -26,6 +26,9 @@
                     {{hit.level}} <i class="fa fa-{{ defineFoundIcon(hit.level) }}"></i>
                 </span>
                 <h4 class="list-group-item-heading">{{hit.sender}}</h4>
+                <span class="pull-right score">
+                    {{hit.score}}
+                </span>
                 <p class="list-group-item-text">{{hit.message}}</p>
                 <p class="list-group-item-text date">
                     Created on {{hit.createdAt | date:'medium'}}
