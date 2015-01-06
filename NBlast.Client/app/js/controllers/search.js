@@ -9,17 +9,19 @@
             '$location',
             'searchService',
             function ($scope, $routeParams, $location, searchService) {
-                var query = $routeParams.query;
+                var query = $routeParams.query,
+                    page = $routeParams.page,
+                    searchQuery;
 
                 if (!_.isEmpty(query)) {
-                    var searchQuery = { q: decodeURIComponent(query) };
+                    searchQuery = { q: decodeURIComponent(query) };
                     $scope.searchQuery = searchQuery.q;
                     $scope.searchResult = searchService.search(searchQuery);
                 }
 
                 $scope.search = function () {
-                    var searchQuery = encodeURIComponent($scope.searchQuery || '*:*');
-                    $location.path(['/search/', searchQuery].join(''));
+                    var encodedQuery = encodeURIComponent($scope.searchQuery || '*:*');
+                    $location.path(['/search/1/', encodedQuery].join(''));
                 };
 
                 $scope.defineFoundIcon = function(level) {

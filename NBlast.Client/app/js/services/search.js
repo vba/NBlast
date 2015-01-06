@@ -7,17 +7,17 @@
             function ($resource, configService) {
                 var searchUrl = configService.appendToBackendUrl('searcher/search'),
                     jsonFormat = configService.getJsonFormat(),
-                    xhr = $resource(searchUrl, jsonFormat, {
+                    xhr = $resource(searchUrl, null, {
                         search: {
-                            'method': 'JSONP'
+                            'method': 'GET'
                         }
                     });
 
                 return _.extend({
                     getById: function(id) {
                         return $resource(configService.appendToBackendUrl('searcher/'+id+'/get'),
-                                         configService.getJsonFormat(),
-                                         {get: {'method': 'JSONP'}}).get();
+                                         null,
+                                         {get: {'method': 'GET'}}).get();
                     }
                 }, xhr);
         }]);

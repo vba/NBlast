@@ -293,13 +293,16 @@
   <ItemGroup>
     <Content Include="app\css\app.css" />
     <Content Include="app\css\sb-admin2.css" />
-    <Content Include="app\index.html" />
     <Content Include="app\js\configuration.js" />
+    <Content Include="app\js\controllers\details.js" />
     <Content Include="app\js\controllers\index.js" />
     <Content Include="app\js\controllers\search.js" />
-    <Content Include="app\js\services\searchService.js" />
-    <Content Include="app\partials\dashboard.html" />
-    <Content Include="app\partials\search.html" />
+    <Content Include="app\js\services\config.js" />
+    <Content Include="app\js\services\dashboard.js" />
+    <Content Include="app\js\services\search.js" />
+    <Content Include="app\views\dashboard.html" />
+    <Content Include="app\views\details.html" />
+    <Content Include="app\views\search.html" />
     <Content Include="bower_components\angular-resource\angular-resource.js" />
     <Content Include="bower_components\angular-resource\angular-resource.min.js" />
     <Content Include="bower_components\angular-route\angular-route.js" />
@@ -592,6 +595,7 @@
     <Content Include="bower_components\underscore\underscore-min.js" />
     <Content Include="bower_components\underscore\underscore.js" />
     <Content Include="gulp.js" />
+    <Content Include="index.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
