@@ -38,6 +38,20 @@ type IndexingQueueKeeperTest() =
         // Then
         sut.Count().Should().Be(10, "Queue count must be 10")
 
+    [<Fact>]
+    member me.``Keeper must peek top indicated model contained in the queue``() =
+        // Given
+        let sut = me.MakeSut()
+        let models = me.``Gimme N log models`` 5
+        
+        // When
+        models |> List.iter (fun x -> sut.Enqueue(x)) 
+        let actuals = sut.PeekTop(10)
+
+        // Then
+        sut.Count().Should().Be(5, "Queue count must be 5") |> ignore
+        (actuals |> Seq.length).Should().Be(5, "Actuals must count 5") |> ignore
+        
 
     [<Fact>]
     member me.``Keeper must peek model and leave it in queue``() =

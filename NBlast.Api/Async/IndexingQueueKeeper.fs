@@ -15,7 +15,7 @@ type IQueueKeeper<'a> = interface
     abstract member ConsumeMany : int option -> seq<'a>
     abstract member Peek : unit -> 'a option
     abstract member Count : unit -> int 
-    abstract member ToArray : unit -> array<'a>
+    abstract member PeekTop : int -> seq<'a>
 end
 
 type IIndexingQueueKeeper = inherit IQueueKeeper<LogModel>
@@ -26,7 +26,8 @@ type IndexingQueueKeeper() =
 
     interface IIndexingQueueKeeper with
         member me.Count() = queue |> Seq.length 
-        member me.ToArray() = queue.ToArray()
+        member me.PeekTop top = 
+            queue |> Seq.truncate top
         member me.Peek() =  
             match queue.TryPeek() with 
             | (false, _) -> None

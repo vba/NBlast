@@ -6,8 +6,10 @@ open NBlast.Storage
 open NBlast.Storage.Core.Index
 open System.Web.Http
 open System.Net.Http.Formatting
+open System.Web.Http.Cors
 
 [<RoutePrefix("api/indexer")>]
+[<EnableCors("*", "*", "GET")>]
 type IndexerController(queueKeeper: IIndexingQueueKeeper) =
     inherit ApiController()
 
@@ -26,6 +28,5 @@ type IndexerController(queueKeeper: IIndexingQueueKeeper) =
         me.Ok(queueKeeper.Count())
 
     [<HttpGet>]
-    [<Route("queue-content")>]
-    member me.QueueContent() =
-        queueKeeper.ToArray()
+    [<Route("queue-content/{top}")>]
+    member me.QueueContent(top: int) = queueKeeper.PeekTop(top)
