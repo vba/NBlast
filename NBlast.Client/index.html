@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="nblast">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -40,11 +40,11 @@
     <div id="pageWrapper" ng-view></div>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/handlebars/handlebars.min.js"></script>
-    <script src="bower_components/ember/ember.js"></script>
-
     <script src="bower_components/underscore/underscore-min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script data-main="app/js/main" src="bower_components/requirejs/require.js"></script>
+<!--
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/angular-resource/angular-resource.min.js"></script>
@@ -57,6 +57,7 @@
     <script src="app/js/controllers/index.js"></script>
     <script src="app/js/controllers/search.js"></script>
     <script src="app/js/controllers/details.js"></script>
+-->
 </body>
 
 </html>

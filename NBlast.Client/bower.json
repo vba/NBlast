@@ -10,6 +10,6 @@
     "angular-underscore": "~0.5.0",
     "underscore": "~1.7.0",
     "chartist": "~0.5.0",
-    "ember": "~1.9.1"
+    "requirejs": "~2.1.15"
   }
 }

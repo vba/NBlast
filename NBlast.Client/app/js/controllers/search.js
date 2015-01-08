@@ -1,7 +1,6 @@
 // ReSharper disable once UseOfImplicitGlobalInFunctionScope
-(function() {
+define(['angular'], function(angular) {
     'use strict';
-
     angular.module('nblast')
         .controller('searchController', [
             '$scope',
@@ -39,4 +38,4 @@
                 };
             }
         ]);
-})();
+});

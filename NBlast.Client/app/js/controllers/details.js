@@ -1,4 +1,4 @@
-(function() {
+define(['angular'], function(angular) {
     'use strict';
     angular.module('nblast')
         .controller('detailsController', [
@@ -14,4 +14,4 @@
                     $scope.hit = data.hits[0];
                 });
         }]);
-})();
+});
