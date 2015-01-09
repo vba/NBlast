@@ -1,4 +1,4 @@
-define(['angular'], function(angular) {
+define(['angular', 'services/config'], function(angular) {
     'use strict';
     angular.module('nblast')
         .service('searchService', [
@@ -15,9 +15,11 @@ define(['angular'], function(angular) {
 
                 return _.extend({
                     getById: function(id) {
-                        return $resource(configService.appendToBackendUrl('searcher/'+id+'/get'),
-                                         null,
-                                         {get: {'method': 'GET'}}).get();
+                        return $resource(
+                            configService.appendToBackendUrl('searcher/' + id + '/get'),
+                            null,
+                            { get: { 'method': 'GET' } }
+                        ).get();
                     }
                 }, xhr);
         }]);

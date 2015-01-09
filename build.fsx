@@ -3,29 +3,31 @@
 open Fake
 
 // Properties
-let buildDir = "./bin/Debug"
-let dirsToClean = ["./bin/"; "./obj/"]
+let buildDir = "./bin"
+let dirsToClean = ["./out"; "./bin"; "./obj"]
 
 // Targets
 Target "Clean" (fun _ ->
     dirsToClean |> List.iter (fun d -> CleanDir d)
 )
 
-Target "BuildApp" (fun _ ->
-    !! "./NBlast.Api/*.fsproj" ++
-        "./NBlast.Api/*.fsproj"
-      |> MSBuildRelease buildDir "Build"
-      |> Log "AppBuild-Output: "
+Target "BuildApps" (fun _ ->
+    [
+      ("./NBlast.Api/*.fsproj", "api"); 
+      ("./NBlast.Fixtures.Console/*.fsproj", "fixtures")
+    ] |> Seq.iter (fun app ->
+       !! (fst app) |> MSBuildDebug (buildDir + "/" + (snd app)) "Build"  |> ignore
+    ) |> ignore
 )
 
 Target "BuildTests" (fun _ ->
     !! "./**/*.fsproj"
-      |> MSBuildDebug buildDir "Build"
+      |> MSBuildDebug (buildDir + "/tests") "Build"
       |> Log "TestBuild-Output: "
 )
 
 Target "RunTests" (fun _ ->
-    let testDlls = !! (buildDir + "/*Tests.dll")
+    let testDlls = !! (buildDir + "/tests/*Tests.dll")
     testDlls
         |> xUnit (fun p -> 
             {p with 
@@ -42,6 +44,7 @@ Target "Default" (fun _ ->
 
 // Dependencies
 "Clean"
+  ==> "BuildApps"
   ==> "BuildTests"
   ==> "RunTests"
 

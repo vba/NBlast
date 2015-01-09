@@ -1,4 +1,4 @@
-define(['angular'], function(angular) {
+define(['angular', 'services/config'], function(angular) {
     'use strict';
     angular.module('nblast')
         .service('dashboardService', [

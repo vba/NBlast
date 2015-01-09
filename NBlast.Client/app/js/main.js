@@ -24,31 +24,15 @@
         }
     });
 
-    /*
-
-    <script src="bower_components/angular-route/angular-route.min.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
-    <script src="bower_components/angular-underscore/angular-underscore.min.js"></script>
-
-    <script src="app/js/configuration.js"></script>
-    <script src="app/js/services/config.js"></script>
-    <script src="app/js/services/search.js"></script>
-    <script src="app/js/services/dashboard.js"></script>
-    <script src="app/js/controllers/index.js"></script>
-    <script src="app/js/controllers/search.js"></script>
-    <script src="app/js/controllers/details.js"></script>
-
-*/
-
     require([
             'angular',
             'angular-route',
             'angular-resource',
             'angular-underscore',
             'configuration',
-            'services/config',
-            'services/search',
-            'services/dashboard',
+//            'services/config',
+//            'services/search',
+//            'services/dashboard',
             'controllers/index',
             'controllers/search',
             'controllers/details'

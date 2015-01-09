@@ -1,5 +1,5 @@
 // ReSharper disable once UseOfImplicitGlobalInFunctionScope
-define(['angular'], function(angular) {
+define(['angular', 'services/search'], function(angular) {
     'use strict';
     angular.module('nblast')
         .controller('searchController', [

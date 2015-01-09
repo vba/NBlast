@@ -5,15 +5,16 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-8">
-        <div class="input-group">
-            <form action="#" name="searchForm"></form>
-            <input type="text" class="form-control" placeholder="Enter your serach query here" ng-model="searchQuery">
-            <span class="input-group-btn">
-                <button class="btn btn-primary" type="button" ng-click="search()">Search</button>
-            </span>
+    <form method="GET" name="searchForm" ng-submit="search()">
+        <div class="col-lg-8">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Enter your serach query here" ng-model="searchQuery">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </span>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 <div class="row">
     <div class="col-lg-8">
