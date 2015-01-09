@@ -30,9 +30,6 @@
             'angular-resource',
             'angular-underscore',
             'configuration',
-//            'services/config',
-//            'services/search',
-//            'services/dashboard',
             'controllers/index',
             'controllers/search',
             'controllers/details'

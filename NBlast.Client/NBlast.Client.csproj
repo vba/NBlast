@@ -155,13 +155,6 @@
     <None Include="bower_components\DataTables\Contributing.md" />
     <None Include="bower_components\DataTables\media\images\Sorting icons.psd" />
     <None Include="bower_components\DataTables\Readme.md" />
-    <None Include="bower_components\ember\.bower.json" />
-    <None Include="bower_components\ember\bower.json" />
-    <None Include="bower_components\ember\component.json" />
-    <None Include="bower_components\ember\composer.json" />
-    <None Include="bower_components\ember\Makefile" />
-    <None Include="bower_components\ember\package.json" />
-    <None Include="bower_components\ember\README.md" />
     <None Include="bower_components\flot.tooltip\.bower.json" />
     <None Include="bower_components\flot.tooltip\bower.json" />
     <None Include="bower_components\flot\.bower.json" />
@@ -291,6 +284,9 @@
     <None Include="bower_components\morrisjs\spec\viz\run.sh" />
     <None Include="bower_components\raphael\.bower.json" />
     <None Include="bower_components\raphael\bower.json" />
+    <None Include="bower_components\requirejs\.bower.json" />
+    <None Include="bower_components\requirejs\bower.json" />
+    <None Include="bower_components\requirejs\README.md" />
     <None Include="bower_components\sb-admin-v2\.bower.json" />
     <None Include="bower_components\sb-admin-v2\bower.json" />
     <None Include="bower_components\sb-admin-v2\README.md" />
@@ -312,6 +308,7 @@
     <Content Include="app\js\controllers\details.js" />
     <Content Include="app\js\controllers\index.js" />
     <Content Include="app\js\controllers\search.js" />
+    <Content Include="app\js\main.js" />
     <Content Include="app\js\services\config.js" />
     <Content Include="app\js\services\dashboard.js" />
     <Content Include="app\js\services\search.js" />
@@ -371,12 +368,6 @@
     <Content Include="bower_components\DataTables\media\js\jquery.dataTables.js" />
     <Content Include="bower_components\DataTables\media\js\jquery.dataTables.min.js" />
     <Content Include="bower_components\DataTables\media\js\jquery.js" />
-    <Content Include="bower_components\ember\.gitignore" />
-    <Content Include="bower_components\ember\ember-template-compiler.js" />
-    <Content Include="bower_components\ember\ember-testing.js" />
-    <Content Include="bower_components\ember\ember.js" />
-    <Content Include="bower_components\ember\ember.min.js" />
-    <Content Include="bower_components\ember\ember.prod.js" />
     <Content Include="bower_components\flot.tooltip\js\excanvas.min.js" />
     <Content Include="bower_components\flot.tooltip\js\jquery.flot.js" />
     <Content Include="bower_components\flot.tooltip\js\jquery.flot.tooltip.js" />
@@ -600,6 +591,7 @@
     <Content Include="bower_components\raphael\license.txt" />
     <Content Include="bower_components\raphael\raphael-min.js" />
     <Content Include="bower_components\raphael\raphael.js" />
+    <Content Include="bower_components\requirejs\require.js" />
     <Content Include="bower_components\sb-admin-v2\css\plugins\dataTables\dataTables.bootstrap.css" />
     <Content Include="bower_components\sb-admin-v2\css\plugins\social-buttons\social-buttons.css" />
     <Content Include="bower_components\sb-admin-v2\css\plugins\timeline\timeline.css" />
