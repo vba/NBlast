@@ -39,7 +39,8 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Async\IndexingQueueKeeperTest.fs" />
     <Compile Include="Async\QueueProcessingTaskTests.fs" />
-    <Compile Include="Controllers\HomeControllerSpecs.fs" />
+    <Compile Include="Controllers\SearchControllerSpecs.fs" />
+    <Compile Include="Controllers\IndexControllerSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
@@ -75,6 +76,9 @@
     </Reference>
     <Reference Include="Ploeh.AutoFixture">
       <HintPath>..\packages\AutoFixture\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="xunit">
