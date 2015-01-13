@@ -11,6 +11,9 @@ define(['angular'], function(angular) {
                 },
                 getJsonFormat: function() {
                     return { format: 'json', callback: 'JSON_CALLBACK' };
+                },
+                getItemsPerPage: function() {
+                    return 15;
                 }
             };
         }]);

@@ -36,7 +36,16 @@
                 </p>
             </article>
         </section>
+        <nav>
+            <!--
+                TODO Continue pagination with following article:
+                http://fdietz.github.io/recipes-with-angular-js/common-user-interface-patterns/paginating-through-server-side-data.html
+            -->
+            <ul ng-model="searchResult" class="pagination">
+                <li ng-repeat="page in getPages(searchResult.total)">
+                    <a href="#">{{page}}</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
-
-
