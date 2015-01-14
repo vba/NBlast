@@ -8,10 +8,12 @@
             'angular-resource': '../../bower_components/angular-resource/angular-resource.min',
             'angular-underscore': '../../bower_components/angular-underscore/angular-underscore.min',
             'jquery': '../../bower_components/jquery/dist/jquery',
+            'text': '../../bower_components/requirejs-text/text',
             'bootstrap': '../../bower_components/bootstrap/dist/js/bootstrap',
             'underscore': '../../bower_components/underscore/underscore-min',
             'knockout': '../../bower_components/knockout/dist/knockout.debug',
-            'sammy': '../../bower_components/sammy/lib/sammy'
+            'sammy': '../../bower_components/sammy/lib/sammy',
+            'views': '../views'
         },
         shim: {
             knockout: {
@@ -45,15 +47,15 @@
     });
 
     require([
-            'routes',
-            'angular',
-            'angular-route',
-            'angular-resource',
-            'angular-underscore',
-            'configuration',
-            'controllers/index',
-            'controllers/search',
-            'controllers/details'
+            'routes'
+            // 'angular',
+            // 'angular-route',
+            // 'angular-resource',
+            // 'angular-underscore',
+            // 'configuration',
+            // 'controllers/index',
+            // 'controllers/search',
+            // 'controllers/details'
         ],
         function(routes, angular) {
             routes.run();
