@@ -10,8 +10,16 @@
             'jquery': '../../bower_components/jquery/dist/jquery',
             'bootstrap': '../../bower_components/bootstrap/dist/js/bootstrap',
             'underscore': '../../bower_components/underscore/underscore-min',
+            'knockout': '../../bower_components/knockout/dist/knockout.debug',
+            'sammy': '../../bower_components/sammy/lib/sammy'
         },
         shim: {
+            knockout: {
+                exports: 'ko'
+            },
+            sammy: {
+                exports: 'sammy'
+            },
             underscore: {
                 exports: '_'
             },
@@ -37,6 +45,7 @@
     });
 
     require([
+            'routes',
             'angular',
             'angular-route',
             'angular-resource',
@@ -46,7 +55,8 @@
             'controllers/search',
             'controllers/details'
         ],
-        function(angular) {
-            angular.bootstrap(document, ['nblast']);
+        function(routes, angular) {
+            routes.run();
+            //angular.bootstrap(document, ['nblast']);
         });
 })();
