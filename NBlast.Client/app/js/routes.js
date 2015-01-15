@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 	var dependencies = [
-		'sammy', 
+		'sammy',
 		'knockout',
 		'services/settings',
 		'viewModels/search'
@@ -15,24 +15,26 @@
 			});
 			me.get('#/search/:page/:query', function() {
 				var params = this.params;
-				require(['viewModels/search'], function(search) {
-					search.bind(params['page'], params['query']);
+				require(['viewModels/search'], function(SearchViewModel) {
+					new SearchViewModel(parseInt(params.page, 10), params.query)
+						.bind()
+						.makeSearch();
 				});
 			});
 			me.get('#/dashboard', function() {
-				require(['viewModels/dashboard'], function(dashboard) {
-					dashboard.bind();
+				require(['viewModels/dashboard'], function(DashboardViewModel) {
+					new DashboardViewModel().bind();
 				});
 			});
 			me.get('#/search', function() {
-				require(['viewModels/emptySearch'], function(emptySearch) {
-					emptySearch.bind();
+				require(['viewModels/emptySearch'], function(EmptySearchViewModel) {
+					new EmptySearchViewModel().bind();
 				});
 				// var path = ['#/search/', encodeURIComponent('*:*')].join('');
 				// me.runRoute('get', path);
 			});
 			me.get('#/search/:query', function() {
-				var path = ['#/search/1/', this.params['query'] || encodeURIComponent('*:*')].join('');
+				var path = ['#/search/1/', this.params.query || encodeURIComponent('*:*')].join('');
 				me.runRoute('get', path);
 			});
 			me.get('', function() {

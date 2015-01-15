@@ -7,6 +7,7 @@
 		'text!views/search'
 	];
 	define(dependencies, function(_, ko, markupService, searchView) {
+
 		var SearchViewModel = function(page, query) {
 			if (!_.isNumber(page)) {
 				throw new Error('page param must be a number');
@@ -23,19 +24,18 @@
 			enterSearch : function(data, event) {
 				if (event.keyCode === 13) {
 					return this.makeSearch();
-				};
+				}
 				return true;
 			},
 			makeSearch : function() {
-				console.log("Search");
+				console.log("Search "+ this.query());
 				return false;
+			},
+			bind: function() {
+				markupService.applyBindings(this, searchView);
+				return this;
 			}
 		};
-		return {
-			bind: function(page, query) {
-				var viewModel = new SearchViewModel(parseInt(page, 10), query);
-				markupService.applyBindings(viewModel, searchView);
-			}
-		}
+		return SearchViewModel;
 	});
 })();

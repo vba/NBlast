@@ -16,21 +16,22 @@
 			enterSearch : function(data, event) {
 				if (event.keyCode === 13) {
 					return this.makeSearch();
-				};
+				}
 				return true;
 			},
 			makeSearch : function() {
-				// window.location.assign(['#/search/', encodeURIComponent('*:*')].join(''));
-				sammy().setLocation(['#/search/', encodeURIComponent('*:*')].join(''));
-				return false;
-			}
-		}
+				var query = this.query() || '*:*',
+					path = ['#/search/', encodeURIComponent(query)].join('');
 
-		return {
+				console.log("Redirect to "+path);
+				sammy().setLocation(path);
+				return false;
+			},
 			bind: function() {
-				var viewModel = new EmptySearchViewModel();
-				markupService.applyBindings(viewModel, searchView);
+				markupService.applyBindings(this, searchView);
 			}
-		}
+		};
+
+		return EmptySearchViewModel;
 	});
 })();

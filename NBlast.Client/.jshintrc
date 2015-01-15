@@ -84,6 +84,7 @@
         // require.js
         "define" : false,
         "require": false,
+        "requirejs": false,
         //sinon.js
         "sinon"  : false,
         // mocha stuff

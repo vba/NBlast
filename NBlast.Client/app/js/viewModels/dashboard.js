@@ -1,16 +1,18 @@
 (function() {
 	'use strict';
 	var dependencies = [
+		'underscore',
 		'services/markup',
 		'text!views/dashboard'
 	];
-	define(dependencies, function(markupService, dashboardView) {
+	define(dependencies, function(_, markupService, dashboardView) {
 		var DashboardViewModel = function() {};
-		return {
+
+		DashboardViewModel.prototype = _.extend({
 			bind: function() {
-				var viewModel = new DashboardViewModel();
-				markupService.applyBindings(viewModel, dashboardView);
+				markupService.applyBindings(this, dashboardView);
 			}
-		}
-	})
+		});
+		return DashboardViewModel;
+	});
 })();

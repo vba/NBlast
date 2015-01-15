@@ -8,7 +8,9 @@
     <form method="GET" name="searchForm" data-bind="event: { keypress: enterSearch }">
         <div class="col-lg-8">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Enter your serach query here">
+                <input type="text" class="form-control"
+                       data-bind="value: query, valueUpdate: 'afterkeydown', hasFocus: true"
+                       placeholder="Enter your serach query here">
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="button" data-bind="click: makeSearch">Search</button>
                 </span>
