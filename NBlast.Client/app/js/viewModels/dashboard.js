@@ -8,7 +8,8 @@
 		var DashboardViewModel = function() {};
 		return {
 			bind: function() {
-				markupService.applyBindings(new DashboardViewModel(), dashboardView);
+				var viewModel = new DashboardViewModel();
+				markupService.applyBindings(viewModel, dashboardView);
 			}
 		}
 	})

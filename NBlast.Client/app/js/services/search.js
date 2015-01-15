@@ -1,10 +1,11 @@
 (function() {
 	'use strict';
 	var dependencies = [
-		'services/markup',
-		'text!views/search'
+		'jquery',
+		'underscore',
+		'services/settings'
 	];
-	define(dependencies, function(markupService, searchView) {
+	define(dependencies, function($, _, settings) {
 	/*
 		'use strict';
 		angular.module('nblast')
@@ -31,12 +32,9 @@
 					}, xhr);
 			}]);
 	*/
-
-		var SearchViewModel = function() {};
 		return {
-			bind: function() {
-				markupService.applyBindings(new SearchViewModel(), searchView);
-			}
+			search: function(query, page) {},
+			getById: function(id) {}
 		}
 	});
 })();

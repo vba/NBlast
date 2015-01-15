@@ -48,17 +48,8 @@
 
     require([
             'routes'
-            // 'angular',
-            // 'angular-route',
-            // 'angular-resource',
-            // 'angular-underscore',
-            // 'configuration',
-            // 'controllers/index',
-            // 'controllers/search',
-            // 'controllers/details'
         ],
         function(routes, angular) {
             routes.run();
-            //angular.bootstrap(document, ['nblast']);
         });
 })();
