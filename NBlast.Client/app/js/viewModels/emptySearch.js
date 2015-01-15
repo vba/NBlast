@@ -13,11 +13,14 @@
 		};
 
 		EmptySearchViewModel.prototype = {
-			absorbEnter: function(data, event) {
-				return event.keyCode !== 13;
+			enterSearch : function(data, event) {
+				if (event.keyCode === 13) {
+					return this.makeSearch();
+				};
+				return true;
 			},
 			makeSearch : function() {
-				// debugger
+				// window.location.assign(['#/search/', encodeURIComponent('*:*')].join(''));
 				sammy().setLocation(['#/search/', encodeURIComponent('*:*')].join(''));
 				return false;
 			}

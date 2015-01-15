@@ -18,6 +18,19 @@
 			this.page = ko.observable(page);
 			this.query = ko.observable(decodeURIComponent(query));
 		};
+
+		SearchViewModel.prototype = {
+			enterSearch : function(data, event) {
+				if (event.keyCode === 13) {
+					return this.makeSearch();
+				};
+				return true;
+			},
+			makeSearch : function() {
+				console.log("Search");
+				return false;
+			}
+		};
 		return {
 			bind: function(page, query) {
 				var viewModel = new SearchViewModel(parseInt(page, 10), query);

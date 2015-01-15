@@ -5,12 +5,12 @@
     </div>
 </div>
 <div class="row">
-    <form method="GET" action="#/do-nothing" name="searchForm" data-bind="event: { keypress: absorbEnter }, submit: makeSearch">
+    <form method="GET" name="searchForm" data-bind="event: { keypress: enterSearch }">
         <div class="col-lg-8">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Enter your serach query here">
                 <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit">Search</button>
+                    <button class="btn btn-primary" type="button" data-bind="click: makeSearch">Search</button>
                 </span>
             </div>
         </div>
