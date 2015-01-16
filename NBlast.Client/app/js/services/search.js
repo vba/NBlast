@@ -34,13 +34,16 @@
 	*/
 		return {
 			search: function(query) {
-				var searchUrl = settings.appendToBackendUrl('searcher/search'),
+				var url = settings.appendToBackendUrl('searcher/search'),
 					params = {
-						q: query = encodeURIComponent(query || '*:*')
+						q: query || '*:*'
 					};
-				return $.getJSON(searchUrl, params);
+				return $.getJSON(url, params);
 			},
-			getById: function(id) {}
+			getById: function(id) {
+				var url = settings.appendToBackendUrl('searcher/' + id + '/get');
+				return $.getJSON(url);
+			}
 		}
 	});
 })();

@@ -26,7 +26,9 @@
 				// me.runRoute('get', path);
 			});
 			me.get('#/search/:query', function() {
-				var path = ['#/search/1/', this.params.query || encodeURIComponent('*:*')].join('');
+//				debugger
+//				var path = ['#/search/1/', this.params.query || encodeURIComponent('*:*')].join('');
+				var path = ['#/search/1/', encodeURIComponent(this.params.query || '*:*')].join('');
 				me.runRoute('get', path);
 			});
 			me.get('', function() {

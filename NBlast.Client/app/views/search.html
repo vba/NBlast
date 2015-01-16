@@ -1,53 +1,62 @@
 <!--<h1 ng-controller="searchController">TO IMPLEMENT</h1>-->
 <div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">Search</h1>
-    </div>
+	<div class="col-lg-12">
+		<h1 class="page-header">Search</h1>
+	</div>
 </div>
 <div class="row">
-    <form method="GET" name="searchForm" data-bind="event: { keypress: enterSearch }">
-        <div class="col-lg-8">
-            <div class="input-group">
-                <input type="text" class="form-control"
-                       data-bind="value: query, valueUpdate: 'afterkeydown', hasFocus: true"
-                       placeholder="Enter your serach query here">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button" data-bind="click: makeSearch">Search</button>
-                </span>
-            </div>
-        </div>
-    </form>
+	<form method="GET" name="searchForm" data-bind="event: { keypress: enterSearch }">
+		<div class="col-lg-8">
+			<div class="input-group">
+				<input type="text" class="form-control"
+					   data-bind="value: query, valueUpdate: 'afterkeydown', hasFocus: true"
+					   placeholder="Enter your serach query here">
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="button" data-bind="click: makeSearch">Search</button>
+				</span>
+			</div>
+		</div>
+	</form>
 </div>
 <div class="row">
-    <div class="col-lg-8">
-        <div class="result-count" ng-if="searchResult.hits">
-            {{searchResult.total}} record(s) found in {{searchResult.queryDuration}} ms
-        </div>
-        <section class="list-group search-result" ng-model="searchResult">
-            <article class="list-group-item" ng-repeat="hit in searchResult.hits" ng-click="onHitClick(hit)">
-                <span class="pull-right {{ hit.level | lowercase }}">
-                    {{hit.level}} <i class="fa fa-{{ defineFoundIcon(hit.level) }}"></i>
-                </span>
-                <h4 class="list-group-item-heading">{{hit.sender}}</h4>
-                <span class="pull-right score">
-                    {{hit.score}}
-                </span>
-                <p class="list-group-item-text">{{hit.message}}</p>
-                <p class="list-group-item-text date">
-                    Created on {{hit.createdAt | date:'medium'}}
-                </p>
-            </article>
-        </section>
-        <nav>
-            <!--
-                TODO Continue pagination with following article:
-                http://fdietz.github.io/recipes-with-angular-js/common-user-interface-patterns/paginating-through-server-side-data.html
-            -->
-            <ul ng-model="searchResult" class="pagination">
-                <li ng-repeat="page in getPages(searchResult.total)">
-                    <a href="#">{{page}}</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+	<div class="col-lg-8">
+		<div class="result-count" data-bind="visible: searchResult, text: getSearchResume()"></div>
+
+		<!--
+		<ul data-bind="foreach: children">
+			<li>
+				<span data-bind="text: $data"> </span>
+				<span class='renderTime' data-bind='visible: $root.showRenderTimes'>
+					(child rendered at <span data-bind='text: new Date().getSeconds()' > </span>)
+				</span>
+			</li>
+		</ul>
+		-->
+
+		<section class="list-group search-result" data-bind="foreach: getFoundHits()">
+			<article class="list-group-item" ng-repeat="hit in searchResult.hits" ng-click="onHitClick(hit)">
+				<span data-bind="attr: {'class': 'pull-right ' + $data.level.toLowerCase()}">
+					<span data-bind="text: $data.level"></span>
+					<i data-bind="attr: {'class': 'fa fa-' + $root.defineFoundIcon($data.level)}"></i>
+				</span>
+				<h4 class="list-group-item-heading" data-bind="text: $data.sender"></h4>
+				<span class="pull-right score" data-bind="text: $data.score"> </span>
+				<p class="list-group-item-text" data-bind="text: $data.message"></p>
+				<p class="list-group-item-text date" data-bind="text: $data.createdAt">
+<!--					Created on {{hit.createdAt | date:'medium'}}-->
+				</p>
+			</article>
+		</section>
+		<nav>
+			<!--
+TODO Continue pagination with following article:
+http://fdietz.github.io/recipes-with-angular-js/common-user-interface-patterns/paginating-through-server-side-data.html
+-->
+			<ul class="pagination" data-bind="visible: searchResult, foreach: getPages()">
+				<li>
+					<a href="#" data-bind="text: $data"></a>
+				</li>
+			</ul>
+		</nav>
+	</div>
 </div>
