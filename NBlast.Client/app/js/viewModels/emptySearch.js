@@ -21,7 +21,7 @@
 			},
 			makeSearch : function() {
 				var query = this.query() || '*:*',
-					path = ['#/search/', encodeURIComponent(query)].join('');
+					path = ['/#/search/', encodeURIComponent(query)].join('');
 
 				console.log("Redirect to "+path);
 				sammy().setLocation(path);

@@ -33,7 +33,13 @@
 			}]);
 	*/
 		return {
-			search: function(query, page) {},
+			search: function(query) {
+				var searchUrl = settings.appendToBackendUrl('searcher/search'),
+					params = {
+						q: query = encodeURIComponent(query || '*:*')
+					};
+				return $.getJSON(searchUrl, params);
+			},
 			getById: function(id) {}
 		}
 	});

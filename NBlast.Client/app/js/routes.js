@@ -1,24 +1,16 @@
 (function() {
 	'use strict';
 	var dependencies = [
-		'sammy',
-		'knockout',
-		'services/settings',
-		'viewModels/search'
+		'sammy'
 	];
-	define(dependencies, function(sammy, ko, settings, search) {
+	define(dependencies, function(sammy) {
 		var routes = sammy(function() {
 			var me = this;
 			//me.get('#/dashboard', function(context) {});
-			me.get('#/do-nothing', function() {
-				return false;
-			});
 			me.get('#/search/:page/:query', function() {
 				var params = this.params;
 				require(['viewModels/search'], function(SearchViewModel) {
-					new SearchViewModel(parseInt(params.page, 10), params.query)
-						.bind()
-						.makeSearch();
+					new SearchViewModel(parseInt(params.page, 10), params.query).bind();
 				});
 			});
 			me.get('#/dashboard', function() {

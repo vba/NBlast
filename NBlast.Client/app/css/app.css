@@ -1,127 +1,128 @@
 html, body {
-    height: 100%;
+	height: 100%;
 }
 
 .result-count {
-    margin-top: .5em;
-    color: gray;
-    font-size: 0.8em;
-    font-style: italic;
+	margin-top: .5em;
+	color: gray;
+	font-size: 0.8em;
+	font-style: italic;
 }
 
 .search-result {
-    margin: 0 0 1.5em 0;
+	margin: 0 0 1.5em 0;
 }
-    .search-result .list-group-item {
-        border-radius: 0;
-        border: 0;
-        padding: 10px 0;
-        cursor: pointer;
-    }
-        .search-result .list-group-item .date {
-            font-style: italic;
-        }
-        .search-result .list-group-item .pull-right {
-/*            font-weight: bold;*/
-            text-transform: uppercase;
-        }
-        .search-result .list-group-item .fatal {
-            color: #af111c;
-        }
-        .search-result .list-group-item .error {
-            color: #EC1D02;
-        }
-        .search-result .list-group-item .warn {
-            color: #E69D3B;
-        }
-        .search-result .list-group-item .info {
-            color: #337AB7;
-        }
-        .search-result .list-group-item .debug {
-            color: #23ae89;
-        }
-        .search-result .list-group-item .trace {
-            color: #2DACC8;
-        }
-        .search-result .score {
-            color: gray;
-            font-size: .8em;
-            font-weight: normal;
-            font-style: italic;
-        }
+.search-result .list-group-item {
+	border-radius: 0;
+	border: 0;
+	padding: 10px 0;
+	cursor: pointer;
+}
+
+.search-result .list-group-item .date {
+	font-style: italic;
+}
+.search-result .list-group-item .pull-right {
+	/*            font-weight: bold;*/
+	text-transform: uppercase;
+}
+.search-result .list-group-item .fatal {
+	color: #af111c;
+}
+.search-result .list-group-item .error {
+	color: #EC1D02;
+}
+.search-result .list-group-item .warn {
+	color: #E69D3B;
+}
+.search-result .list-group-item .info {
+	color: #337AB7;
+}
+.search-result .list-group-item .debug {
+	color: #23ae89;
+}
+.search-result .list-group-item .trace {
+	color: #2DACC8;
+}
+.search-result .score {
+	color: gray;
+	font-size: .8em;
+	font-weight: normal;
+	font-style: italic;
+}
 
 
 
 #pageWrapper {
-    min-height: calc(100% - 51px);
+	min-height: calc(100% - 51px);
 }
 
 .navbar {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .panel-primary {
-    border-color: #E9E9E9;
+	border-color: #E9E9E9;
 }
 
 .panel-heading .fa {
-    margin-right: .35em;
+	margin-right: .35em;
 }
 
 .tile {
-    overflow: hidden;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    background: none repeat scroll 0 0 #FFF;
-    /*border: 1px solid #E9E9E9;*/
+	overflow: hidden;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+	background: none repeat scroll 0 0 #FFF;
+	/*border: 1px solid #E9E9E9;*/
 
-    border-radius: 2px;
-    padding: 1.2em 1.2em 1.2em 0;
+	border-radius: 2px;
+	padding: 1.2em 1.2em 1.2em 0;
 }
-    .tile .counter {
-        font-size: 25px;
-        color: dimgrey;
-    }
-    .tile .title {
-        font-weight: bold;
-        text-transform: uppercase;
-        color: dimgrey;
-    }
-    .tile .pull-left {
-        margin-left: 1.5em;
-    }
+.tile .counter {
+	font-size: 25px;
+	color: dimgrey;
+}
+.tile .title {
+	font-weight: bold;
+	text-transform: uppercase;
+	color: dimgrey;
+}
+.tile .pull-left {
+	margin-left: 1.5em;
+}
 
 .circle {
-    display: block;
-    width: 2em;
-    height: 2em;
-    border-radius: 1em;
-    text-align: center;
-    vertical-align: middle;
-    padding-top: .3em;
-    font-size: 30px;
-    color: white;
-    font-weight: bold;
+	display: block;
+	width: 2em;
+	height: 2em;
+	border-radius: 1em;
+	text-align: center;
+	vertical-align: middle;
+	padding-top: .3em;
+	font-size: 30px;
+	color: white;
+	font-weight: bold;
 }
 
-    .circle.info {
-        background-color: #337AB7;
-        border-color: #2361AE;
-    }
-    .circle.trace {
-        background-color: #2DACC8;
-        border-color: #2361AE;
-    }
-    .circle.debug {
-        background-color: #23ae89;
-    }
-    .circle.error {
-/*        background-color:#ae2323;*/
-        background-color:#EC1D02;
-    }
-    .circle.fatal {
-        background-color:#af111c;
-    }
-    .circle.warn {
-        background-color: #E69D3B;
-    }
+.circle.info {
+	background-color: #337AB7;
+	border-color: #2361AE;
+}
+.circle.trace {
+	background-color: #2DACC8;
+	border-color: #2361AE;
+}
+.circle.debug {
+	background-color: #23ae89;
+}
+.circle.error {
+	/*        background-color:#ae2323;*/
+	background-color:#EC1D02;
+}
+.circle.fatal {
+	background-color:#af111c;
+}
+.circle.warn {
+	background-color: #E69D3B;
+}
 
