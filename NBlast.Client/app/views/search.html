@@ -42,9 +42,8 @@
 				<h4 class="list-group-item-heading" data-bind="text: $data.sender"></h4>
 				<span class="pull-right score" data-bind="text: $data.score"> </span>
 				<p class="list-group-item-text" data-bind="text: $data.message"></p>
-				<p class="list-group-item-text date" data-bind="text: $data.createdAt">
-<!--					Created on {{hit.createdAt | date:'medium'}}-->
-				</p>
+				<p class="list-group-item-text date"
+				   data-bind="text: 'Created on '+ $root.moment($data.createdAt).format('MMM d, YYYY [at] hh:mm:ss')"></p>
 			</article>
 		</section>
 		<nav>

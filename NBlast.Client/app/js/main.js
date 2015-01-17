@@ -13,9 +13,13 @@
             'underscore': '../../bower_components/underscore/underscore-min',
             'knockout': '../../bower_components/knockout/dist/knockout.debug',
             'sammy': '../../bower_components/sammy/lib/sammy',
+            'moment': '../../bower_components/moment/moment',
             'views': '../views'
         },
         shim: {
+            moment: {
+                exports: 'moment'
+            },
             knockout: {
                 exports: 'ko'
             },

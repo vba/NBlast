@@ -5,6 +5,7 @@
 		'jquery',
 		'knockout',
 		'sammy',
+		'moment',
 		'services/markup',
 		'services/search',
 		'services/settings',
@@ -14,6 +15,7 @@
 								  $,
 								  ko,
 								  sammy,
+								  moment,
 								  markupService,
 								  searchService,
 								  settings,
@@ -28,6 +30,7 @@
 			this.searchResult = ko.observable({});
 			this.page = ko.observable(page);
 			this.query = ko.observable(query);
+			this.moment = moment;
 		};
 
 		SearchViewModel.prototype = {
