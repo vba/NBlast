@@ -22,17 +22,6 @@
 	<div class="col-lg-8">
 		<div class="result-count" data-bind="visible: searchResult, text: getSearchResume()"></div>
 
-		<!--
-		<ul data-bind="foreach: children">
-			<li>
-				<span data-bind="text: $data"> </span>
-				<span class='renderTime' data-bind='visible: $root.showRenderTimes'>
-					(child rendered at <span data-bind='text: new Date().getSeconds()' > </span>)
-				</span>
-			</li>
-		</ul>
-		-->
-
 		<section class="list-group search-result" data-bind="foreach: getFoundHits()">
 			<article class="list-group-item" ng-repeat="hit in searchResult.hits" ng-click="onHitClick(hit)">
 				<span data-bind="attr: {'class': 'pull-right ' + $data.level.toLowerCase()}">
@@ -46,14 +35,22 @@
 				   data-bind="text: 'Created on '+ $root.moment($data.createdAt).format('MMM d, YYYY [at] hh:mm:ss')"></p>
 			</article>
 		</section>
-		<nav>
-			<!--
-TODO Continue pagination with following article:
-http://fdietz.github.io/recipes-with-angular-js/common-user-interface-patterns/paginating-through-server-side-data.html
--->
-			<ul class="pagination" data-bind="visible: searchResult, foreach: getPages()">
+		<nav class="text-center">
+			<ul class="pagination" data-bind="visible: searchResult">
 				<li>
+					<a href="#" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<!-- ko foreach: getPages() -->
+				<li data-bind="css: {active: $data === $root.page()}">
 					<a href="#" data-bind="text: $data"></a>
+				</li>
+				<!-- /ko -->
+				<li>
+					<a href="#" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
 				</li>
 			</ul>
 		</nav>

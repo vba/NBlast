@@ -36,12 +36,17 @@
 		SearchViewModel.prototype = {
 			getPages: function () {
 				var total = this.searchResult().total,
+					links = 10 + this.page(),
 					amount;
 				if (!_.isNumber(total)) {
 					return [];
 				}
-				amount = Math.ceil(total / settings.getItemsPerPage());
-				return _.range(1, amount + 1);
+				amount = Math.ceil(total / settings.getItemsPerPage()) + 1;
+				return _
+					.chain(_.range(this.page() - 5, amount > links ? links : amount))
+					.filter(function(n) { return n > 0; })
+					.take(10)
+					.value();
 			},
 			defineFoundIcon: function (level) {
 				return {
