@@ -37,20 +37,22 @@
 		</section>
 		<nav class="text-center">
 			<ul class="pagination" data-bind="visible: searchResult">
-				<li>
-					<a href="#" aria-label="Previous">
+				<li data-bind="css: {disabled: page() === 1}">
+					<a href="#" aria-label="Previous" data-bind="visible: page() !== 1">
 						<span aria-hidden="true">&laquo;</span>
 					</a>
+					<span aria-hidden="true" data-bind="visible: page() === 1">&laquo;</span>
 				</li>
 				<!-- ko foreach: getPages() -->
 				<li data-bind="css: {active: $data === $root.page()}">
 					<a href="#" data-bind="text: $data"></a>
 				</li>
 				<!-- /ko -->
-				<li>
-					<a href="#" aria-label="Next">
+				<li data-bind="css: {disabled: page() === totalPages()}">
+					<a href="#" aria-label="Next" data-bind="visible: page() !== totalPages()">
 						<span aria-hidden="true">&raquo;</span>
 					</a>
+					<span aria-hidden="true" data-bind="visible: page() === totalPages()">&raquo;</span>
 				</li>
 			</ul>
 		</nav>

@@ -27,8 +27,10 @@
 			if (!_.isString(query)) {
 				throw new Error('query param must be a string');
 			}
+
 			this.searchResult = ko.observable({});
 			this.page = ko.observable(page);
+			this.totalPages = ko.observable(0);
 			this.query = ko.observable(query);
 			this.moment = moment;
 		};
@@ -37,11 +39,10 @@
 			getPages: function () {
 				var total = this.searchResult().total,
 					links = 10 + this.page(),
-					amount;
+					amount = this.totalPages() + 1;
 				if (!_.isNumber(total)) {
 					return [];
 				}
-				amount = Math.ceil(total / settings.getItemsPerPage()) + 1;
 				return _
 					.chain(_.range(this.page() - 5, amount > links ? links : amount))
 					.filter(function(n) { return n > 0; })
@@ -85,7 +86,9 @@
 				markupService.applyBindings(this, searchView);
 				searchService.search(this.query())
 					.done(function(data) {
-						me.searchResult(data || {});
+						var result = data || {total: 0};
+						me.searchResult(result);
+						me.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
 					});
 			}
 		};
