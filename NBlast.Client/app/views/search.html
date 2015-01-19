@@ -35,21 +35,24 @@
 				   data-bind="text: 'Created on '+ $root.moment($data.createdAt).format('MMM d, YYYY [at] hh:mm:ss')"></p>
 			</article>
 		</section>
-		<nav class="text-center">
+		<nav class="text-center" data-bind="visible: totalPages() > 1">
 			<ul class="pagination" data-bind="visible: searchResult">
 				<li data-bind="css: {disabled: page() === 1}">
-					<a href="#" aria-label="Previous" data-bind="visible: page() !== 1">
+					<a href="#" aria-label="Previous" 
+					   data-bind="visible: page() !== 1, attr: {href: '/#/search/'+(page() - 1)+'/'+encodeURIComponent($root.query())}">
 						<span aria-hidden="true">&laquo;</span>
 					</a>
 					<span aria-hidden="true" data-bind="visible: page() === 1">&laquo;</span>
 				</li>
 				<!-- ko foreach: getPages() -->
 				<li data-bind="css: {active: $data === $root.page()}">
-					<a href="#" data-bind="text: $data"></a>
+					<a href="#" 
+					   data-bind="text: $data, attr: {href: '/#/search/'+$data+'/'+encodeURIComponent($root.query())}"></a>
 				</li>
 				<!-- /ko -->
 				<li data-bind="css: {disabled: page() === totalPages()}">
-					<a href="#" aria-label="Next" data-bind="visible: page() !== totalPages()">
+					<a href="#" aria-label="Next" 
+					   data-bind="visible: page() !== totalPages(), attr: {href: '/#/search/'+(page() + 1)+'/'+encodeURIComponent($root.query())}">
 						<span aria-hidden="true">&raquo;</span>
 					</a>
 					<span aria-hidden="true" data-bind="visible: page() === totalPages()">&raquo;</span>

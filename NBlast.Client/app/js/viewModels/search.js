@@ -66,6 +66,10 @@
 				return [result.total, ' record(s) found in ', result.queryDuration, ' ms'].join('');
 			},
 			enterSearch : function(data, event) {
+				// if (event.keyCode === 27) {
+				// 	sammy().setLocation('/#/search');
+				// 	return false;
+				// }
 				if (event.keyCode === 13) {
 					return this.makeSearch();
 				}

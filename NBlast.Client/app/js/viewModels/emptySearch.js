@@ -8,6 +8,7 @@
 	];
 	define(dependencies, function(ko, sammy, markupService, searchView) {
 		var EmptySearchViewModel = function() {
+            this.totalPages = ko.observable(0);
 			this.page = ko.observable();
 			this.query = ko.observable();
 			this.searchResult = false;
@@ -32,9 +33,7 @@
 			makeSearch : function() {
 				var query = this.query() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
-//					path = ['/#/search/', query].join('');
 
-				console.log("Redirect to "+path);
 				sammy().setLocation(path);
 				return false;
 			},
