@@ -15,12 +15,15 @@ open System.IO
 
 module UnityConfig = 
     let private logger = NLog.LogManager.GetCurrentClassLogger()
-    let private configReader = new ConfigReader() :> IConfigReader
+//    let private configReader = new ConfigReader() :> IConfigReader
 
     let Configure() =
         logger.Debug("Start to configure IoC container")
-
         let container = new UnityContainer()
+        
+        container.RegisterInstance<IConfigReader>(new ConfigReader()) |> ignore
+
+        let configReader = container.Resolve<IConfigReader>()
         let directoryPath = "NBlast.index.directory_path" |> configReader.Read |> Path.GetFullPath
         let indexDocumentPerTask = "NBlast.index.documents_per_task" |> configReader.ReadAsInt
         

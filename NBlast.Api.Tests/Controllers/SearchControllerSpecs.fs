@@ -7,7 +7,9 @@ open Moq
 open FluentAssertions
 open NBlast.Storage.Core.Index
 open NBlast.Api.Controllers
+open NBlast.Storage.Core
 
+[<AllowNullLiteral>]
 type SearchControllerSpecs() = 
 
     [<Fact>]
@@ -31,16 +33,24 @@ type SearchControllerSpecs() =
     member me.``Search action must work as expected``() =
         // Given
         let reader = new Mock<IStorageReader>(MockBehavior.Strict)
+        let configReader = new Mock<IConfigReader>(MockBehavior.Strict)
         let query = "some: value"
-        let expression = SearchQuery.GetOnlyExpression query
+        let expression = {
+            SearchQuery.GetOnlyExpression query 
+            with Take = Some 15 
+                 Skip = Some (0 * 15)
+        }
         let result = {Hits = []; Total = 0; QueryDuration = 0L}
-        let sut = me.MakeSut(reader.Object)
+        let sut = me.MakeSut(reader.Object, configReader.Object)
 
         // When
         reader.Setup(fun x -> x.SearchByField(expression))
             .Returns(fun () -> result) |> ignore
 
-        let actionResult = sut.Search(query)
+        configReader.Setup(fun x -> x.ReadAsInt(It.IsAny<string>()))
+            .Returns(fun () -> 15) |> ignore
+
+        let actionResult = sut.Search(query, new Nullable<int>(1))
 
         // Then
         reader.VerifyAll() |> ignore
@@ -70,6 +80,9 @@ type SearchControllerSpecs() =
         reader.VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
-    member private me.MakeSut(?reader: IStorageReader): SearcherController = 
+    member private me.MakeSut(?reader: IStorageReader,
+                              ?configReader: IConfigReader): SearcherController =
+                               
         let reader = (new Mock<IStorageReader>(MockBehavior.Strict)).Object |> defaultArg reader
-        new SearcherController(reader)
+        let configReader = (new Mock<IConfigReader>(MockBehavior.Strict)).Object |> defaultArg configReader
+        new SearcherController(reader, configReader)
