@@ -3,10 +3,6 @@
 
     requirejs.config({
         paths: {
-            'angular': '../../bower_components/angular/angular',
-            'angular-route': '../../bower_components/angular-route/angular-route.min',
-            'angular-resource': '../../bower_components/angular-resource/angular-resource.min',
-            'angular-underscore': '../../bower_components/angular-underscore/angular-underscore.min',
             'jquery': '../../bower_components/jquery/dist/jquery',
             'text': '../../bower_components/requirejs-text/text',
             'bootstrap': '../../bower_components/bootstrap/dist/js/bootstrap',
@@ -34,18 +30,6 @@
             },
             bootstrap: {
                 deps: ['jquery']
-            },
-            angular: {
-                exports: 'angular'
-            },
-            'angular-route': {
-                deps: ["angular"]
-            },
-            'angular-resource': {
-                deps: ["angular"]
-            },
-            'angular-underscore': {
-                deps: ["angular", 'underscore']
             }
         }
     });
@@ -53,7 +37,7 @@
     require([
             'routes'
         ],
-        function(routes, angular) {
+        function(routes) {
             routes.run();
         });
 })();

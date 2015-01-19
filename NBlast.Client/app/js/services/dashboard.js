@@ -1,17 +1,5 @@
-define(['angular', 'services/config'], function(angular) {
-    'use strict';
-    angular.module('nblast')
-        .service('dashboardService', [
-            '$resource',
-            'configService',
-            function ($resource, configService) {
-                var searchUrl = configService.appendToBackendUrl('searcher/search'),
-                    jsonFormat = configService.getJsonFormat();
+define(['knockout', 'jquery', 'services/settings'], function(ko, $, settingsService) {
+	'use strict';
 
-                return $resource(searchUrl, jsonFormat, {
-                    search: {
-                        'method': 'JSONP'
-                    }
-                });
-        }]);
+	return Object.freeze({});
 });
