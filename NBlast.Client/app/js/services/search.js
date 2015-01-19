@@ -40,8 +40,8 @@
 					};
 				return $.getJSON(url, params);
 			},
-			getById: function(id) {
-				var url = settings.appendToBackendUrl('searcher/' + id + '/get');
+			getById: function(uuid) {
+				var url = settings.appendToBackendUrl('searcher/' + uuid + '/get');
 				return $.getJSON(url);
 			}
 		}

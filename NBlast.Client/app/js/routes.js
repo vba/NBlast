@@ -7,6 +7,12 @@
 		var routes = sammy(function() {
 			var me = this;
 			//me.get('#/dashboard', function(context) {});
+			me.get('#/details/:uuid', function() {
+				var params = this.params;
+				require(['viewModels/details'], function(DetailsViewModel) {
+					new DetailsViewModel(params.uuid).bind();
+				});
+			});
 			me.get('#/search/:page/:query', function() {
 				var params = this.params;
 				require(['viewModels/search'], function(SearchViewModel) {

@@ -36,6 +36,12 @@
 		};
 
 		SearchViewModel.prototype = {
+			selectHit: function(hit) {
+				if (_.isEmpty(hit)) {
+					throw new Error('selected hit cannot be empty');
+				}
+				sammy().setLocation(['/#/details/', hit.id].join(''));
+			},
 			getPages: function () {
 				var total = this.searchResult().total,
 					links = 10 + this.page(),

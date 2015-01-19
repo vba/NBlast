@@ -5,13 +5,13 @@
 </div>
 <div class="row">
     <div class="col-sm-2">Sender</div>
-    <div class="col-sm-10">{{hit.sender}}</div>
+    <div class="col-sm-10" data-bind="text: details().sender"></div>
     <div class="col-sm-2">Logger</div>
-    <div class="col-sm-10">{{hit.logger}}</div>
+    <div class="col-sm-10" data-bind="text: details().logger"></div>
     <div class="col-sm-2">Level</div>
-    <div class="col-sm-10">{{hit.level}}</div>
+    <div class="col-sm-10" data-bind="text: details().level"></div>
     <div class="col-sm-2">Message</div>
-    <div class="col-sm-10">{{hit.message}}</div>
+    <div class="col-sm-10" data-bind="text: details().message"></div>
     <div class="col-sm-2">Error</div>
-    <div class="col-sm-10">{{hit.error}}</div>
+    <div class="col-sm-10" data-bind="text: details().error"></div>
 </div>

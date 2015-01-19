@@ -5,6 +5,7 @@
 	</div>
 </div>
 <div class="row">
+	<!-- Search panel -->
 	<form method="GET" name="searchForm" data-bind="event: { keypress: enterSearch }">
 		<div class="col-lg-8">
 			<div class="input-group">
@@ -21,9 +22,9 @@
 <div class="row">
 	<div class="col-lg-8">
 		<div class="result-count" data-bind="visible: searchResult, text: getSearchResume()"></div>
-
+		<!-- Search results (hits) -->
 		<section class="list-group search-result" data-bind="foreach: getFoundHits()">
-			<article class="list-group-item" ng-repeat="hit in searchResult.hits" ng-click="onHitClick(hit)">
+			<article class="list-group-item" data-bind="click: $parent.selectHit">
 				<span data-bind="attr: {'class': 'pull-right ' + $data.level.toLowerCase()}">
 					<span data-bind="text: $data.level"></span>
 					<i data-bind="attr: {'class': 'fa fa-' + $root.defineFoundIcon($data.level)}"></i>
@@ -35,6 +36,7 @@
 				   data-bind="text: 'Created on '+ $root.moment($data.createdAt).format('MMM d, YYYY [at] hh:mm:ss')"></p>
 			</article>
 		</section>
+		<!-- Pagination -->
 		<nav class="text-center" data-bind="visible: totalPages() > 1">
 			<ul class="pagination" data-bind="visible: searchResult">
 				<li data-bind="css: {disabled: page() === 1}">
