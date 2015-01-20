@@ -76,12 +76,16 @@ type LogDocument ( sender     : string,
 
     let id = Guid.NewGuid()
 
+    member private me.FormalizeContent() = 
+        let mandatory = sender + " " + logger + " " + message
+        if (error.IsSome) then mandatory + " " + error.Value else mandatory
+
     member me.Id with get() = new TextField(LogField.Id.GetName(), id.ToString()) :> IField<string>
     member me.Sender with get() = new SenderField(sender)  :> IField<string>
     member me.Message with get() = new MessageField(message)  :> IField<string>
     member me.Logger with get() = new LoggerField(logger)  :> IField<string>
     member me.Level with get() = new LevelField(level)  :> IField<string>
-    member me.Content with get() = new ContentField(if (error.IsSome) then message + " " + error.Value else message ) :> IField<string>
+    member me.Content with get() = new ContentField(me.FormalizeContent()) :> IField<string>
     member me.CreatedAt with get() = new CreatedAtField(if (createdAt.IsSome) then createdAt.Value else DateTime.Now) :> IField<DateTime>
     member me.Error with get() =  if (error.IsSome) 
                                     then Some(new ErrorField(error.Value)  :> IField<string>)
