@@ -6,23 +6,32 @@
 </div>
 <div class="row">
 	<!-- Search panel -->
-	<form method="GET" name="searchForm" data-bind="event: { keypress: enterSearch }">
-		<div class="col-lg-8">
+	<div class="col-lg-8">
+		<form method="GET" name="searchForm" data-bind="event: { keypress: enterSearch }">
 			<div class="input-group">
 				<input type="text" class="form-control"
-					   data-bind="value: query, valueUpdate: 'afterkeydown', hasFocus: true"
-					   placeholder="Enter your serach query here">
+						data-bind="value: query, valueUpdate: 'afterkeydown', hasFocus: true"
+						placeholder="Enter your serach query here">
 				<span class="input-group-btn">
 					<button class="btn btn-primary" type="button" data-bind="click: makeSearch">Search</button>
 				</span>
 			</div>
+		</form>
+    </div>
+	<!-- Search presicion panel -->
+	<div class="col-lg-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">Filter panel</div>
+			<div class="panel-body">
+				Filter content
+			</div>
 		</div>
-	</form>
-</div>
-<div class="row">
+	</div>
 	<div class="col-lg-8">
 		<div class="result-count" data-bind="visible: searchResult, text: getSearchResume()"></div>
-		<!-- Search results (hits) -->
+	</div>
+	<!-- Search results (hits) -->
+	<div class="col-lg-8">
 		<section class="list-group search-result" data-bind="foreach: getFoundHits()">
 			<article class="list-group-item" data-bind="click: $parent.selectHit, attr: {title: 'Score: '+ $data.score}">
 				<span data-bind="attr: {'class': 'pull-right ' + $data.level.toLowerCase()}">
@@ -30,17 +39,19 @@
 					<i data-bind="attr: {'class': 'fa fa-' + $root.defineFoundIcon($data.level)}"></i>
 				</span>
 				<h4 class="list-group-item-heading" data-bind="text: $data.sender"></h4>
-<!--				<span class="pull-right score" data-bind="text: $data.score, visible: !/^\d+$/.test($data.score)"> </span>-->
+				<!--				<span class="pull-right score" data-bind="text: $data.score, visible: !/^\d+$/.test($data.score)"> </span>-->
 				<p class="list-group-item-text message" data-bind="text: $data.message"></p>
 				<p class="list-group-item-text date"
-				   data-bind="text: 'Created on '+ $root.moment($data.createdAt).format('MMM d, YYYY [at] hh:mm:ss')"></p>
+					data-bind="text: 'Created on '+ $root.moment($data.createdAt).format('MMM d, YYYY [at] hh:mm:ss')"></p>
 			</article>
 		</section>
-		<!-- Pagination -->
+	</div>
+	<!-- Pagination -->
+	<div class="col-lg-8">
 		<nav class="text-center" data-bind="visible: totalPages() > 1">
 			<ul class="pagination" data-bind="visible: searchResult">
 				<li data-bind="css: {disabled: page() === 1}">
-					<a href="#" aria-label="Previous" 
+					<a href="#" aria-label="Previous"
 					   data-bind="visible: page() !== 1, attr: {href: '/#/search/'+(page() - 1)+'/'+encodeURIComponent($root.query())}">
 						<span aria-hidden="true">&laquo;</span>
 					</a>
@@ -48,12 +59,12 @@
 				</li>
 				<!-- ko foreach: getPages() -->
 				<li data-bind="css: {active: $data === $root.page()}">
-					<a href="#" 
+					<a href="#"
 					   data-bind="text: $data, attr: {href: '/#/search/'+$data+'/'+encodeURIComponent($root.query())}"></a>
 				</li>
 				<!-- /ko -->
 				<li data-bind="css: {disabled: page() === totalPages()}">
-					<a href="#" aria-label="Next" 
+					<a href="#" aria-label="Next"
 					   data-bind="visible: page() !== totalPages(), attr: {href: '/#/search/'+(page() + 1)+'/'+encodeURIComponent($root.query())}">
 						<span aria-hidden="true">&raquo;</span>
 					</a>
