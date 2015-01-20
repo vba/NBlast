@@ -7,12 +7,9 @@
 	];
 	define(dependencies, function($, _, settings) {
 		return {
-			search: function(query) {
-				var url = settings.appendToBackendUrl('searcher/search'),
-					params = {
-						q: query || '*:*'
-					};
-				return $.getJSON(url, params);
+			search: function(query, page) {
+				var url = settings.appendToBackendUrl('searcher/search/');
+				return $.getJSON([url, page,'/', query].join(''));
 			},
 			getById: function(uuid) {
 				var url = settings.appendToBackendUrl('searcher/' + uuid + '/get');

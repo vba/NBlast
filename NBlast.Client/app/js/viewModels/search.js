@@ -94,7 +94,7 @@
 			bind: function() {
 				var me = this;
 				markupService.applyBindings(this, searchView);
-				searchService.search(this.query())
+				searchService.search(this.query(), this.page())
 					.done(function(data) {
 						var result = data || {total: 0};
 						me.searchResult(result);
