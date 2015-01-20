@@ -19,12 +19,18 @@ type SearcherController(storageReader: IStorageReader,
     let itemsPerPage = lazy("NBlast.search.hits_per_page" |> configReader.ReadAsInt)
 
     [<HttpGet>]
-    member me.Search (q: string, p: Nullable<int>) =
-        let page = if (p.HasValue) then p.Value else 1
+    [<Route("search")>]
+    [<Route("search/{q}")>]
+    member me.Search (q: string) = me.Search(q, 1)
+
+    [<HttpGet>]
+    [<Route("search")>]
+    [<Route("search/{p}/{q}")>]
+    member me.Search (q: string, p: int) =
         let searchQuery = {
             SearchQuery.GetOnlyExpression q 
             with Take = Some itemsPerPage.Value 
-                 Skip = Some ((page - 1) * itemsPerPage.Value)
+                 Skip = Some ((p - 1) * itemsPerPage.Value)
         }
         let result = storageReader.SearchByField(searchQuery)
         //result |> sprintf "search result: %A" |> logger.Debug

@@ -50,7 +50,7 @@ type SearchControllerSpecs() =
         configReader.Setup(fun x -> x.ReadAsInt(It.IsAny<string>()))
             .Returns(fun () -> 15) |> ignore
 
-        let actionResult = sut.Search(query, new Nullable<int>(1))
+        let actionResult = sut.Search(query)
 
         // Then
         reader.VerifyAll() |> ignore

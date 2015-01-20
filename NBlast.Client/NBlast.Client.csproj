@@ -304,9 +304,6 @@
   <ItemGroup>
     <Content Include="app\css\app.css" />
     <Content Include="app\css\sb-admin2.css" />
-    <Content Include="app\js\controllers\details.js" />
-    <Content Include="app\js\controllers\index.js" />
-    <Content Include="app\js\controllers\search.js" />
     <Content Include="app\js\main.js" />
     <Content Include="app\js\routes.js" />
     <Content Include="app\js\services\dashboard.js" />
@@ -314,6 +311,7 @@
     <Content Include="app\js\services\search.js" />
     <Content Include="app\js\services\settings.js" />
     <Content Include="app\js\viewModels\dashboard.js" />
+    <Content Include="app\js\viewModels\details.js" />
     <Content Include="app\js\viewModels\emptySearch.js" />
     <Content Include="app\js\viewModels\search.js" />
     <Content Include="app\views\dashboard.html" />
