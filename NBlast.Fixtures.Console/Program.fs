@@ -8,6 +8,8 @@ open Microsoft.FSharp.Control.WebExtensions
 open RestSharp
 open NBlast.Storage.Core
 open NBlast.Api.Models
+open Faker
+open System
 
 [<ExcludeFromCodeCoverage>]
 module App =
@@ -22,7 +24,9 @@ module App =
         request.AddParameter("message", log.Message) |> ignore
         request.AddParameter("level", log.Level) |> ignore
         request.AddParameter("logger", log.Logger) |> ignore
-        request.AddParameter("error", log.Error) |> ignore
+
+        if (log.Level = "fatal" || log.Level = "error") then
+            request.AddParameter("error", log.Error) |> ignore
         //request.AddParameter("createdAt", log.CreatedAt) |> ignore
         
         let response = restClient.Execute(request)
@@ -30,9 +34,19 @@ module App =
         response.StatusCode
 
     let generate () =
+        let message = 
+            fun () -> if((new Random()).Next(2) % 2 = 0) 
+                        then Lorem.Sentence() 
+                        else Company.CatchPhrase()
+
         let levels = ["fatal"; "error"; "warn"; "info"; "debug"; "trace"]
+
         fixture.CreateMany<LogModel>(fixturesLimit) |> PSeq.map (fun x -> 
-            x.Level <- levels.[(new System.Random()).Next(levels.Length)]
+            x.Level <- levels.[(new Random()).Next(levels.Length)]
+            x.Logger <- Address.UsState().ToLower()
+            x.Sender <- Company.Name()
+            x.Message <- message() + ", " + message().ToLower() + ", " + message().ToLower()
+            x.Error <- Lorem.Paragraph() + ", " + Lorem.Paragraph().ToLower()
             x
         )
 

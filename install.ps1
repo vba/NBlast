@@ -19,3 +19,4 @@
 & ".nuget\NuGet.exe" "Install" "RestSharp" "-OutputDirectory" "packages" "-ExcludeVersion"
 
 & ".nuget\NuGet.exe" "Install" "WebApiContrib.Formatting.Jsonp" "-OutputDirectory" "packages" "-ExcludeVersion"
+& ".nuget\NuGet.exe" "Install" "Faker.Net" "-OutputDirectory" "packages" "-ExcludeVersion"

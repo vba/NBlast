@@ -22,3 +22,4 @@ mono ".nuget\NuGet.exe" "Install" "Moq" "-OutputDirectory" "packages" "-ExcludeV
 mono ".nuget\NuGet.exe" "Install" "RestSharp" "-OutputDirectory" "packages" "-ExcludeVersion"
 
 mono ".nuget\NuGet.exe" "Install" "WebApiContrib.Formatting.Jsonp" "-OutputDirectory" "packages" "-ExcludeVersion"
+mono ".nuget\NuGet.exe" "Install" "Faker.Net" "-OutputDirectory" "packages" "-ExcludeVersion"

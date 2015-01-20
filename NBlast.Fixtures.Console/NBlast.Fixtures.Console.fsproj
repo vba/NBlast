@@ -32,7 +32,16 @@
     <Externalconsole>true</Externalconsole>
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <None Include="app.config" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Faker.NET4">
+      <HintPath>..\packages\Faker.Net\lib\net40\Faker.NET4.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
@@ -47,13 +56,6 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp\lib\net4-client\RestSharp.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <None Include="app.config" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\NBlast.Api\NBlast.Api.fsproj">
       <Name>NBlast.Api</Name>
       <Project>{096351ce-7e17-4d2d-a758-378e354fe977}</Project>
@@ -65,5 +67,4 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
 </Project>
