@@ -21,7 +21,10 @@ type FakeStorageWriter() =
     interface IStorageWriter with
         member me.InsertOne doc =
             me.IndexedDocuments <- (doc :?> LogDocument) :: me.IndexedDocuments
-            ignore ""
+
+        member me.InsertMany docs =
+            me.IndexedDocuments <- 
+                (docs |> Seq.map (fun x -> x :?> LogDocument) |> Seq.toList) @ me.IndexedDocuments
 
 type QueueProcessingTaskTests() =
 

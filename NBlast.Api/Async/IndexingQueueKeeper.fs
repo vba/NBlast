@@ -41,7 +41,7 @@ type IndexingQueueKeeper() =
             match queue.TryDequeue() with
             | (false, _) -> None
             | (true, model) ->
-                model |> sprintf "Dequeuing model %A" |> logger.Debug 
+                //model |> sprintf "Dequeuing model %A" |> logger.Debug 
                 Some model
 
         member me.ConsumeMany ?amount =
