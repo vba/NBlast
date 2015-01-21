@@ -32,6 +32,8 @@ type QueueProcessingTask(queueKeeper: IIndexingQueueKeeper,
 
     interface ITask with 
         member me.Execute() =
-            logger.Debug("Scheduled task executed, queue contains {0} element(s)", queueKeeper.Count())
-            queueKeeper.ConsumeMany(Some (indexingLimit |? 400)) |> me.ProcessModels |> ignore  
+            let count = queueKeeper.Count()
+            if (count > 0) then
+                logger.Debug("Scheduled task executed, queue contains {0} element(s)", count)
+                queueKeeper.ConsumeMany(Some (indexingLimit |? 400)) |> me.ProcessModels |> ignore  
 

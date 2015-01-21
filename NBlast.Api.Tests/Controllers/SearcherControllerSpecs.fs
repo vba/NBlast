@@ -10,7 +10,7 @@ open NBlast.Api.Controllers
 open NBlast.Storage.Core
 
 [<AllowNullLiteral>]
-type SearchControllerSpecs() = 
+type SearcherControllerSpecs() = 
 
     [<Fact>]
     member me.``Count all must use storage reader in the right way``() =

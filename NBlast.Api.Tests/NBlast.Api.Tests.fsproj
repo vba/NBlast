@@ -39,8 +39,8 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Async\IndexingQueueKeeperTest.fs" />
     <Compile Include="Async\QueueProcessingTaskTests.fs" />
-    <Compile Include="Controllers\SearchControllerSpecs.fs" />
-    <Compile Include="Controllers\IndexControllerSpecs.fs" />
+    <Compile Include="Controllers\SearcherControllerSpecs.fs" />
+    <Compile Include="Controllers\IndexerControllerSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">

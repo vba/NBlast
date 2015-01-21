@@ -29,6 +29,22 @@ type FakeStorageWriter() =
 type QueueProcessingTaskTests() =
 
     [<Fact>]
+    member me.``Task execution must do nothing when the queue is empty``() =
+        // Given
+        let storageWriter = new FakeStorageWriter()
+        let queueKeeper = new Mock<IIndexingQueueKeeper>(MockBehavior.Strict)
+        let sut = me.MakeSut(queueKeeper.Object, storageWriter)
+
+        // When
+        queueKeeper
+            .Setup<int>(fun x -> x.Count()).Returns(fun () -> 0) |> ignore
+        sut.Execute();
+
+        // Then
+        queueKeeper.VerifyAll()
+
+
+    [<Fact>]
     member me.``Task execution must consume and convert model to appropriated entity without error``() =
         // Given
         let actualAmount = 20
