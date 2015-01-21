@@ -30,7 +30,7 @@ module App =
         //request.AddParameter("createdAt", log.CreatedAt) |> ignore
         
         let response = restClient.Execute(request)
-        response.StatusCode |> printfn "Response status code is %A"
+        //response.StatusCode |> printfn "Response status code is %A"
         response.StatusCode
 
     let generate () =
@@ -52,6 +52,8 @@ module App =
 
     [<EntryPoint>]
     let main argv = 
+        fixturesLimit |> printfn "Sending %d fake log(s) to the server"
+
         let processed = 
             generate() 
                 |> PSeq.map (fun log -> log |> index)
