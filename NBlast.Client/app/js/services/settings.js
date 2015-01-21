@@ -9,7 +9,7 @@ define(['knockout', 'jquery'], function(ko, $) {
 			return [this.getBackendUrl(), path].join('');
 		},
 		getItemsPerPage: function() {
-			return 15;
+			return 10;
 		},
 		getViewsContainer: function() {
 			return '#pageWrapper';

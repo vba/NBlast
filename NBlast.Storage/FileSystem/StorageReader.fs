@@ -25,7 +25,7 @@ type StorageReader (directoryProvider: IDirectoryProvider,
     static let logger = NLog.LogManager.GetCurrentClassLogger()
     static let version = Version.LUCENE_30
     
-    let itemsPerPage = itemsPerPage |? 15
+    let itemsPerPage = itemsPerPage |? 10
     //let paginator = new Paginator() :> IPaginator
 
     static let _parseQuery = fun query (parser: QueryParser) ->
