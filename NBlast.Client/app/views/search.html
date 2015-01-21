@@ -6,18 +6,28 @@
 </div>
 <div class="row">
 	<div class="col-lg-3 col-lg-push-9">
-
 		<div class="panel panel-default">
-			<div class="panel-heading">Filter panel</div>
 			<div class="panel-body">
-				Filter content
+				<form>
+					<div class="form-group">
+						<label for="sortByDropdown">Sort by</label>
+						<select class="selectpicker" id="sortByDropdown">
+							<option>Pertinence</option>
+							<option>Date</option>
+							<option>Sender</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">Password</label>
+						<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+					</div>
+					<!-- <button type="submit" class="btn btn-default btn-xs">Apply</button> -->
+				</form>
 			</div>
 		</div>
-
 	</div>
 	<!-- Search panel -->
 	<div class="col-lg-9 col-lg-pull-3">
-
 		<form method="GET" name="searchForm" data-bind="event: { keypress: enterSearch }">
 			<div class="input-group">
 				<input type="text" class="form-control"
@@ -28,9 +38,7 @@
 				</span>
 			</div>
 		</form>
-
 		<!-- Search presicion panel -->
-
 		<div class="result-count" data-bind="visible: searchResult, text: getSearchResume()"></div>
 		<!--  Search results (hits) -->
 		<section class="list-group search-result" data-bind="foreach: getFoundHits()">
@@ -40,7 +48,6 @@
 					<i data-bind="attr: {'class': 'fa fa-' + $root.defineFoundIcon($data.level)}"></i>
 				</span>
 				<h4 class="list-group-item-heading" data-bind="text: $data.sender"></h4>
-				<!--				<span class="pull-right score" data-bind="text: $data.score, visible: !/^\d+$/.test($data.score)"> </span>-->
 				<p class="list-group-item-text message" data-bind="text: $data.message"></p>
 				<p class="list-group-item-text date"
 				   data-bind="text: 'Created on '+ $root.moment($data.createdAt).format('MMM d, YYYY [at] hh:mm:ss')"></p>
@@ -72,5 +79,4 @@
 			</ul>
 		</nav>
 	</div>
-
 </div>
