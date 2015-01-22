@@ -9,7 +9,8 @@
 		'services/markup',
 		'services/search',
 		'services/settings',
-		'text!views/search'
+		'text!views/search',
+		'bootstrap'
 	];
 	define(dependencies, function(_,
 								  $,

@@ -135,7 +135,14 @@ html, body {
 	width: 100%;
 	text-align: left;
 }
-	.filter-group .btn{
+	.filter-group .btn {
 		text-align: left;
+		padding: .2em .4em;
+		height: auto;
+	}
+
+	.filter-group .caret {
+		float: right;
+		margin-top: .6em;
 	}
 
