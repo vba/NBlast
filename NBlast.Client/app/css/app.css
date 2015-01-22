@@ -132,7 +132,8 @@ html, body {
 }
 
 .filter-group {
-	width: 100%;
+	width: calc(100% - 4em);
+	margin-right: .2em;
 	text-align: left;
 }
 	.filter-group .btn {
@@ -144,5 +145,9 @@ html, body {
 	.filter-group .caret {
 		float: right;
 		margin-top: .6em;
+	}
+
+	.filter-group .dropdown-menu {
+		width: 100%;
 	}
 
