@@ -10,7 +10,7 @@
 		'services/search',
 		'services/settings',
 		'text!views/search',
-		'bootstrap'
+		'bootstrap-picker'
 	];
 	define(dependencies, function(_,
 								  $,
@@ -92,9 +92,22 @@
 				}
 				return false;
 			},
+			initExternals: function() {
+				var fromPicker = $('#filterFromDate'),
+					tillPicker = $('#filterTillDate'),
+					options = { format: 'DD/MM/YYYY' };
+
+				fromPicker.datetimepicker(options).on("dp.change", function (e) {
+					tillPicker.data("DateTimePicker").minDate(e.date);
+				});
+				tillPicker.datetimepicker(options).on("dp.change", function (e) {
+					fromPicker.data("DateTimePicker").maxDate(e.date);
+				});
+			},
 			bind: function() {
 				var me = this;
 				markupService.applyBindings(this, searchView);
+				me.initExternals();
 				searchService.search(this.query(), this.page())
 					.done(function(data) {
 						var result = data || {total: 0};
