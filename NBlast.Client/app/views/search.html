@@ -10,12 +10,19 @@
 			<div class="panel-body">
 				<form>
 					<div class="form-group">
-						<label for="sortByDropdown">Sort by</label>
-						<select class="selectpicker" id="sortByDropdown">
-							<option>Pertinence</option>
-							<option>Date</option>
-							<option>Sender</option>
-						</select>
+						<label for="sorbyFieldButton">Sort by:</label>
+						<div class="btn-group btn-input filter-group">
+							<button type="button" id="sorbyFieldButton" data-toggle="dropdown"
+									class="btn btn-default dropdown-toggle form-control">
+							<span data-bind="label">Relevance</span>&nbsp;<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="javascript:;">Relevance</a></li>
+								<li><a href="javascript:;">Date</a></li>
+								<li><a href="javascript:;">Sender</a></li>
+							</ul>
+						</div>
+
 					</div>
 					<div class="form-group">
 						<label for="exampleInputPassword1">Password</label>

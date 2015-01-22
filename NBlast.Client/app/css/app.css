@@ -131,3 +131,11 @@ html, body {
 	background-color: #E69D3B;
 }
 
+.filter-group {
+	width: 100%;
+	text-align: left;
+}
+	.filter-group .btn{
+		text-align: left;
+	}
+
