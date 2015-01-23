@@ -42,6 +42,7 @@
     <Compile Include="Exceptions\StorageLockedException.fs" />
     <Compile Include="Exceptions\StorageUnlockFailedException.fs" />
     <Compile Include="Index\LogDocumentHit.fs" />
+    <Compile Include="Index\FilterQuery.fs" />
     <Compile Include="Index\SearchQuery.fs" />
     <Compile Include="Index\SimpleSenderFacets.fs" />
     <Compile Include="Index\IStorageDocument.fs" />

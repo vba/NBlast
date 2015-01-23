@@ -38,6 +38,8 @@
     <Compile Include="PaginatorTest.fs" />
     <Compile Include="FileSystem\StorageWriterTest.fs" />
     <Compile Include="FileSystem\StorageReaderTest.fs" />
+    <Compile Include="InMemory\RamStorageWriterTest.fs" />
+    <Compile Include="InMemory\RamStorageReaderTest.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
