@@ -18,7 +18,7 @@ type StorageReaderTest() =
     [<Fact>]
     member this.``Reader must work as expected in the case of a banal search by field``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 6 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut path
@@ -43,7 +43,7 @@ type StorageReaderTest() =
     [<Fact>]
     member this.``Reader must search and collect expected amount of total documents``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
@@ -62,7 +62,7 @@ type StorageReaderTest() =
     [<Fact>]
     member this.``Reader must count all documents as expected``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
@@ -77,7 +77,7 @@ type StorageReaderTest() =
     [<Fact>]
     member this.``Reader must find and paginate results in the case of a banal search``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
@@ -93,7 +93,7 @@ type StorageReaderTest() =
     [<Fact>]
     member this.``Reader must find and paginate in the end of found result slot``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
@@ -109,7 +109,7 @@ type StorageReaderTest() =
     [<Fact>]
     member this.``Reader must find and paginate in the middle of found result slot``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
@@ -126,7 +126,7 @@ type StorageReaderTest() =
     [<Fact>]
     member this.``Reader must find all when it's requested``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
@@ -140,7 +140,7 @@ type StorageReaderTest() =
     [<Fact>]
     member this.``Reader must group index results by requested field as expected``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, Guid.NewGuid().ToString())
+        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         let sut = this.MakeSut (path, 5)
@@ -188,7 +188,4 @@ type StorageReaderTest() =
     member private this.MakeSut(path, ?itemsPerPage) :IStorageReader =
         let directoryProvider = this.MakeDirectoryProvider(path)
         let paginator = new Paginator() :> IPaginator
-//        { 
-//            new IDirectoryProvider with member me.Provide() = new RAMDirectory() :> Directory
-//        }
         new StorageReader(directoryProvider, paginator, itemsPerPage |? 15) :> IStorageReader

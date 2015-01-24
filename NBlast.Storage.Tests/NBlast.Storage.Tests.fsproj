@@ -36,10 +36,9 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="PaginatorTest.fs" />
-    <Compile Include="FileSystem\StorageWriterTest.fs" />
-    <Compile Include="FileSystem\StorageReaderTest.fs" />
-    <Compile Include="InMemory\RamStorageWriterTest.fs" />
-    <Compile Include="InMemory\RamStorageReaderTest.fs" />
+    <Compile Include="FileSystem\StorageWriterSpecs.fs" />
+    <Compile Include="FileSystem\Search_StorageReaderSpecs.fs" />
+    <Compile Include="FileSystem\Filters_StorageReaderSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">

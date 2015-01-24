@@ -52,6 +52,26 @@ type StorageReader (directoryProvider: IDirectoryProvider,
           CreatedAt = DateTools.StringToDate(doc.Get(LogField.CreatedAt.GetName()));
         }
 
+    member private me.GetDatesRange(query: FilterQuery option) =
+        if (query.IsNone) 
+        then 
+            None
+        else
+            let convert = fun (x) -> DateTools.DateToString(x, DateTools.Resolution.SECOND)
+            (match query.Value with
+             | After(x) -> (convert(x), null)
+             | Before(x) -> (null, convert(x))
+             | Between(x, y) -> (convert(x), convert(y))) |> Some
+
+    member private me.GetRangeFilter(query: FilterQuery option) = 
+        let range = me.GetDatesRange(query)
+        if range.IsNone then null
+        else FieldCacheRangeFilter.NewStringRange(LogField.CreatedAt.GetName(), 
+                                                  fst range.Value, 
+                                                  snd range.Value, 
+                                                  false, 
+                                                  false)
+
     interface IStorageReader with
         member me.GroupWith (field: LogField) =
             use directory = directoryProvider.Provide()
@@ -72,7 +92,9 @@ type StorageReader (directoryProvider: IDirectoryProvider,
 
             { Facets        = facets
               QueryDuration = sw.ElapsedMilliseconds }
-
+        
+            
+        
         member this.SearchByField searchQuery =
             use directory = directoryProvider.Provide()
             use indexSearcher = new IndexSearcher(directory, true)
@@ -80,10 +102,12 @@ type StorageReader (directoryProvider: IDirectoryProvider,
             let (skip, take) = (searchQuery.Skip |? 0, searchQuery.Take |? itemsPerPage)
             let parser = new MultiFieldQueryParser(version, LogField.Names, analyzer)
             let query = _parseQuery searchQuery.Expression parser
+            let filter = this.GetRangeFilter(searchQuery.Filter)
+                    
             let sw = new Stopwatch()
 
             sw.Start()
-            let topDocs = indexSearcher.Search(query, null, skip + take)
+            let topDocs = indexSearcher.Search(query, filter, skip + take)
             sw.Stop()
 
             let getHit = fun (index) -> 
