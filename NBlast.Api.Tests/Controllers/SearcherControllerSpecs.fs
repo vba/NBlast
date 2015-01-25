@@ -65,6 +65,7 @@ type SearcherControllerSpecs() =
             Expression = "id : " + id.ToString()
             Filter     = None
             Skip       = None
+            Sort       = None
             Take       = Some 1
         }
         let result = {Hits = []; Total = 0; QueryDuration = 0L}

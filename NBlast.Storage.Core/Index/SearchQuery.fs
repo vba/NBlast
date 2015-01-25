@@ -5,6 +5,7 @@ open NBlast.Storage.Core.Extensions
 type SearchQuery =
     { Expression: string
       Filter    : FilterQuery option
+      Sort      : Sort option
       Skip      : int option
       Take      : int option }
 
@@ -13,5 +14,6 @@ type SearchQuery =
         
         { Expression = expression
           Filter     = None
+          Sort       = None
           Skip       = None
           Take       = None }

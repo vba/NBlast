@@ -1,4 +1,4 @@
-﻿namespace NBlast.Storage.Tests.InMemory
+﻿namespace NBlast.Storage.Tests.FileSystem
 
 open System
 open System.IO
@@ -13,7 +13,7 @@ open Xunit
 open FluentAssertions
 
 
-type RamStorageReaderTest() = 
+type Filters_StorageReaderSpecs() = 
 
     [<Fact>]
     member me.``After date filter should find nothing when it's out of scope``() =

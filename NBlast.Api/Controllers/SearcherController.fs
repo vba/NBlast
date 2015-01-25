@@ -43,6 +43,7 @@ type SearcherController(storageReader: IStorageReader,
                                                     Expression = "id : " + id.ToString()
                                                     Filter     = None
                                                     Skip       = None
+                                                    Sort       = None
                                                     Take       = Some 1
                                                  })
         result

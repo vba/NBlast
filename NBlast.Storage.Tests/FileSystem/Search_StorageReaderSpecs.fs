@@ -13,7 +13,7 @@ open Xunit
 open FluentAssertions
 
 
-type StorageReaderTest() = 
+type Search_StorageReaderSpecs() = 
 
     [<Fact>]
     member this.``Reader must work as expected in the case of a banal search by field``() =
