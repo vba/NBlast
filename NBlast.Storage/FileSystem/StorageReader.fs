@@ -3,7 +3,6 @@
 open System
 open System.IO
 open System.Linq
-open System.Diagnostics
 open Lucene.Net
 open NBlast.Storage
 open NBlast.Storage.Core.Extensions
@@ -74,42 +73,34 @@ type StorageReader (directoryProvider: IDirectoryProvider,
 
     interface IStorageReader with
         member me.GroupWith (field: LogField) =
-            use directory = directoryProvider.Provide()
-            use indexReader = IndexReader.Open(directory, true)
-            use analyzer = new StandardAnalyzer(version)
+            use directory       = directoryProvider.Provide()
+            use indexReader     = IndexReader.Open(directory, true)
+            use analyzer        = new StandardAnalyzer(version)
             use facetedSearcher = new SimpleFacetedSearch(indexReader, LogField.Sender.GetName())
-            let parser = new MultiFieldQueryParser(version, LogField.Names, analyzer)
-            let query = _parseQuery "*:*" parser
-            let sw = new Stopwatch()
-
-            sw.Start()
-            let hits = facetedSearcher.Search(query)
-            sw.Stop()
-
+            let parser          = new MultiFieldQueryParser(version, LogField.Names, analyzer)
+            let query           = _parseQuery "*:*" parser
+            let searchTimer     = new Timer<_>(fun () -> facetedSearcher.Search(query))
+            let hits            = searchTimer.WrapExecution()
+            
             let facets = hits.HitsPerFacet 
                          |> Seq.map (fun x -> {Name = x.Name.ToString(); Count = x.HitCount }) 
                          |> Seq.toList
 
             { Facets        = facets
-              QueryDuration = sw.ElapsedMilliseconds }
-        
-            
+              QueryDuration = searchTimer.GetElapsedMilliseconds() }
         
         member this.SearchByField searchQuery =
-            use directory = directoryProvider.Provide()
+            use directory     = directoryProvider.Provide()
             use indexSearcher = new IndexSearcher(directory, true)
-            use analyzer = new StandardAnalyzer(version)
-            let (skip, take) = (searchQuery.Skip |? 0, searchQuery.Take |? itemsPerPage)
-            let parser = new MultiFieldQueryParser(version, LogField.Names, analyzer)
-            let query = _parseQuery searchQuery.Expression parser
-            let filter = this.GetRangeFilter(searchQuery.Filter)
-                    
-            let sw = new Stopwatch()
-
-            sw.Start()
-            let topDocs = indexSearcher.Search(query, filter, skip + take)
-            sw.Stop()
-
+            use analyzer      = new StandardAnalyzer(version)
+            
+            let (skip, take)  = (searchQuery.Skip |? 0, searchQuery.Take |? itemsPerPage)
+            let parser        = new MultiFieldQueryParser(version, LogField.Names, analyzer)
+            let query         = _parseQuery searchQuery.Expression parser
+            let filter        = this.GetRangeFilter(searchQuery.Filter)
+            let searchTimer   = new Timer<_>(fun () -> indexSearcher.Search(query, filter, skip + take))
+            let topDocs       = searchTimer.WrapExecution()
+            
             let getHit = fun (index) -> 
                 let sd    = topDocs.ScoreDocs.[index - 1]
                 let score = if (Single.IsNaN(sd.Score)) then None else Some(sd.Score)
@@ -122,7 +113,7 @@ type StorageReader (directoryProvider: IDirectoryProvider,
 
             { Hits          = hits; 
               Total         = topDocs.TotalHits; 
-              QueryDuration = sw.ElapsedMilliseconds }
+              QueryDuration = searchTimer.GetElapsedMilliseconds() }
 
         member me.FindAll ?skipOp ?takeOp = 
             let query = { (SearchQuery.GetOnlyExpression "*:*") 

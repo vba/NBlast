@@ -50,6 +50,7 @@
     <Compile Include="Index\IStorageReader.fs" />
     <Compile Include="Index\IPaginator.fs" />
     <Compile Include="Index\IDirectoryProvider.fs" />
+    <Compile Include="Timer.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Lucene.Net">
