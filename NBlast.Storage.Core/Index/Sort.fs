@@ -2,8 +2,11 @@
 
 open System
 
-type Sort = {
-    Field: LogField
-    Reverse: bool
-}
+type Sort = 
+    { Field: LogField
+      Reverse: bool }
+
+    static member OnlyField field = 
+        { Field = field
+          Reverse = false }
 

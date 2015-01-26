@@ -1,5 +1,7 @@
 ﻿namespace NBlast.Storage.Tests.FileSystem
 
+open System
+open System.IO
 open NBlast.Storage
 open NBlast.Storage.Core
 open NBlast.Storage.Core.Extensions
@@ -12,6 +14,7 @@ open FluentAssertions
 [<AutoOpen>]
 module StorageReaderExtensions = 
     type System.Object with
+        member me.GenerateTempPath() = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         member me.MakeDirectoryProvider(path) = new ReaderDirectoryProvider(path)
         member me.MakeStorageReader(path, ?itemsPerPage) :IStorageReader =
             let directoryProvider = me.MakeDirectoryProvider(path)

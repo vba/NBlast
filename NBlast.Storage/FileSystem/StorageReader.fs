@@ -71,6 +71,14 @@ type StorageReader (directoryProvider: IDirectoryProvider,
                                                   false, 
                                                   false)
 
+    member private me.GetSort(sort: Index.Sort option) = 
+        if sort.IsNone 
+        then 
+            None
+        else 
+            let field = new SortField(sort.Value.Field.GetName(), SortField.STRING, sort.Value.Reverse)
+            Sort(field) |> Some
+
     interface IStorageReader with
         member me.GroupWith (field: LogField) =
             use directory       = directoryProvider.Provide()
@@ -98,7 +106,14 @@ type StorageReader (directoryProvider: IDirectoryProvider,
             let parser        = new MultiFieldQueryParser(version, LogField.Names, analyzer)
             let query         = _parseQuery searchQuery.Expression parser
             let filter        = this.GetRangeFilter(searchQuery.Filter)
-            let searchTimer   = new Timer<_>(fun () -> indexSearcher.Search(query, filter, skip + take))
+            let sort          = this.GetSort(searchQuery.Sort)
+            
+            let search = 
+                if sort.IsNone 
+                    then fun() -> indexSearcher.Search(query, filter, skip + take) 
+                    else fun() -> indexSearcher.Search(query, filter, skip + take, sort.Value) :> TopDocs
+
+            let searchTimer   = new Timer<_>(fun () -> search())
             let topDocs       = searchTimer.WrapExecution()
             
             let getHit = fun (index) -> 
