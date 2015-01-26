@@ -21,7 +21,7 @@ type Search_StorageReaderSpecs() =
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 6 fake documents``() |> Seq.iter writer.InsertOne
-        let sut = this.MakeSut path
+        let sut = this.MakeStorageReader path
         let query = SearchQuery.GetOnlyExpression (Content.QueryWith "c")
 
         // When
@@ -47,7 +47,7 @@ type Search_StorageReaderSpecs() =
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
-        let sut = this.MakeSut (path, 5)
+        let sut = this.MakeStorageReader (path, 5)
         let query = { SearchQuery.GetOnlyExpression (Content.QueryWith "b") 
                         with Skip = Some 0 
                              Take = Some 1 }
@@ -66,7 +66,7 @@ type Search_StorageReaderSpecs() =
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
-        let sut = this.MakeSut (path, 5)
+        let sut = this.MakeStorageReader (path, 5)
         
         // When
         let actualTotal = sut.CountAll()
@@ -80,7 +80,7 @@ type Search_StorageReaderSpecs() =
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
-        let sut = this.MakeSut (path, 5)
+        let sut = this.MakeStorageReader (path, 5)
         let query = { SearchQuery.GetOnlyExpression (Content.QueryWith "c") with Skip = Some 1 }
         
         // When
@@ -96,7 +96,7 @@ type Search_StorageReaderSpecs() =
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
-        let sut = this.MakeSut (path, 5)
+        let sut = this.MakeStorageReader (path, 5)
         let query = { SearchQuery.GetOnlyExpression (Level.QueryWith "debug") with Skip = Some 13 }
         
         // When
@@ -112,7 +112,7 @@ type Search_StorageReaderSpecs() =
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
-        let sut = this.MakeSut (path, 5)
+        let sut = this.MakeStorageReader (path, 5)
         let query = { SearchQuery.GetOnlyExpression (Level.QueryWith "debug") with Skip = Some 10 }
         
         // When
@@ -129,7 +129,7 @@ type Search_StorageReaderSpecs() =
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
-        let sut = this.MakeSut (path, 5)
+        let sut = this.MakeStorageReader (path, 5)
         
         // When
         let actuals = (sut.FindAll None (Some Int32.MaxValue)).Hits 
@@ -143,7 +143,7 @@ type Search_StorageReaderSpecs() =
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(this.MakeDirectoryProvider(path)) :> IStorageWriter
         this.``gimme 15 fake documents``() |> Seq.iter writer.InsertOne
-        let sut = this.MakeSut (path, 5)
+        let sut = this.MakeStorageReader (path, 5)
         
         // When
         let actualFacets = (sut.GroupWith LogField.Sender).Facets |> List.toArray
@@ -182,10 +182,3 @@ type Search_StorageReaderSpecs() =
           new LogDocument("sender3", "14 B", "log", "debug"); 
           new LogDocument("sender3", "15 C", "log", "debug"); ] 
             |> List.map (fun x -> x :> IStorageDocument)
-
-    member private me.MakeDirectoryProvider(path) = new ReaderDirectoryProvider(path)
-
-    member private this.MakeSut(path, ?itemsPerPage) :IStorageReader =
-        let directoryProvider = this.MakeDirectoryProvider(path)
-        let paginator = new Paginator() :> IPaginator
-        new StorageReader(directoryProvider, paginator, itemsPerPage |? 15) :> IStorageReader

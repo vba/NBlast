@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="PaginatorTest.fs" />
+    <Compile Include="FileSystem\StorageExtensions.fs" />
     <Compile Include="FileSystem\StorageWriterSpecs.fs" />
     <Compile Include="FileSystem\Search_StorageReaderSpecs.fs" />
     <Compile Include="FileSystem\Filters_StorageReaderSpecs.fs" />

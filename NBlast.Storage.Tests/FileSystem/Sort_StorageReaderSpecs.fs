@@ -16,8 +16,9 @@ open FluentAssertions
 type Sort_StorageReaderSpecs() = 
 
     [<Fact>]
-    member me.``Do somethings``() =
+    member me.``It must realize a banal non-reversed sort by sender column``() =
         // Given
+
         // When
         // Then
         ignore ""

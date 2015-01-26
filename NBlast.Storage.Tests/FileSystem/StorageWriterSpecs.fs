@@ -30,7 +30,7 @@ type StorageWriterTest() =
     member this.``Writer directory must be created as expected``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
-        let sut  = (this.MakeSut false path) 
+        let sut  = (this.MakeStorageWriter false path) 
 
         // When
         sut.InsertOne(FakeDocument())
@@ -56,7 +56,7 @@ type StorageWriterTest() =
     member this.``Writer directory creation must fail when it's already locked``() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
-        let sut  = (this.MakeSut false path) 
+        let sut  = (this.MakeStorageWriter false path) 
         let directory = FSDirectory.Open(new DirectoryInfo(path))
 
         // When
@@ -65,7 +65,3 @@ type StorageWriterTest() =
         directory.Dispose()
 
         Assert.Throws<StorageLockedException>(fun () -> sut.InsertOne(FakeDocument())) //|> ignore
-
-    member private this.MakeSut reopenWhenLocked path :IStorageWriter =
-        let directoryProvider = new WriterDirectoryProvider(path, reopenWhenLocked)
-        new StorageWriter(directoryProvider) :> IStorageWriter

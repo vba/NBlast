@@ -11,7 +11,7 @@ open NBlast.Storage.Core.Env
 open NBlast.Storage.FileSystem
 open Xunit
 open FluentAssertions
-
+//open NBlast.Storage.Tests.FileSystem
 
 type Filters_StorageReaderSpecs() = 
 
@@ -20,7 +20,7 @@ type Filters_StorageReaderSpecs() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
-        let sut = me.MakeSut(path)
+        let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
         let query = {
             SearchQuery.GetOnlyExpression() with 
@@ -39,7 +39,7 @@ type Filters_StorageReaderSpecs() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
-        let sut = me.MakeSut(path)
+        let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
         let query = {
             SearchQuery.GetOnlyExpression() with 
@@ -64,7 +64,7 @@ type Filters_StorageReaderSpecs() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
-        let sut = me.MakeSut(path)
+        let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
         let query = {
             SearchQuery.GetOnlyExpression() with 
@@ -83,7 +83,7 @@ type Filters_StorageReaderSpecs() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
-        let sut = me.MakeSut(path)
+        let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
         let query = {
             SearchQuery.GetOnlyExpression() with 
@@ -106,7 +106,7 @@ type Filters_StorageReaderSpecs() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
-        let sut = me.MakeSut(path)
+        let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
         let query = {
             SearchQuery.GetOnlyExpression() with 
@@ -125,7 +125,7 @@ type Filters_StorageReaderSpecs() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
-        let sut = me.MakeSut(path)
+        let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
         let query = {
             SearchQuery.GetOnlyExpression() with 
@@ -148,7 +148,7 @@ type Filters_StorageReaderSpecs() =
         // Given
         let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
-        let sut = me.MakeSut(path)
+        let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
         let query = {
             SearchQuery.GetOnlyExpression("4 BCD") with 
@@ -174,10 +174,3 @@ type Filters_StorageReaderSpecs() =
           new LogDocument("sender2", "5 C", "log", "debug", None, date.AddDays(-5.0) |> Some);
           new LogDocument("sender2", "6 B", "log", "debug", None, date.AddDays(-6.0) |> Some); ] 
             |> List.map (fun x -> x :> IStorageDocument)
-
-    member private me.MakeDirectoryProvider(path) = new ReaderDirectoryProvider(path)
-
-    member private me.MakeSut(path, ?itemsPerPage) :IStorageReader =
-        let directoryProvider = me.MakeDirectoryProvider(path)
-        let paginator = new Paginator() :> IPaginator
-        new StorageReader(directoryProvider, paginator, itemsPerPage |? 15) :> IStorageReader
