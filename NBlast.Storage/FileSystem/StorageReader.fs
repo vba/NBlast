@@ -75,8 +75,11 @@ type StorageReader (directoryProvider: IDirectoryProvider,
         if sort.IsNone 
         then 
             None
-        else 
-            let field = new SortField(sort.Value.Field.GetName(), SortField.STRING, sort.Value.Reverse)
+        else
+            let ft = match sort.Value.Field with 
+                        | LogField.CreatedAt -> SortField.LONG
+                        | _ -> SortField.STRING
+            let field = new SortField(sort.Value.Field.GetName(), ft, sort.Value.Reverse)
             Sort(field) |> Some
 
     interface IStorageReader with

@@ -16,7 +16,83 @@ open FluentAssertions
 type Sort_StorageReaderSpecs() = 
 
     [<Fact>]
-    member me.``Reader must realize a banal non-reversed sort by sender column``() =
+    member me.``Reader must realize a banal, not reversed sort by date column``() =
+        // Given
+        let path = me.GenerateTempPath()
+        let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
+        let sut = me.MakeStorageReader(path)
+        let date = DateTime.Now
+        let query = {
+            SearchQuery.GetOnlyExpression() with
+                Sort = LogField.CreatedAt |> (Sort.OnlyField >> Some)
+        }
+        // When
+        me.``gimme 6 fake documents``(date) |> writer.InsertMany
+        let hits = sut.SearchByField query
+
+        // Then
+        hits.Total.Should().Be(6, "Should return 6 hits") |> ignore
+        [
+            hits.Hits.[0].Sender.Should().Be("senderB3", "senderB3 expected")
+            hits.Hits.[1].Sender.Should().Be("senderB2", "senderB2 expected")
+            hits.Hits.[2].Sender.Should().Be("senderB1", "senderB1 expected")
+            hits.Hits.[3].Sender.Should().Be("senderA3", "senderA3 expected")
+            hits.Hits.[4].Sender.Should().Be("senderA2", "senderA2 expected")
+            hits.Hits.[5].Sender.Should().Be("senderA1", "senderA1 expected")
+        ] |> ignore
+
+    [<Fact>]
+    member me.``Reader must realize a banal, reversed sort by date column``() =
+        // Given
+        let path = me.GenerateTempPath()
+        let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
+        let sut = me.MakeStorageReader(path)
+        let date = DateTime.Now
+        let query = {
+            SearchQuery.GetOnlyExpression() with
+                Sort = { Field = LogField.CreatedAt; Reverse = true } |> Some
+        }
+        // When
+        me.``gimme 6 fake documents``(date) |> writer.InsertMany
+        let hits = sut.SearchByField query
+
+        // Then
+        hits.Total.Should().Be(6, "Should return 6 hits") |> ignore
+        [
+            hits.Hits.[0].Sender.Should().Be("senderA1", "senderA1 expected")
+            hits.Hits.[1].Sender.Should().Be("senderA2", "senderA2 expected")
+            hits.Hits.[2].Sender.Should().Be("senderA3", "senderA3 expected")
+            hits.Hits.[3].Sender.Should().Be("senderB1", "senderB1 expected")
+            hits.Hits.[4].Sender.Should().Be("senderB2", "senderB2 expected")
+            hits.Hits.[5].Sender.Should().Be("senderB3", "senderB3 expected")
+        ] |> ignore
+
+    [<Fact>]
+    member me.``Reader must realize a banal, reversed sort by date column with search expression``() =
+        // Given
+        let path = me.GenerateTempPath()
+        let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
+        let sut = me.MakeStorageReader(path)
+        let date = DateTime.Now
+        let query = {
+            SearchQuery.GetOnlyExpression("senderA*") with
+                Sort = { Field = LogField.CreatedAt; Reverse = true } |> Some
+        }
+        // When
+        me.``gimme 6 fake documents``(date) |> writer.InsertMany
+        let hits = sut.SearchByField query
+
+        // Then
+        hits.Total.Should().Be(3, "Should return 3 hits") |> ignore
+        [
+            hits.Hits.[0].Sender.Should().Be("senderA1", "senderA1 expected")
+            hits.Hits.[1].Sender.Should().Be("senderA2", "senderA2 expected")
+            hits.Hits.[2].Sender.Should().Be("senderA3", "senderA3 expected")
+        ] |> ignore
+
+
+    [<Fact>]
+    member me.``Reader must realize a banal, not reversed sort by sender column``() =
         // Given
         let path = me.GenerateTempPath()
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
@@ -42,7 +118,7 @@ type Sort_StorageReaderSpecs() =
         ] |> ignore
 
     [<Fact>]
-    member me.``Reader must realize a banal reversed sort by sender column``() =
+    member me.``Reader must realize a banal, reversed sort by sender column``() =
         // Given
         let path = me.GenerateTempPath()
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
