@@ -30,6 +30,38 @@ type SearcherControllerSpecs() =
         result.Should().Be(0, "0 count is expected") |> ignore
 
     [<Fact>]
+    member me.``Search full of parameters must pass all of them to search``() =
+        // Given
+//        let reader = new Mock<IStorageReader>(MockBehavior.Strict)
+//        let configReader = new Mock<IConfigReader>(MockBehavior.Strict)
+        let query = "expression"
+        let fromDate = DateTime.Now.AddDays(-2.0)
+        let tillDate = DateTime.Now.AddDays(2.0)
+
+        let sq = {
+            Expression = query 
+            Take = Some 15 
+            Skip = Some (0 * 15)
+            Filter = FilterQuery.Between(fromDate, tillDate) |> Some
+            Sort = {Reverse = true; Field = LogField.CreatedAt} |> Some
+        }
+        let result = {Hits = []; Total = 0; QueryDuration = 0L}
+        let deps = me.MakeSutDependencies(sq, result)
+        let sut = me.MakeSut(fst deps, snd deps)
+
+        // When
+        let actionResult = sut.Search(query, 
+                                      1, 
+                                      "createdat", 
+                                      new Nullable<_>(true),
+                                      new Nullable<_>(fromDate),
+                                      new Nullable<_>(tillDate))
+
+        // Then
+        Mock.Get(fst deps).VerifyAll() |> ignore
+        actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
+
+    [<Fact>]
     member me.``Search action must work as expected``() =
         // Given
         let reader = new Mock<IStorageReader>(MockBehavior.Strict)
@@ -80,6 +112,20 @@ type SearcherControllerSpecs() =
         // Then
         reader.VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
+
+
+    member private me.MakeSutDependencies(expression, result) = 
+
+        let reader = new Mock<IStorageReader>(MockBehavior.Strict)
+        let configReader = new Mock<IConfigReader>(MockBehavior.Strict)
+
+        reader.Setup(fun x -> x.SearchByField(expression))
+            .Returns(fun () -> result) |> ignore
+
+        configReader.Setup(fun x -> x.ReadAsInt(It.IsAny<string>()))
+            .Returns(fun () -> 15) |> ignore
+
+        (reader.Object, configReader.Object)
 
     member private me.MakeSut(?reader: IStorageReader,
                               ?configReader: IConfigReader): SearcherController =

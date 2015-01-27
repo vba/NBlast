@@ -51,7 +51,13 @@ type SearcherController(storageReader: IStorageReader,
             Expression = q
             Take = itemsPerPage.Value |> Some
             Skip = ((p - 1) * itemsPerPage.Value) |> Some
-            Filter = None
+            Filter = if (from.HasValue && till.HasValue) 
+                        then FilterQuery.Between(from.Value, till.Value) |> Some
+                     else if (from.HasValue)
+                        then FilterQuery.After(from.Value)  |> Some
+                     else if (till.HasValue)
+                         then FilterQuery.Before(till.Value) |> Some
+                     else None
             Sort = if sf.IsNone 
                     then None
                     else { Field = sf.Value 

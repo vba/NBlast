@@ -34,7 +34,7 @@ type LogField =
                LogField.Error.GetName(); |]
 
         static member ConvertFrom(key: string) = 
-            let key = key.ToLowerInvariant()
+            let key = key.ToUpperInvariant()
             match key with
             |"ID"        -> LogField.Id |> Some
             |"SENDER"    -> LogField.Sender |> Some
