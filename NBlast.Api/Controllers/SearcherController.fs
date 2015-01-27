@@ -38,7 +38,7 @@ type SearcherController(storageReader: IStorageReader,
 
     [<HttpGet>]
     [<Route("search")>]
-    [<Route("search/{p}/{q}")>]
+    [<Route("search/{p}/{q}/{sf}")>]
     member me.Search (q: string, 
                       p: int, 
                       sf: string,
