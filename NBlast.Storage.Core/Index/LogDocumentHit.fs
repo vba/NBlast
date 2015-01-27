@@ -2,39 +2,6 @@
 
 open Newtonsoft.Json
 
-type LogField = 
-    | Id
-    | Sender
-    | Content
-    | Error
-    | Message
-    | Logger
-    | Level
-    | CreatedAt
-    with 
-        member me.GetName() = 
-            match me with
-            | Id        -> "id"
-            | Sender    -> "sender"
-            | Error     -> "error"
-            | Message   -> "message"
-            | Logger    -> "logger"
-            | Level     -> "level"
-            | Content   -> "content"
-            | CreatedAt -> "createdAt"
-
-        member me.QueryWith query = me.GetName() + ": "+ query
-        
-        static member Names = 
-            [| LogField.Sender.GetName();
-               LogField.Id.GetName();
-               LogField.Content.GetName();
-               LogField.Message.GetName();
-               LogField.Logger.GetName();
-               LogField.Level.GetName();
-               LogField.CreatedAt.GetName();
-               LogField.Error.GetName(); |]
-
 type LogDocumentHit = 
     { [<field: JsonProperty("sender")>]    Sender   : string
       [<field: JsonProperty("id")>]        Id       : string

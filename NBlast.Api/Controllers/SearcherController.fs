@@ -37,6 +37,33 @@ type SearcherController(storageReader: IStorageReader,
         result
 
     [<HttpGet>]
+    [<Route("search")>]
+    [<Route("search/{p}/{q}")>]
+    member me.Search (q: string, 
+                      p: int, 
+                      sf: string,
+                      sr: Nullable<Boolean>,
+                      from: Nullable<DateTime>,
+                      till: Nullable<DateTime>) =
+
+        let sf = LogField.ConvertFrom(sf)
+        let searchQuery = {
+            Expression = q
+            Take = itemsPerPage.Value |> Some
+            Skip = ((p - 1) * itemsPerPage.Value) |> Some
+            Filter = None
+            Sort = if sf.IsNone 
+                    then None
+                    else { Field = sf.Value 
+                           Reverse = if sr.HasValue 
+                                        then sr.Value 
+                                        else false} |> Some
+        }
+
+        let result = storageReader.SearchByField(searchQuery)
+        result
+
+    [<HttpGet>]
     [<Route("{id}/get")>]
     member me.GetById (id: Guid) = 
         let result = storageReader.SearchByField({

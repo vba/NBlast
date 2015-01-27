@@ -41,6 +41,7 @@
     <Compile Include="Env\Variables.fs" />
     <Compile Include="Exceptions\StorageLockedException.fs" />
     <Compile Include="Exceptions\StorageUnlockFailedException.fs" />
+    <Compile Include="Index\LogField.fs" />
     <Compile Include="Index\LogDocumentHit.fs" />
     <Compile Include="Index\FilterQuery.fs" />
     <Compile Include="Index\Sort.fs" />
