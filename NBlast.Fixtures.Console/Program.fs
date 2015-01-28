@@ -13,10 +13,13 @@ open System
 
 [<ExcludeFromCodeCoverage>]
 module App =
-    let configReader = new ConfigReader() :> IConfigReader
-    let fixturesLimit = configReader.ReadAsInt("NBlast.fixtures_limit")
-    let restClient = new RestClient(configReader.Read("NBlast.index_endpoint"))
-    let fixture = new Fixture()
+    let configReader      = new ConfigReader() :> IConfigReader
+    let fixturesLimit     = configReader.ReadAsInt("NBlast.fixtures_limit")
+    let restClient        = new RestClient(configReader.Read("NBlast.index_endpoint"))
+    let fixture           = new Fixture()
+    let datetimeGenerator = new RandomDateTimeSequenceGenerator(DateTime.Now.AddYears(-2),
+                                                                DateTime.Now.AddMinutes(-5.0))
+    fixture.Customizations.Add(datetimeGenerator)
 
     let index (log: LogModel) = 
         let request =  new RestRequest("indexer/index", Method.POST)
@@ -27,7 +30,7 @@ module App =
 
         if (log.Level = "fatal" || log.Level = "error") then
             request.AddParameter("error", log.Error) |> ignore
-        //request.AddParameter("createdAt", log.CreatedAt) |> ignore
+        request.AddParameter("createdAt", log.CreatedAt) |> ignore
         
         let response = restClient.Execute(request)
         //response.StatusCode |> printfn "Response status code is %A"
