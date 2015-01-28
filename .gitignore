@@ -199,3 +199,4 @@ test/assets/temp-*/
 test/reports
 test/tmp/
 bower_components
+.idea/
