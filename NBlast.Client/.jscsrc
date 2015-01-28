@@ -23,7 +23,7 @@
     "disallowImplicitTypeConversion": [ "string" ],
     "disallowKeywordsOnNewLine": [ "else" ],
     "disallowKeywords": [ "with" ],
-    "disallowMixedSpacesAndTabs": true,
+    "disallowMixedSpacesAndTabs": "smart",
     "disallowQuotedKeysInObjects": true,
     "disallowSpaceAfterBinaryOperators": null,
     "excludeFiles": [ ]
