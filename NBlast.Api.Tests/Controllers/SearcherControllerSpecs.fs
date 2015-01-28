@@ -60,6 +60,64 @@ type SearcherControllerSpecs() =
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
     [<Fact>]
+    member me.``Search with unknown sort field must ignore sort at all``() =
+        // Given
+        let query = "expression"
+        let fromDate = DateTime.Now.AddDays(-2.0)
+
+        let sq = {
+            Expression = query 
+            Take = Some 15 
+            Skip = Some (0 * 15)
+            Filter = FilterQuery.After(fromDate) |> Some
+            Sort = None
+        }
+        let result = {Hits = []; Total = 0; QueryDuration = 0L}
+        let deps = me.MakeSutDependencies(sq, result)
+        let sut = me.MakeSut(fst deps, snd deps)
+
+        // When
+        let actionResult = sut.Search(query, 
+                                      1, 
+                                      "Unknown", 
+                                      new Nullable<_>(true),
+                                      new Nullable<_>(fromDate),
+                                      new Nullable<_>())
+
+        // Then
+        Mock.Get(fst deps).VerifyAll() |> ignore
+        actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
+
+    [<Fact>]
+    member me.``Search without reverse parameter must ignore it``() =
+        // Given
+        let query = "expression"
+        let fromDate = DateTime.Now.AddDays(-2.0)
+
+        let sq = {
+            Expression = query 
+            Take = Some 15 
+            Skip = Some (0 * 15)
+            Filter = FilterQuery.After(fromDate) |> Some
+            Sort = {Reverse = false; Field = LogField.CreatedAt} |> Some
+        }
+        let result = {Hits = []; Total = 0; QueryDuration = 0L}
+        let deps = me.MakeSutDependencies(sq, result)
+        let sut = me.MakeSut(fst deps, snd deps)
+
+        // When
+        let actionResult = sut.Search(query, 
+                                      1, 
+                                      "createdat", 
+                                      new Nullable<_>(),
+                                      new Nullable<_>(fromDate),
+                                      new Nullable<_>())
+
+        // Then
+        Mock.Get(fst deps).VerifyAll() |> ignore
+        actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
+
+    [<Fact>]
     member me.``Search with after parameter must pass it to search``() =
         // Given
         let query = "expression"

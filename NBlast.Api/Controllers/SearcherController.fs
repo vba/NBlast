@@ -32,8 +32,8 @@ type SearcherController(storageReader: IStorageReader,
             with Take = Some itemsPerPage.Value 
                  Skip = Some ((p - 1) * itemsPerPage.Value)
         }
+        searchQuery |> sprintf "Simple search with %A" |> logger.Debug
         let result = storageReader.SearchByField(searchQuery)
-        //result |> sprintf "search result: %A" |> logger.Debug
         result
 
     [<HttpGet>]
@@ -65,7 +65,7 @@ type SearcherController(storageReader: IStorageReader,
                                         then sr.Value 
                                         else false} |> Some
         }
-
+        searchQuery |> sprintf "Complex search with %A" |> logger.Debug
         let result = storageReader.SearchByField(searchQuery)
         result
 
