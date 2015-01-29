@@ -10,7 +10,7 @@
 		var EmptySearchViewModel = function() {
 			this.totalPages = ko.observable(0);
 			this.page = ko.observable();
-			this.query = ko.observable();
+			this.expression = ko.observable();
 			this.searchResult = false;
 		};
 
@@ -31,7 +31,7 @@
 				return true;
 			},
 			makeSearch : function() {
-				var query = this.query() || '*:*',
+				var query = this.expression() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
 
 				sammy().setLocation(path);

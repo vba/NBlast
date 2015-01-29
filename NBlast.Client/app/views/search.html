@@ -37,16 +37,16 @@
 					</div>
 					<div class="form-group">
 						<label for="filterFromDate">From:</label>
-						<div class='input-group date' id='filterFromDate'>
-							<input type='text' class="form-control" />
+						<div class='input-group date'>
+							<input type='text' class="form-control" id='filterFromDate' />
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
 						
 						<label for="filterTillDate">Till:</label>
-						<div class='input-group date' id='filterTillDate'>
-							<input type='text' class="form-control" />
+						<div class='input-group date' >
+							<input type='text' class="form-control" id="filterTillDate" />
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -61,7 +61,7 @@
 		<form method="GET" name="searchForm" data-bind="event: { keypress: enterSearch }">
 			<div class="input-group">
 				<input type="text" class="form-control"
-					   data-bind="value: query, valueUpdate: 'afterkeydown', hasFocus: true"
+					   data-bind="value: expression, valueUpdate: 'afterkeydown', hasFocus: true"
 					   placeholder="Enter your serach query here">
 				<span class="input-group-btn">
 					<button class="btn btn-primary" type="button" data-bind="click: makeSearch">Search</button>
@@ -88,7 +88,7 @@
 			<ul class="pagination" data-bind="visible: searchResult">
 				<li data-bind="css: {disabled: page() === 1}">
 					<a href="#" aria-label="Previous"
-					   data-bind="visible: page() !== 1, attr: {href: '/#/search/'+(page() - 1)+'/'+encodeURIComponent($root.query())}">
+					   data-bind="visible: page() !== 1, attr: {href: '/#/search/'+(page() - 1)+'/'+encodeURIComponent($root.expression())}">
 						<span aria-hidden="true">&laquo;</span>
 					</a>
 					<span aria-hidden="true" data-bind="visible: page() === 1">&laquo;</span>
@@ -96,12 +96,12 @@
 				<!-- ko foreach: getPages() -->
 				<li data-bind="css: {active: $data === $root.page()}">
 					<a href="#"
-					   data-bind="text: $data, attr: {href: '/#/search/'+$data+'/'+encodeURIComponent($root.query())}"></a>
+					   data-bind="text: $data, attr: {href: '/#/search/'+$data+'/'+encodeURIComponent($root.expression())}"></a>
 				</li>
 				<!-- /ko -->
 				<li data-bind="css: {disabled: page() === totalPages()}">
 					<a href="#" aria-label="Next"
-					   data-bind="visible: page() !== totalPages(), attr: {href: '/#/search/'+(page() + 1)+'/'+encodeURIComponent($root.query())}">
+					   data-bind="visible: page() !== totalPages(), attr: {href: '/#/search/'+(page() + 1)+'/'+encodeURIComponent($root.expression())}">
 						<span aria-hidden="true">&raquo;</span>
 					</a>
 					<span aria-hidden="true" data-bind="visible: page() === totalPages()">&raquo;</span>

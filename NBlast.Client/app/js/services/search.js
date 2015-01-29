@@ -15,6 +15,7 @@
 			result.sr = !!query.sortReverse || "";
 			result.from = query.from || "";
 			result.till = query.from || "";
+			return result;
 		};
 		return {
 			search: function (query) {

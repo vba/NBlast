@@ -2,7 +2,7 @@
     // REQUIRE
 
     "requireCurlyBraces": [ "if", "else", "for", "while", "do", "try", "catch" ],
-    "requireSpaceAfterKeywords": [ "if", "else", "for", "while", "do", "switch", "return", "try", "catch", "function" ],
+    "requireSpaceAfterKeywords": [ "if", "else", "for", "while", "do", "switch", "return", "try", "catch" ],
     "requireMultipleVarDecl": true,
     //"requireCamelCaseOrUpperCaseIdentifiers": true,
     "requireCommaBeforeLineBreak": true,

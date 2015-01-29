@@ -21,18 +21,28 @@
 	                               searchService,
 	                               settings,
 	                               searchView) {
-		var SearchViewModel = function (page, query) {
+
+		var SearchViewModel = function (page,
+		                                expression,
+		                                sortField,
+		                                sortReverse,
+		                                filterFrom,
+		                                filterTill) {
 			if (!_.isNumber(page)) {
 				throw new Error('page param must be a number');
 			}
-			if (!_.isString(query)) {
-				throw new Error('query param must be a string');
+			if (!_.isString(expression)) {
+				throw new Error('expression param must be a string');
 			}
 
 			this.searchResult = ko.observable({});
 			this.page = ko.observable(page);
 			this.totalPages = ko.observable(0);
-			this.query = ko.observable(query);
+			this.expression = ko.observable(expression);
+			this.sortField = ko.observable(sortField || '');
+			this.sortReverse = ko.observable(sortReverse || false);
+			this.filterFrom = ko.observable(filterFrom || '');
+			this.filterTill = ko.observable(filterTill || '');
 			this.moment = moment;
 		};
 
@@ -86,7 +96,7 @@
 				return true;
 			},
 			makeSearch : function () {
-				var query = this.query() || '*:*',
+				var query = this.expression() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
 				if (sammy().getLocation() === path) {
 					sammy().runRoute('get', path);
@@ -98,7 +108,7 @@
 			initExternals: function () {
 				var fromPicker = $('#filterFromDate'),
 					tillPicker = $('#filterTillDate'),
-					options = { format: 'DD/MM/YYYY' };
+					options = { format: 'hh:mm DD/MM/YYYY' };
 
 				fromPicker.datetimepicker(options).on("dp.change", function (e) {
 					tillPicker.data("DateTimePicker").minDate(e.date);
@@ -112,7 +122,7 @@
 				markupService.applyBindings(this, searchView);
 				me.initExternals();
 				searchService.search({
-					expression: this.query(),
+					expression: this.expression(),
 					page: this.page()
 				}).done(function (data) {
 					var result = data || {total: 0};
