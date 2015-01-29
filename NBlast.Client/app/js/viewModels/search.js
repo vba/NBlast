@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 	var dependencies = [
 		'underscore',
@@ -36,6 +36,7 @@
 			this.moment = moment;
 		};
 
+		//noinspection JSUnusedGlobalSymbols
 		SearchViewModel.prototype = {
 			selectHit: function (hit) {
 				if (_.isEmpty(hit)) {
@@ -110,12 +111,14 @@
 				var me = this;
 				markupService.applyBindings(this, searchView);
 				me.initExternals();
-				searchService.search(this.query(), this.page())
-					.done(function(data) {
-						var result = data || {total: 0};
-						me.searchResult(result);
-						me.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
-					});
+				searchService.search({
+					expression: this.query(),
+					page: this.page()
+				}).done(function (data) {
+					var result = data || {total: 0};
+					me.searchResult(result);
+					me.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
+				});
 			}
 		};
 		return SearchViewModel;
