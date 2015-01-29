@@ -40,7 +40,7 @@
 			this.totalPages = ko.observable(0);
 			this.expression = ko.observable(expression);
 			this.sortField = ko.observable(sortField || '');
-			this.sortReverse = ko.observable(sortReverse || false);
+			this.sortReverse = ko.observable(sortReverse || 'false');
 			this.filterFrom = ko.observable(filterFrom || '');
 			this.filterTill = ko.observable(filterTill || '');
 			this.moment = moment;
@@ -108,7 +108,7 @@
 			initExternals: function () {
 				var fromPicker = $('#filterFromDate'),
 					tillPicker = $('#filterTillDate'),
-					options = { format: 'hh:mm DD/MM/YYYY' };
+					options = { format: 'HH:mm DD/MM/YYYY' };
 
 				fromPicker.datetimepicker(options).on("dp.change", function (e) {
 					tillPicker.data("DateTimePicker").minDate(e.date);

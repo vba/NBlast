@@ -15,21 +15,27 @@
 							<div class="btn-group btn-input filter-group">
 								<button type="button" id="sorbyFieldButton" data-toggle="dropdown"
 										class="btn btn-default dropdown-toggle form-control">
-								<span data-bind="label">Relevance</span>&nbsp;<span class="caret"></span>
+								<span>Relevance</span>&nbsp;<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="javascript:;">Relevance</a></li>
-									<li><a href="javascript:;">Date</a></li>
-									<li><a href="javascript:;">Sender</a></li>
+									<li><a href="javascript:" data-bind="click: sortField.bind($root,'')">Relevance</a></li>
+									<li><a href="javascript:" data-bind="click: sortField.bind($root,'createdAt')">Date</a></li>
+									<li><a href="javascript:" data-bind="click: sortField.bind($root,'sender')">Sender</a></li>
+									<li><a href="javascript:" data-bind="click: sortField.bind($root,'logger')">Logger</a></li>
+									<li><a href="javascript:" data-bind="click: sortField.bind($root,'level')">Level</a></li>
 								</ul>
 							</div>
 							<div class="btn-group" data-toggle="buttons">
-								<label class="btn btn-default btn-xs active">
-									<input type="radio" autocomplete="off" checked>
+								<label data-bind="attr: {class: 'btn btn-default btn-xs '+ (sortReverse() == 'false' ? 'active' : '')}">
+									<input type="radio" autocomplete="off"
+									       value="false" name="sortReverse"
+									       data-bind="checked: sortReverse">
 									<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 								</label>
-								<label class="btn btn-default btn-xs">
-									<input type="radio" autocomplete="off">
+								<label data-bind="attr: {class: 'btn btn-default btn-xs '+ (sortReverse() == 'true' ? 'active' : '')}">
+									<input type="radio" autocomplete="off"
+									       value="true" name="sortReverse"
+									       data-bind="checked: sortReverse">
 									<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 								</label>
 							</div>

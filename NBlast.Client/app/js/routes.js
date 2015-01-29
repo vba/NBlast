@@ -22,7 +22,7 @@
 					new SearchViewModel(parseInt(params.page, 10),
 						params.expression,
 						$.trim(params.sortField),
-						!!$.trim(params.sortReverse),
+						$.trim(params.sortReverse),
 						$.trim(params.fromDate),
 						$.trim(params.tillDate)).bind();
 				});

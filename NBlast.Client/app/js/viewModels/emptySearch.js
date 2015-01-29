@@ -11,6 +11,10 @@
 			this.totalPages = ko.observable(0);
 			this.page = ko.observable();
 			this.expression = ko.observable();
+			this.sortField = ko.observable('');
+			this.sortReverse = ko.observable('false');
+			this.filterFrom = ko.observable('');
+			this.filterTill = ko.observable('');
 			this.searchResult = false;
 		};
 
