@@ -200,3 +200,4 @@ test/reports
 test/tmp/
 bower_components
 .idea/
+NBlast.Client/app/css/*.css
