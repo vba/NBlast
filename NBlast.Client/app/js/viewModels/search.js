@@ -10,7 +10,7 @@
 		'services/search',
 		'services/settings',
 		'text!views/search',
-		'bootstrap-picker'
+		'viewModels/baseSearch'
 	];
 	define(dependencies, function (_,
 	                               $,
@@ -20,7 +20,8 @@
 	                               markupService,
 	                               searchService,
 	                               settings,
-	                               searchView) {
+	                               searchView,
+	                               BaseSearchViewModel) {
 
 		var SearchViewModel = function (page,
 		                                expression,
@@ -28,6 +29,9 @@
 		                                sortReverse,
 		                                filterFrom,
 		                                filterTill) {
+
+			BaseSearchViewModel.apply(this);
+
 			if (!_.isNumber(page)) {
 				throw new Error('page param must be a number');
 			}
@@ -43,17 +47,10 @@
 			this.sortReverse = ko.observable(sortReverse || 'false');
 			this.filterFrom = ko.observable(filterFrom || '');
 			this.filterTill = ko.observable(filterTill || '');
-			this.moment = moment;
 		};
 
 		//noinspection JSUnusedGlobalSymbols
-		SearchViewModel.prototype = {
-			selectHit: function (hit) {
-				if (_.isEmpty(hit)) {
-					throw new Error('selected hit cannot be empty');
-				}
-				sammy().setLocation(['/#/details/', hit.id].join(''));
-			},
+		SearchViewModel.prototype = _.extend(BaseSearchViewModel.prototype, {
 			getPages: function () {
 				var total = this.searchResult().total,
 					links = 10 + this.page(),
@@ -85,16 +82,6 @@
 				var result = this.searchResult();
 				return [result.total, ' record(s) found in ', result.queryDuration, ' ms'].join('');
 			},
-			enterSearch : function (data, event) {
-				// if (event.keyCode === 27) {
-				// 	sammy().setLocation('/#/search');
-				// 	return false;
-				// }
-				if (event.keyCode === 13) {
-					return this.makeSearch();
-				}
-				return true;
-			},
 			makeSearch : function () {
 				var query = this.expression() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
@@ -104,18 +91,6 @@
 					sammy().setLocation(path);
 				}
 				return false;
-			},
-			initExternals: function () {
-				var fromPicker = $('#filterFromDate'),
-					tillPicker = $('#filterTillDate'),
-					options = { format: 'HH:mm DD/MM/YYYY' };
-
-				fromPicker.datetimepicker(options).on("dp.change", function (e) {
-					tillPicker.data("DateTimePicker").minDate(e.date);
-				});
-				tillPicker.datetimepicker(options).on("dp.change", function (e) {
-					fromPicker.data("DateTimePicker").maxDate(e.date);
-				});
 			},
 			bind: function () {
 				var me = this;
@@ -130,7 +105,7 @@
 					me.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
 				});
 			}
-		};
+		});
 		return SearchViewModel;
 	});
 })();

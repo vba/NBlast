@@ -11,49 +11,52 @@ html, body {
 
 .search-result {
 	margin: 0 0 1.5em 0;
-}
-.search-result .list-group-item {
-	border-radius: 0;
-	border: 0;
-	padding: 10px 0;
-	cursor: pointer;
-}
+	.score {
+		color: gray;
+		font-size: .8em;
+		font-weight: normal;
+		font-style: italic;
+	}
+	.list-group-item {
+		border-radius: 0;
+		border: 0;
+		padding: 10px 0;
+		cursor: pointer;
+		.message {
+			margin-right: 5em;
+		}
+		.date {
+			margin-top: .4em;
+			font-style: italic;
+		}
+		.pull-right {
+			/*            font-weight: bold;*/
+			text-transform: uppercase;
+		}
+		.fatal {
+			color: #af111c;
+		}
+		.error {
+			color: #EC1D02;
+		}
+		.warn {
+			color: #E69D3B;
+		}
+		.info {
+			color: #337AB7;
+		}
+		.debug {
+			color: #23ae89;
+		}
+		.trace {
+			color: #2DACC8;
+		}
+		.sender {
+			font-size: 18px;
+			color: #4e8040;
+		}
+	}
 
-.search-result .list-group-item .message {
-	margin-right: 5em;
-}
-.search-result .list-group-item .date {
-	margin-top: .4em;
-	font-style: italic;
-}
-
-.search-result .list-group-item .pull-right {
-	/*            font-weight: bold;*/
-	text-transform: uppercase;
-}
-.search-result .list-group-item .fatal {
-	color: #af111c;
-}
-.search-result .list-group-item .error {
-	color: #EC1D02;
-}
-.search-result .list-group-item .warn {
-	color: #E69D3B;
-}
-.search-result .list-group-item .info {
-	color: #337AB7;
-}
-.search-result .list-group-item .debug {
-	color: #23ae89;
-}
-.search-result .list-group-item .trace {
-	color: #2DACC8;
-}
-.search-result .score {
-	color: gray;
-	font-size: .8em;
-	font-weight: normal;
-	font-style: italic;
 }
 
 
@@ -131,23 +134,25 @@ html, body {
 	background-color: #E69D3B;
 }
 
+
 .filter-group {
-	width: calc(100% - 4em);
+	//noinspection ALL
+	width: calc(~"100% - 4em");
 	margin-right: .2em;
 	text-align: left;
-}
-	.filter-group .btn {
+
+	.btn {
 		text-align: left;
 		padding: .2em .4em;
 		height: auto;
 	}
 
-	.filter-group .caret {
+	.caret {
 		float: right;
 		margin-top: .6em;
 	}
 
-	.filter-group .dropdown-menu {
+	.dropdown-menu {
 		width: 100%;
 	}
-
+}

@@ -4,10 +4,13 @@
 		'knockout',
 		'sammy',
 		'services/markup',
-		'text!views/search'
+		'text!views/search',
+		'viewModels/baseSearch'
 	];
-	define(dependencies, function(ko, sammy, markupService, searchView) {
+	define(dependencies, function(ko, sammy, markupService, searchView, BaseSearchViewModel) {
+
 		var EmptySearchViewModel = function() {
+			BaseSearchViewModel.apply(this);
 			this.totalPages = ko.observable(0);
 			this.page = ko.observable();
 			this.expression = ko.observable();
@@ -18,33 +21,19 @@
 			this.searchResult = false;
 		};
 
-		EmptySearchViewModel.prototype = {
-			getFoundHits: function() {
-				return [];
-			},
-			getPages: function() {
-				return [];
-			},
-			getSearchResume: function() {
-				return "";
-			},
-			enterSearch : function(data, event) {
-				if (event.keyCode === 13) {
-					return this.makeSearch();
-				}
-				return true;
-			},
-			makeSearch : function() {
+		EmptySearchViewModel.prototype = _.extend(BaseSearchViewModel.prototype, {
+			makeSearch: function () {
 				var query = this.expression() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
 
 				sammy().setLocation(path);
 				return false;
 			},
-			bind: function() {
+			bind: function () {
 				markupService.applyBindings(this, searchView);
+				this.initExternals();
 			}
-		};
+		});
 
 		return EmptySearchViewModel;
 	});
