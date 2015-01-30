@@ -11,10 +11,10 @@
 			var result = {};
 			result.q = _.isString(query) ? query : query.expression || '*:*';
 			result.p = query.page || 1;
-			result.sf = query.sortField || "";
-			result.sr = !!query.sortReverse || "";
-			result.from = query.from || "";
-			result.till = query.from || "";
+			result.sf = query.sort.field;
+			result.sr = query.sort.reverse;
+			result.from = query.filter.from;
+			result.till = query.filter.till;
 			return result;
 		};
 		return {

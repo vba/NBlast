@@ -15,7 +15,8 @@
 							<div class="btn-group btn-input filter-group">
 								<button type="button" id="sorbyFieldButton" data-toggle="dropdown"
 										class="btn btn-default dropdown-toggle form-control">
-								<span>Relevance</span>&nbsp;<span class="caret"></span>
+									<span class="caret"></span>
+									<span data-bind="text: sortFieldLabel"></span>
 								</button>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="javascript:" data-bind="click: sortField.bind($root,'')">Relevance</a></li>
@@ -25,26 +26,24 @@
 									<li><a href="javascript:" data-bind="click: sortField.bind($root,'level')">Level</a></li>
 								</ul>
 							</div>
-							<div class="btn-group" data-toggle="buttons">
-								<label data-bind="attr: {class: 'btn btn-default btn-xs '+ (sortReverse() == 'false' ? 'active' : '')}">
-									<input type="radio" autocomplete="off"
-									       value="false" name="sortReverse"
-									       data-bind="checked: sortReverse">
+							<div class="btn-group" data-toggle="buttons" data-bind="visible: sortField">
+								<label data-bind="click: function() {sortReverse(false)}, attr: {class: 'btn btn-default btn-xs '+ (!sortReverse() ? 'active' : '')}">
+									<input type="radio" autocomplete="off" name="sortReverse">
 									<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 								</label>
-								<label data-bind="attr: {class: 'btn btn-default btn-xs '+ (sortReverse() == 'true' ? 'active' : '')}">
-									<input type="radio" autocomplete="off"
-									       value="true" name="sortReverse"
-									       data-bind="checked: sortReverse">
+								<label data-bind="click: function() {sortReverse(true)}, attr: {class: 'btn btn-default btn-xs '+ (sortReverse() ? 'active' : '')}">
+									<input type="radio" autocomplete="off" name="sortReverse">
 									<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 								</label>
 							</div>
+							<!--<div data-bind="text: !!sortReverse()"></div>-->
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="filterFromDate">From:</label>
 						<div class='input-group date'>
-							<input type='text' class="form-control" id='filterFromDate' />
+							<input type='text' class="form-control" id='filterFromDate'
+							       data-bind="value: filter.from, valueUpdate: 'keyup'" />
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -52,7 +51,8 @@
 						
 						<label for="filterTillDate">Till:</label>
 						<div class='input-group date' >
-							<input type='text' class="form-control" id="filterTillDate" />
+							<input type='text' class="form-control" id="filterTillDate"
+							       data-bind="value: filter.till, valueUpdate: 'keyup'" />
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>

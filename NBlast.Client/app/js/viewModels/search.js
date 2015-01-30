@@ -5,7 +5,7 @@
 		'jquery',
 		'knockout',
 		'sammy',
-		'moment',
+		'amplify',
 		'services/markup',
 		'services/search',
 		'services/settings',
@@ -16,19 +16,14 @@
 	                               $,
 	                               ko,
 	                               sammy,
-	                               moment,
+	                               amplify,
 	                               markupService,
 	                               searchService,
 	                               settings,
 	                               searchView,
 	                               BaseSearchViewModel) {
 
-		var SearchViewModel = function (page,
-		                                expression,
-		                                sortField,
-		                                sortReverse,
-		                                filterFrom,
-		                                filterTill) {
+		var SearchViewModel = function (page, expression) {
 
 			BaseSearchViewModel.apply(this);
 
@@ -41,16 +36,11 @@
 
 			this.searchResult = ko.observable({});
 			this.page = ko.observable(page);
-			this.totalPages = ko.observable(0);
 			this.expression = ko.observable(expression);
-			this.sortField = ko.observable(sortField || '');
-			this.sortReverse = ko.observable(sortReverse || 'false');
-			this.filterFrom = ko.observable(filterFrom || '');
-			this.filterTill = ko.observable(filterTill || '');
 		};
 
 		//noinspection JSUnusedGlobalSymbols
-		SearchViewModel.prototype = _.extend(BaseSearchViewModel.prototype, {
+		SearchViewModel.prototype = _.extend(_.clone(BaseSearchViewModel.prototype), {
 			getPages: function () {
 				var total = this.searchResult().total,
 					links = 10 + this.page(),
@@ -85,6 +75,7 @@
 			makeSearch : function () {
 				var query = this.expression() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
+				this.storeAdvancedDetails();
 				if (sammy().getLocation() === path) {
 					sammy().runRoute('get', path);
 				} else {
@@ -93,12 +84,24 @@
 				return false;
 			},
 			bind: function () {
-				var me = this;
+				var me = this,
+					filter = amplify.store('filter') || {},
+					sort = amplify.store('sort') || {};
+
 				markupService.applyBindings(this, searchView);
 				me.initExternals();
+
 				searchService.search({
 					expression: this.expression(),
-					page: this.page()
+					page: this.page(),
+					sort: {
+						field: sort.field,
+						reverse: sort.reverse
+					},
+					filter: {
+						from: filter.from,
+						till: filter.till
+					}
 				}).done(function (data) {
 					var result = data || {total: 0};
 					me.searchResult(result);

@@ -11,9 +11,13 @@
             knockout: '../../bower_components/knockout/dist/knockout.debug',
             sammy: '../../bower_components/sammy/lib/sammy',
             moment: '../../bower_components/moment/moment',
+            amplify: '../../bower_components/amplify/lib/amplify.store.min',
             views: '../views'
         },
         shim: {
+            amplify: {
+                exports: 'amplify'
+            },
             moment: {
                 exports: 'moment'
             },
