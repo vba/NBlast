@@ -6,6 +6,7 @@
 		'knockout',
 		'sammy',
 		'amplify',
+		'jsface',
 		'services/markup',
 		'services/search',
 		'services/settings',
@@ -17,30 +18,29 @@
 	                               ko,
 	                               sammy,
 	                               amplify,
+	                               jsface,
 	                               markupService,
 	                               searchService,
 	                               settings,
 	                               searchView,
 	                               BaseSearchViewModel) {
 
-		var SearchViewModel = function (page, expression) {
-
-			BaseSearchViewModel.apply(this);
-
-			if (!_.isNumber(page)) {
-				throw new Error('page param must be a number');
-			}
-			if (!_.isString(expression)) {
-				throw new Error('expression param must be a string');
-			}
-
-			this.searchResult = ko.observable({});
-			this.page = ko.observable(page);
-			this.expression = ko.observable(expression);
-		};
-
 		//noinspection JSUnusedGlobalSymbols
-		SearchViewModel.prototype = _.extend(_.clone(BaseSearchViewModel.prototype), {
+		var SearchViewModel = jsface.Class(BaseSearchViewModel, {
+			constructor: function (page, expression) {
+				SearchViewModel.$super.call(this);
+
+				if (!_.isNumber(page)) {
+					throw new Error('page param must be a number');
+				}
+				if (!_.isString(expression)) {
+					throw new Error('expression param must be a string');
+				}
+
+				this.searchResult = ko.observable({});
+				this.page = ko.observable(page);
+				this.expression = ko.observable(expression);
+			},
 			getPages: function () {
 				var total = this.searchResult().total,
 					links = 10 + this.page(),
@@ -58,12 +58,12 @@
 			},
 			defineFoundIcon: function (level) {
 				return {
-					DEBUG: 'cog',
-					INFO: 'info',
-					WARN: 'warning',
-					ERROR: 'bolt',
-					FATAL: 'fire'
-				}[level.toUpperCase()] || 'asterisk';
+						DEBUG: 'cog',
+						INFO: 'info',
+						WARN: 'warning',
+						ERROR: 'bolt',
+						FATAL: 'fire'
+					}[level.toUpperCase()] || 'asterisk';
 			},
 			getFoundHits: function () {
 				return this.searchResult().hits || [];

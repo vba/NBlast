@@ -6,30 +6,33 @@
 		'moment',
 		'amplify',
 		'knockout',
+		'jsface',
 		'bootstrap-picker'
 	];
-	define(dependencies, function(_, $, moment, amplify, ko) {
-		var BaseSearchViewModel = function() {
-			this.moment = moment;
-			this.totalPages = ko.observable(0);
-			this.page = ko.observable();
-			this.expression = ko.observable();
-			this.searchResult = false;
-			this.initAdvancedDetails();
-			this.sortFieldLabel = ko.computed(function() {
-				return BaseSearchViewModel.prototype.mapSortFieldLabel(this.sortField());
-			}.bind(this));
-		};
-		BaseSearchViewModel.displayDateTimeFormat = 'HH:mm DD/MM/YYYY';
+	define(dependencies, function(_, $, moment, amplify, ko, jsface) {
 		//noinspection JSUnusedGlobalSymbols
-		BaseSearchViewModel.prototype = {
+		var BaseSearchViewModel = jsface.Class({
+			$statics: {
+				displayDateTimeFormat: 'HH:mm DD/MM/YYYY'
+			},
+			constructor: function() {
+				this.moment = moment;
+				this.totalPages = ko.observable(0);
+				this.page = ko.observable();
+				this.expression = ko.observable();
+				this.searchResult = false;
+				this.initAdvancedDetails();
+				this.sortFieldLabel = ko.computed(function() {
+					return BaseSearchViewModel.prototype.mapSortFieldLabel(this.sortField());
+				}.bind(this));
+			},
 			mapSortFieldLabel: function(value) {
 				return {
-					CREATEDAT: 'Date',
-					SENDER: 'Sender',
-					LOGGER: 'Logger',
-					LEVEL: 'Level'
-				}[value.toUpperCase()] || 'Relevance';
+						CREATEDAT: 'Date',
+						SENDER: 'Sender',
+						LOGGER: 'Logger',
+						LEVEL: 'Level'
+					}[value.toUpperCase()] || 'Relevance';
 			},
 			storeAdvancedDetails: function() {
 				var format = BaseSearchViewModel.displayDateTimeFormat,
@@ -95,11 +98,13 @@
 					this.filter.from(fromPicker.val());
 				}.bind(this));
 				tillPicker.datetimepicker(options).on("dp.change", function (e) {
-					fromPicker.data("DateTimePicker").maxDate(e.date);
+					if (e.date !== null) {
+						fromPicker.data("DateTimePicker").maxDate(e.date);
+					}
 					this.filter.till(tillPicker.val());
 				}.bind(this));
 			}
-		};
+		});
 		return BaseSearchViewModel;
 	});
 })();

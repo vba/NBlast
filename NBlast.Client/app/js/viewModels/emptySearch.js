@@ -3,17 +3,17 @@
 	var dependencies = [
 		'knockout',
 		'sammy',
+		'jsface',
 		'services/markup',
 		'text!views/search',
 		'viewModels/baseSearch'
 	];
-	define(dependencies, function(ko, sammy, markupService, searchView, BaseSearchViewModel) {
+	define(dependencies, function(ko, sammy, jsface, markupService, searchView, BaseSearchViewModel) {
 
-		var EmptySearchViewModel = function() {
-			BaseSearchViewModel.apply(this);
-		};
-
-		EmptySearchViewModel.prototype = _.extend(_.clone(BaseSearchViewModel.prototype), {
+		var EmptySearchViewModel = jsface.Class(BaseSearchViewModel, {
+			constructor: function() {
+				EmptySearchViewModel.$super.call(this);
+			},
 			makeSearch: function () {
 				var query = this.expression() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
@@ -26,7 +26,7 @@
 				this.initExternals();
 			}
 		});
-
+		
 		return EmptySearchViewModel;
 	});
 })();

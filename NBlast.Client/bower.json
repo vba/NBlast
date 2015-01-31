@@ -12,6 +12,7 @@
     "sammy": "~0.7.6",
     "moment": "~2.9.0",
     "eonasdan-bootstrap-datetimepicker": "~4.0.0",
-    "amplify": "~1.1.2"
+    "amplify": "~1.1.2",
+    "jsface": "~2.3.0"
   }
 }
