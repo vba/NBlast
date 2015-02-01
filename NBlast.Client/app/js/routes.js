@@ -1,10 +1,9 @@
 (function() {
 	'use strict';
 	var dependencies = [
-		'sammy',
-		'jquery'
+		'sammy'
 	];
-	define(dependencies, function(sammy, $) {
+	define(dependencies, function(sammy) {
 		var routes;
 		routes = sammy(function () {
 			var me = this;
@@ -45,5 +44,4 @@
 		});
 		return routes;
 	});
-
 })();

@@ -14,12 +14,11 @@ config =
 			js : './app/js/*.js'
 			less : './app/css/*.less'
 
-
 gulp.task('lint', () ->
 	gulp.src([config.paths.app.js])
 		.pipe(jshint('.jshintrc'))
 		.pipe(jshint.reporter('jshint-stylish'))
-		.pipe(jscs('.jscsrc'))
+		.pipe(jscs({configPath: '.jscsrc'}))
 )
 
 gulp.task('watch', ['lint'], () ->
