@@ -11,6 +11,7 @@
 <div id="mocha"></div>
 
 <script type="text/javascript" src="bower_components/requirejs/require.js"></script>
+<script type="text/javascript" src="bower_components/mocha/mocha.js"></script>
 <!--<script type="text/javascript" src="bower_components/mocha/mocha.js"></script>-->
 <script type="text/javascript">
 	(function () {
@@ -20,27 +21,24 @@
 			// Paths
 //			config.paths.sinon = 'noext!../../bower_components/sinon/lib/sinon';
 			config.paths.sinon = 'http://cdnjs.cloudflare.com/ajax/libs/sinon.js/1.7.3/sinon-min';
-			config.paths.mocha = '../../bower_components/mocha/mocha';
 			config.paths.chai = '../../bower_components/chai/chai';
 
 			// Shims
 			config.shim.chai = { exports: 'chai' };
-			config.shim.mocha = { exports: 'mocha' };
 			config.shim.sinon = { exports: 'sinon' };
 
 			config.baseUrl = './app/js';
 
 			requirejs.config(config);
 
-			var deps = [
-				'mocha',
+			var dependencies = [
 				'../../tests/services/searchSpecs.js'
 				// SPECS ...
 			];
 
-			requirejs(deps, function (chai, mocha) {
-				mocha.setup('bdd');
+			mocha.setup('bdd');
 
+			requirejs(dependencies, function () {
 				if (window.mochaPhantomJS) {
 					mochaPhantomJS.run();
 				}

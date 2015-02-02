@@ -1,18 +1,23 @@
-define(['knockout', 'jquery'], function(ko, $) {
+define(['underscore'], function(_) {
 	'use strict';
 
-	return Object.freeze({
-		getBackendUrl: function() {
+	var settings = {
+		getBackendUrl: function () {
 			return "http://localhost:9090/api/";
 		},
-		appendToBackendUrl: function(path) {
+		appendToBackendUrl: function (path) {
 			return [this.getBackendUrl(), path].join('');
 		},
-		getItemsPerPage: function() {
+		getItemsPerPage: function () {
 			return 10;
 		},
-		getViewsContainer: function() {
-			return '#pageWrapper';
+		getViewsContainer: function () {
+            return '#pageWrapper';
+        },
+		isTestEnv: function () {
+			return _.isFunction(window.describe) && _.isFunction(window.it);
 		}
-	});
+    };
+
+    return settings.isTestEnv() ? settings : Object.freeze(settings);
 });
