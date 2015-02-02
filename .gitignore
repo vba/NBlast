@@ -202,3 +202,4 @@ bower_components
 .idea/
 NBlast.Client/app/css/*.css
 NBlast.Client/tests/**/*.js*
+**/*.map

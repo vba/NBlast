@@ -286,7 +286,7 @@
     <None Include="bower_components\underscore\package.json" />
     <None Include="bower_components\underscore\README.md" />
     <None Include="bower_components\underscore\underscore-min.map" />
-    <None Include="gulp.coffee" />
+    <None Include="tasks.coffee" />
     <None Include="package.json" />
   </ItemGroup>
   <ItemGroup>
