@@ -10,36 +10,36 @@
 <body>
 <div id="mocha"></div>
 
-<script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="../bower_components/mocha/mocha.js"></script>
-<script type="text/javascript" src="../bower_components/sinon/lib/sinon.js"></script>
-<script type="text/javascript" src="../bower_components/requirejs/require.js"></script>
-<script type="text/javascript" src="../bower_components/requirejs-text/text.js"></script>
+<script type="text/javascript" src="bower_components/requirejs/require.js"></script>
+<!--<script type="text/javascript" src="bower_components/mocha/mocha.js"></script>-->
 <script type="text/javascript">
 	(function () {
 		"use strict";
+		requirejs(['app/js/config'], function(config) {
 
-		requirejs.config({
-			baseUrl: '../app',
-			paths: {
-//				"sinon": "sinon/sinon",
-//				"mocha": "mocha/mocha",
-//				"chai": "chai/chai",
-//				"underscore": "underscore/underscore-min",
-//				"moment": 'moment/moment-with-langs.min'
-			}
-		});
+			// Paths
+//			config.paths.sinon = 'noext!../../bower_components/sinon/lib/sinon';
+			config.paths.sinon = 'http://cdnjs.cloudflare.com/ajax/libs/sinon.js/1.7.3/sinon-min';
+			config.paths.mocha = '../../bower_components/mocha/mocha';
+			config.paths.chai = '../../bower_components/chai/chai';
 
-		mocha.setup('bdd');
+			// Shims
+			config.shim.chai = { exports: 'chai' };
+			config.shim.mocha = { exports: 'mocha' };
+			config.shim.sinon = { exports: 'sinon' };
 
-		requirejs(['chai'], function (chai) {
+			config.baseUrl = './app/js';
 
-			chai.should();
+			requirejs.config(config);
 
-			var specs = [
+			var deps = [
+				'mocha',
+				'../../tests/services/searchSpecs.js'
+				// SPECS ...
 			];
 
-			requirejs(specs, function () {
+			requirejs(deps, function (chai, mocha) {
+				mocha.setup('bdd');
 
 				if (window.mochaPhantomJS) {
 					mochaPhantomJS.run();
@@ -50,6 +50,8 @@
 
 			});
 		});
+
+
 	}());
 </script>
 
