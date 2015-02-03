@@ -19,7 +19,7 @@
 		};
 		return {
 			search: function (query) {
-				var url    = settings.appendToBackendUrl('searcher/search/'),
+				var url    = settings.appendToBackendUrl('searcher/search'),
 					params = prepareSearchParams(query || {});
 
 				return $.getJSON(url, params);

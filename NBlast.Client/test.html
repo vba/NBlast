@@ -32,7 +32,11 @@
 			requirejs.config(config);
 
 			var dependencies = [
-				'tests/services/searchSpecs.js'
+				'tests/services/searchSpec.js',
+				'tests/viewModels/searchSpec.js',
+				'tests/viewModels/emptySearchSpec.js',
+				'tests/viewModels/detailsSpec.js',
+				'tests/viewModels/dashboardSpec.js'
 			];
 			mocha.setup('bdd');
 
