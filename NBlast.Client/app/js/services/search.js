@@ -7,20 +7,20 @@
 		'services/settings'
 	];
 	define(dependencies, function ($, _, moment, settings) {
-		var prepareSearchParams = function (query) {
+		var prepareSearchParams = function (q) {
 			var result  = {};
-			result.q    = _.isString(query) ? query : query.expression || '*:*';
-			result.p    = query.page || 1;
-			result.sf   = query.sort.field;
-			result.sr   = query.sort.reverse;
-			result.from = query.filter.from;
-			result.till = query.filter.till;
+			result.q    = _.isString(q) ? q : q.expression || '*:*';
+			result.p    = q.page || 1;
+			result.sf   = q.sort && q.sort.field || '';
+			result.sr   = q.sort && q.sort.reverse || '';
+			result.from = q.filter && q.filter.from || '';
+			result.till = q.filter && q.filter.till || '';
 			return result;
 		};
 		return {
 			search: function (query) {
 				var url    = settings.appendToBackendUrl('searcher/search/'),
-					params = prepareSearchParams(query);
+					params = prepareSearchParams(query || {});
 
 				return $.getJSON(url, params);
 			},

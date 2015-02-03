@@ -286,7 +286,7 @@
     <None Include="bower_components\underscore\package.json" />
     <None Include="bower_components\underscore\README.md" />
     <None Include="bower_components\underscore\underscore-min.map" />
-    <None Include="tasks.coffee" />
+    <None Include="gulp-tasks.coffee" />
     <None Include="package.json" />
   </ItemGroup>
   <ItemGroup>
@@ -637,7 +637,7 @@
     <Content Include="bower_components\underscore\.gitignore" />
     <Content Include="bower_components\underscore\underscore-min.js" />
     <Content Include="bower_components\underscore\underscore.js" />
-    <Content Include="gulp.js" />
+    <Content Include="gulpfile.js" />
     <Content Include="index.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
