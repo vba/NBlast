@@ -24,7 +24,7 @@ CommonTasks =
 		gulp.src(config.paths.test.coffee)
 			.pipe sourcemaps.init()
 			.pipe coffee({bare: true}).on('error', gutil.log)
-			.pipe sourcemaps.write('./')
+			.pipe sourcemaps.write()
 			.pipe gulp.dest('./tests')
 	runSpecs: (silentMode) ->
 		gulp.src(config.paths.test.runner)
