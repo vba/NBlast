@@ -12,6 +12,32 @@ define deps, (chai, sinon, amplify, moment, BaseSearchViewModel) ->
 
 	describe 'When common search features are in use', ->
 		describe 'When UI needs to store advanced details before make a request', ->
+			it 'Should initialize stored advanced details', ->
+				# Given
+				format = BaseSearchViewModel.displayDateTimeFormat
+				storeStub = mocker.stub(amplify, 'store')
+				fromDate = moment().subtract(5, 'years')
+				tillDate = moment().subtract(1, 'years')
+				sut = new BaseSearchViewModel()
+				stored =
+					filter:
+						from: fromDate.toISOString()
+						till: tillDate.toISOString()
+					sort:
+						field: 'logger'
+						reverse: true
+
+				storeStub.withArgs('filter').returns stored.filter
+				storeStub.withArgs('sort').returns stored.sort
+
+				# When
+				sut.initAdvancedDetails()
+
+				#Then
+				sut.sortField().should.be.equal(stored.sort.field)
+				sut.sortReverse().should.be.equal(stored.sort.reverse)
+#				sut.from().should.be.equal()
+
 			it 'Should store filter and sort details', ->
 				# Given
 				format = BaseSearchViewModel.displayDateTimeFormat
@@ -22,7 +48,6 @@ define deps, (chai, sinon, amplify, moment, BaseSearchViewModel) ->
 				captured = []
 				sut = new BaseSearchViewModel()
 				initDetailsStub = mocker.stub(sut, 'initAdvancedDetails')
-				storeStub = mocker.stub(amplify, 'store', (x, y) -> captured.push(y))
 				sut.filter =
 					from: -> fromDate.format(format)
 					till: -> tillDate.format(format)
@@ -30,6 +55,7 @@ define deps, (chai, sinon, amplify, moment, BaseSearchViewModel) ->
 				sut.sortField = -> sortField
 
 				initDetailsStub.returns(true)
+				mocker.stub(amplify, 'store', (x, y) -> captured.push(y))
 
 				# When
 				sut.storeAdvancedDetails()
