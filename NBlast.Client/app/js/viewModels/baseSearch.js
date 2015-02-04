@@ -22,6 +22,7 @@
 				this.expression = ko.observable();
 				this.searchResult = false;
 				this.initAdvancedDetails();
+				//noinspection JSUnusedGlobalSymbols
 				this.sortFieldLabel = ko.computed(function() {
 					return BaseSearchViewModel.prototype.mapSortFieldLabel(this.sortField());
 				}.bind(this));
