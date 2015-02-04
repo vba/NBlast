@@ -47,6 +47,7 @@
 						reverse: this.sortReverse(),
 						field: $.trim(this.sortField())
 					};
+
 				amplify.store('filter', filter);
 				amplify.store('sort', sort);
 			},
