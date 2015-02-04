@@ -13,12 +13,13 @@
 		var EmptySearchViewModel = jsface.Class(BaseSearchViewModel, {
 			constructor: function() {
 				EmptySearchViewModel.$super.call(this);
+				this.sammy = sammy();
 			},
 			makeSearch: function () {
 				var query = this.expression() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
 				this.storeAdvancedDetails();
-				sammy().setLocation(path);
+				this.sammy.setLocation(path);
 				return false;
 			},
 			bind: function () {

@@ -12,6 +12,22 @@ define deps, (chai, sinon, amplify, moment, BaseSearchViewModel) ->
 
 	describe 'When common search features are in use', ->
 		describe 'When UI needs to store advanced details before make a request', ->
+			it 'Should initialize empty details', ->
+				# Given
+				storeStub = mocker.stub(amplify, 'store')
+				sut = new BaseSearchViewModel()
+				storeStub.withArgs('filter').returns null
+				storeStub.withArgs('sort').returns null
+
+				# When
+				sut.initAdvancedDetails()
+
+				#Then
+				sut.sortField().should.be.equal('')
+				sut.sortReverse().should.be.equal(false)
+				sut.filter.from().should.be.equal('')
+				sut.filter.till().should.be.equal('')
+
 			it 'Should initialize stored advanced details', ->
 				# Given
 				format = BaseSearchViewModel.displayDateTimeFormat
@@ -36,7 +52,10 @@ define deps, (chai, sinon, amplify, moment, BaseSearchViewModel) ->
 				#Then
 				sut.sortField().should.be.equal(stored.sort.field)
 				sut.sortReverse().should.be.equal(stored.sort.reverse)
-#				sut.from().should.be.equal()
+				sut.filter.from().should.be
+					.equal(moment(new Date(stored.filter.from)).format(format))
+				sut.filter.till().should.be
+					.equal(moment(new Date(stored.filter.till)).format(format))
 
 			it 'Should store filter and sort details', ->
 				# Given
