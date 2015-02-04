@@ -95,8 +95,7 @@
 						maxDate: new Date()
 					};
 
-				fromPicker.datetimepicker(options).on("dp.change", function (e) {
-					//tillPicker.data("DateTimePicker").minDate(e.date);
+				fromPicker.datetimepicker(options).on("dp.change", function () {
 					this.filter.from(fromPicker.val());
 				}.bind(this));
 				tillPicker.datetimepicker(options).on("dp.change", function (e) {
