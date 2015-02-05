@@ -42,19 +42,26 @@
 				this.expression = ko.observable(expression);
 			},
 			getPages: function () {
-				var total = this.searchResult().total,
-					links = 10 + this.page(),
-					amount = this.totalPages() + 1;
-				if (!_.isNumber(total)) {
+				var lower, upper,
+					index = 1,
+					links = 10,
+					totalPages = this.totalPages(),
+					current = parseInt(this.page(), 10);
+
+				lower = upper = current;
+
+				if (!_.isNumber(this.searchResult().total)) {
 					return [];
 				}
-				return _
-					.chain(_.range(this.page() - 5, amount > links ? links : amount))
-					.filter(function (n) {
-						return n > 0;
-					})
-					.take(10)
-					.value();
+                for (;index < links && index < totalPages;) {
+					if (lower > 1 ) {
+						lower--; index++;
+					}
+					if (index < links && upper < totalPages) {
+						upper++; index++;
+					}
+				}
+				return _.range(lower, upper + 1);
 			},
 			defineFoundIcon: function (level) {
 				return {
