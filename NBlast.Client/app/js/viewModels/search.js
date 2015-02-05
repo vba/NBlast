@@ -40,6 +40,7 @@
 				this.searchResult = ko.observable({});
 				this.page = ko.observable(page);
 				this.expression = ko.observable(expression);
+				this.sammy = sammy();
 			},
 			getPages: function () {
 				var lower, upper,
@@ -83,10 +84,10 @@
 				var query = this.expression() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
 				this.storeAdvancedDetails();
-				if (sammy().getLocation() === path) {
-					sammy().runRoute('get', path);
+				if (this.sammy.getLocation() === path) {
+					this.sammy.runRoute('get', path);
 				} else {
-					sammy().setLocation(path);
+					this.sammy.setLocation(path);
 				}
 				return false;
 			},

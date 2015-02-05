@@ -12,13 +12,14 @@ define deps, (chai, sinon, SearchViewModel) ->
 
 	describe 'When search page is used', ->
 		describe 'When search view pagination is used', ->
-			check_5_pages = (page, expected) -> check_pages(page, expected, 5)
-			check_12_pages = (page, expected) -> check_pages(page, expected, 12)
-			check_pages = (page, expected, total = 12) ->
+			check_12_pages = (page, expected) ->
+				check_pages(page, expected, 12)
+
+			check_pages = (page, expected, totalPages = 12) ->
 				# Given
 				sut = new SearchViewModel(page, '*')
 				# When
-				sut.totalPages(total)
+				sut.totalPages(totalPages)
 				sut.searchResult({total:120})
 				actual = sut.getPages()
 				# Then
@@ -87,6 +88,31 @@ define deps, (chai, sinon, SearchViewModel) ->
 			it 'Should paginate 120 results and select relative range starting with 1st page', ->
 				check_12_pages(1, [1,2,3,4,5,6,7,8,9,10])
 
+		describe 'When search view displays UI elements', ->
+			it 'Should define found icon by level', ->
+				# Given
+				sut = new SearchViewModel(1, '*')
+
+				# When
+				actualIcons = [
+					sut.defineFoundIcon('Debug')
+					sut.defineFoundIcon('info')
+					sut.defineFoundIcon('Warn')
+					sut.defineFoundIcon('ERRor')
+					sut.defineFoundIcon('Fatal')
+					sut.defineFoundIcon('bullshit')
+					sut.defineFoundIcon('')
+				]
+
+				# Then
+				actualIcons[0].should.be.equal('cog')
+				actualIcons[1].should.be.equal('info')
+				actualIcons[2].should.be.equal('warning')
+				actualIcons[3].should.be.equal('bolt')
+				actualIcons[4].should.be.equal('fire')
+				actualIcons[5].should.be.equal('asterisk')
+				actualIcons[6].should.be.equal('asterisk')
+
 		describe 'When search view is instantiated', ->
 			it 'Should fails when init params are invalid', ->
 				# Given
@@ -106,3 +132,38 @@ define deps, (chai, sinon, SearchViewModel) ->
 				# Then
 				sut.page().should.be.equal(expectedPage)
 				sut.expression().should.be.equal(expectedExpression)
+
+		describe 'When view model needs to interact with server', ->
+			it 'Should run route during search request when location remains equal to requested path', ->
+				# Given
+				sut = new SearchViewModel(1, '*')
+				path = '/#/search/' + encodeURIComponent('*')
+				storeStub = mocker.stub(sut, 'storeAdvancedDetails', -> true)
+				getLocationStub = mocker.stub(sut.sammy, 'getLocation')
+				runRouteStub = mocker.stub(sut.sammy, 'runRoute')
+
+				getLocationStub.returns(path)
+				runRouteStub.withArgs('get', path).returns(true)
+
+				# When
+				actual = sut.enterSearch(null, {keyCode: 13})
+
+				# Then
+				actual.should.be.false()
+				storeStub.calledOnce.should.be.true()
+				sinon.assert.calledWithMatch(runRouteStub, 'get', path)
+
+			it 'Should set location during search request when location does not remain equal to requested path', ->
+				# Given
+				sut = new SearchViewModel(1, '*')
+				path = '/#/search/' + encodeURIComponent('*')
+				storeStub = mocker.stub(sut, 'storeAdvancedDetails', -> true)
+				setLocationStub = mocker.stub(sut.sammy, 'setLocation', -> true)
+
+				# When
+				actual = sut.enterSearch(null, {keyCode: 13})
+
+				# Then
+				actual.should.be.false()
+				storeStub.calledOnce.should.be.true()
+				sinon.assert.calledWithMatch(setLocationStub, path)
