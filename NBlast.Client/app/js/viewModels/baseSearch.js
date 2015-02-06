@@ -108,17 +108,17 @@
 					tillPicker = $('#filterTillDate'),
 					options = {
 						format: BaseSearchViewModel.displayDateTimeFormat,
-						maxDate: new Date()
+						maxDate: this.moment().add(1, 'hour')
 					};
 
 				fromPicker.datetimepicker(options).on("dp.change", function () {
-					this.filter.from(fromPicker.val());
+					this.filter.from(fromPicker.data('date'));
 				}.bind(this));
 				tillPicker.datetimepicker(options).on("dp.change", function (e) {
 					if (e.date !== null) {
 						fromPicker.data("DateTimePicker").maxDate(e.date);
 					}
-					this.filter.till(tillPicker.val());
+					this.filter.till(tillPicker.data('date'));
 				}.bind(this));
 			}
 		});

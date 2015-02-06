@@ -40,18 +40,18 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="filterFromDate">From:</label>
-						<div class='input-group date'>
-							<input type='text' class="form-control" id='filterFromDate'
+						<label for="filterFromDateInput">From:</label>
+						<div class='input-group date' id='filterFromDate'>
+							<input type='text' class="form-control" id='filterFromDateInput'
 							       data-bind="value: filter.from, valueUpdate: 'keyup'" />
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
 						
-						<label for="filterTillDate">Till:</label>
-						<div class='input-group date' >
-							<input type='text' class="form-control" id="filterTillDate"
+						<label for="filterTillDateLabel">Till:</label>
+						<div class='input-group date' id="filterTillDate">
+							<input type='text' class="form-control" id="filterTillDateLabel"
 							       data-bind="value: filter.till, valueUpdate: 'keyup'" />
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
