@@ -35,13 +35,21 @@
 						LEVEL: 'Level'
 					}[value.toUpperCase()] || 'Relevance';
 			},
-			storeAdvancedDetails: function() {
+			getDatesAsISO: function () {
 				var format = BaseSearchViewModel.displayDateTimeFormat,
 					fromDate = this.moment(this.filter.from(), format),
-					tillDate = this.moment(this.filter.till(), format),
+					tillDate = this.moment(this.filter.till(), format);
+
+				return {
+					from: fromDate.isValid() ? fromDate.toISOString() : '',
+					till: tillDate.isValid() ? tillDate.toISOString()  : ''
+				};
+			},
+			storeAdvancedDetails: function() {
+				var dates = this.getDatesAsISO(),
 					filter = {
-						from: fromDate.isValid() ? fromDate.toISOString() : '',
-						till: tillDate.isValid() ? tillDate.toISOString()  : ''
+						from: dates.from,
+						till: dates.till
 					},
 					sort = {
 						reverse: this.sortReverse(),

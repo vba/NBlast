@@ -91,30 +91,33 @@
 				}
 				return false;
 			},
-			bind: function () {
-				var me = this,
-					filter = amplify.store('filter') || {},
-					sort = amplify.store('sort') || {};
-
-				markupService.applyBindings(this, searchView);
-				me.initExternals();
-
-				searchService.search({
+			getSearchParams: function () {
+				var dates = this.getDatesAsISO();
+				return {
 					expression: this.expression(),
 					page: this.page(),
 					sort: {
-						field: sort.field,
-						reverse: sort.reverse
+						field: this.sortField(),
+						reverse: this.sortReverse()
 					},
 					filter: {
-						from: filter.from,
-						till: filter.till
+						from: dates.from,
+						till: dates.till
 					}
-				}).done(function (data) {
-					var result = data || {total: 0};
-					me.searchResult(result);
-					me.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
-				});
+				};
+			},
+			onSearchDone: function (data) {
+				var result = data || {total: 0};
+				this.searchResult(result);
+				this.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
+			},
+			bind: function () {
+				markupService.applyBindings(this, searchView);
+				this.initExternals();
+
+				searchService
+					.search(this.getSearchParams())
+					.done(this.onSearchDone.bind(this));
 			}
 		});
 		return SearchViewModel;

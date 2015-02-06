@@ -1,12 +1,13 @@
-define(['knockout', 'jquery', 'services/settings'], function (ko, $, settingsService) {
+define(['knockout', 'jquery', 'services/settings'], function (ko, $, settings) {
 	'use strict';
 
-	return Object.freeze({
+	var markup = {
 		applyBindings: function (viewModel, view) {
-			var container = $(settingsService.getViewsContainer());
+			var container = $(settings.getViewsContainer());
 			container.html(view);
 			ko.cleanNode(container[0]);
 			ko.applyBindings(viewModel, container[0]);
-		}
-	});
+        }
+    };
+	return settings.isTestEnv() ? markup : Object.freeze(markup);
 });

@@ -1,10 +1,12 @@
 deps = [
 	'chai'
     'sinon'
+	'services/markup'
+	'services/search'
 	'viewModels/search'
 ]
 
-define deps, (chai, sinon, SearchViewModel) ->
+define deps, (chai, sinon, markupService, searchService, SearchViewModel) ->
 	mocker = null
 	chai.should()
 	window.beforeEach -> mocker = sinon.sandbox.create()
@@ -132,6 +134,31 @@ define deps, (chai, sinon, SearchViewModel) ->
 				# Then
 				sut.page().should.be.equal(expectedPage)
 				sut.expression().should.be.equal(expectedExpression)
+
+		describe 'When search view is bind', ->
+			it 'Should apply binding, init externals and accomplish a search request', ->
+				# Given
+				actualSearchParams = {}
+				actualSearchCallback = ->
+				sut = new SearchViewModel(10, '*')
+				applyBindingsStub = mocker.stub(markupService, 'applyBindings', ->)
+				initExternalsStub = mocker.stub(sut, 'initExternals', ->)
+				searchStub = mocker.stub(searchService, 'search', (p) ->
+					actualSearchParams = p
+					done: (cb) ->
+						actualSearchCallback = cb
+				)
+
+
+				# When
+				sut.bind()
+
+				# Then
+				applyBindingsStub.calledWith(sut, sinon.match.string)
+				initExternalsStub.calledOnce.should.be.true()
+				searchStub.calledOnce.should.be.true()
+				actualSearchParams.expression.should.be.equal('*')
+				actualSearchParams.page.should.be.equal(10)
 
 		describe 'When view model needs to interact with server', ->
 			it 'Should run route during search request when location remains equal to requested path', ->
