@@ -115,6 +115,27 @@ define deps, (chai, sinon, markupService, searchService, SearchViewModel) ->
 				actualIcons[5].should.be.equal('asterisk')
 				actualIcons[6].should.be.equal('asterisk')
 
+			it 'Should clear advanced details every time when user clicks the button', ->
+				# Given
+				sut = new SearchViewModel(10, '*')
+				storeStub = mocker.stub(amplify, 'store', ->)
+				sortFieldSpy = mocker.spy(sut, 'sortField')
+				sortReverseSpy = mocker.spy(sut, 'sortReverse')
+				fromSpy = mocker.spy(sut.filter, 'from')
+				tillSpy = mocker.spy(sut.filter, 'till')
+
+				# When
+				sut.clearAdvancedDetails()
+
+				# Then
+				storeStub.calledTwice.should.be.true()
+				storeStub.calledWith('filter', null).should.be.true()
+				storeStub.calledWith('sort', null).should.be.true()
+				sortFieldSpy.calledOnce.should.be.true()
+				sortReverseSpy.calledOnce.should.be.true()
+				fromSpy.calledOnce.should.be.true()
+				tillSpy.calledOnce.should.be.true()
+
 		describe 'When search view is instantiated', ->
 			it 'Should fails when init params are invalid', ->
 				# Given

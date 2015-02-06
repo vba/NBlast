@@ -45,6 +45,14 @@
 					till: tillDate.isValid() ? tillDate.toISOString()  : ''
 				};
 			},
+			clearAdvancedDetails: function () {
+				amplify.store('filter', null);
+				amplify.store('sort', null);
+				this.sortField('');
+				this.sortReverse(false);
+				this.filter.from('');
+				this.filter.till('');
+			},
 			storeAdvancedDetails: function() {
 				var dates = this.getDatesAsISO(),
 					filter = {
