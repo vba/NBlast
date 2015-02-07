@@ -4,5 +4,6 @@ type IStorageReader = interface
     abstract member SearchByField : SearchQuery -> LogDocumentHits
     abstract member FindAll: int option -> int option -> LogDocumentHits
     abstract member CountAll: unit -> int
-    abstract member GroupWith: LogField -> SimpleSenderFacets
+    abstract member GroupWith: LogField -> SimpleFacets
+    abstract member GroupWith: LogField * int -> SimpleFacets
     end

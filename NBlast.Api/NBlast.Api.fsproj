@@ -50,6 +50,7 @@
     <Compile Include="Async\QueueProcessingTask.fs" />
     <Compile Include="Controllers\SearcherController.fs" />
     <Compile Include="Controllers\IndexerController.fs" />
+    <Compile Include="Controllers\DashboardController.fs" />
     <Compile Include="UnityResolver.fs" />
     <Compile Include="UnityConfig.fs" />
     <Compile Include="SchedulerConfig.fs" />
@@ -62,6 +63,9 @@
   <ItemGroup>
     <Reference Include="FluentScheduler">
       <HintPath>..\packages\FluentScheduler\lib\net40\FluentScheduler.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.SimpleFacetedSearch">
+      <HintPath>..\packages\Lucene.Net.Contrib\lib\net40\Lucene.Net.Contrib.SimpleFacetedSearch.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\packages\Unity\lib\net45\Microsoft.Practices.Unity.dll</HintPath>

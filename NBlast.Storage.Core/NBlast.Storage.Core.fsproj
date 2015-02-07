@@ -46,7 +46,7 @@
     <Compile Include="Index\FilterQuery.fs" />
     <Compile Include="Index\Sort.fs" />
     <Compile Include="Index\SearchQuery.fs" />
-    <Compile Include="Index\SimpleSenderFacets.fs" />
+    <Compile Include="Index\SimpleFacets.fs" />
     <Compile Include="Index\IStorageDocument.fs" />
     <Compile Include="Index\IStorageWriter.fs" />
     <Compile Include="Index\IStorageReader.fs" />

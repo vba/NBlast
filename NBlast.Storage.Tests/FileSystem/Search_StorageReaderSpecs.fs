@@ -146,7 +146,7 @@ type Search_StorageReaderSpecs() =
         let sut = this.MakeStorageReader (path, 5)
         
         // When
-        let actualFacets = (sut.GroupWith LogField.Sender).Facets |> List.toArray
+        let actualFacets = (sut.GroupWith LogField.Sender).Facets |> Seq.toArray
 
         // Then
         (actualFacets |> Array.length).Should().Be(3, "3 facet must be found") |> ignore

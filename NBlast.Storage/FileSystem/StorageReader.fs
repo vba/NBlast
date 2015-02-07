@@ -62,43 +62,50 @@ type StorageReader (directoryProvider: IDirectoryProvider,
              | Before(x) -> (null, convert(x))
              | Between(x, y) -> (convert(x), convert(y))) |> Some
 
-    member private me.GetRangeFilter(query: FilterQuery option) = 
+    member private me.GetRangeFilter(query: FilterQuery option) =
         let range = me.GetDatesRange(query)
         if range.IsNone then null
         else FieldCacheRangeFilter.NewStringRange(LogField.CreatedAt.GetName(), 
-                                                  fst range.Value, 
-                                                  snd range.Value, 
-                                                  false, 
+                                                  fst range.Value,
+                                                  snd range.Value,
+                                                  false,
                                                   false)
 
-    member private me.GetSort(sort: Index.Sort option) = 
+    member private me.GetSort(sort: Index.Sort option) =
         if sort.IsNone 
-        then 
+        then
             None
         else
-            let ft = match sort.Value.Field with 
+            let ft = match sort.Value.Field with
                         | LogField.CreatedAt -> SortField.LONG
                         | _ -> SortField.STRING
             let field = new SortField(sort.Value.Field.GetName(), ft, sort.Value.Reverse)
             Sort(field) |> Some
 
     interface IStorageReader with
-        member me.GroupWith (field: LogField) =
+        member me.GroupWith (field: LogField, docsPerGroup) =
             use directory       = directoryProvider.Provide()
             use indexReader     = IndexReader.Open(directory, true)
             use analyzer        = new StandardAnalyzer(version)
-            use facetedSearcher = new SimpleFacetedSearch(indexReader, LogField.Sender.GetName())
+
+            SimpleFacetedSearch.MAX_FACETS <- indexReader.NumDocs()
+
+            use facetedSearcher = new SimpleFacetedSearch(indexReader, field.GetName())
             let parser          = new MultiFieldQueryParser(version, LogField.Names, analyzer)
             let query           = _parseQuery "*:*" parser
-            let searchTimer     = new Timer<_>(fun () -> facetedSearcher.Search(query))
+            let searchTimer     = new Timer<_>(fun () -> facetedSearcher.Search(query, docsPerGroup))
             let hits            = searchTimer.WrapExecution()
             
             let facets = hits.HitsPerFacet 
                          |> Seq.map (fun x -> {Name = x.Name.ToString(); Count = x.HitCount }) 
+                         |> Seq.sortBy (fun x -> -x.Count)
                          |> Seq.toList
 
             { Facets        = facets
-              QueryDuration = searchTimer.GetElapsedMilliseconds() }
+              QueryDuration = searchTimer.GetElapsedMilliseconds() 
+              Total         = Seq.length facets}
+
+        member me.GroupWith (field: LogField) = (me :> IStorageReader).GroupWith(field, 0)
         
         member this.SearchByField searchQuery =
             use directory     = directoryProvider.Provide()
@@ -129,8 +136,8 @@ type StorageReader (directoryProvider: IDirectoryProvider,
                         |> Seq.map (getHit >> this.HitToDocument) // TODO Weak place, needs to be processed with parallel sequences
                         |> Seq.toList 
 
-            { Hits          = hits; 
-              Total         = topDocs.TotalHits; 
+            { Hits          = hits
+              Total         = topDocs.TotalHits
               QueryDuration = searchTimer.GetElapsedMilliseconds() }
 
         member me.FindAll ?skipOp ?takeOp = 
