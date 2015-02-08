@@ -24,7 +24,7 @@
 				this.initAdvancedDetails();
 				//noinspection JSUnusedGlobalSymbols
 				this.sortFieldLabel = ko.computed(function() {
-					return BaseSearchViewModel.prototype.mapSortFieldLabel(this.sortField());
+					return this.mapSortFieldLabel(this.sortField());
 				}.bind(this));
 			},
 			mapSortFieldLabel: function(value) {
