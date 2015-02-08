@@ -29,4 +29,4 @@ type DashboardController(storageReader: IStorageReader,
             field |> sprintf "Invalid field name %s" |> me.BadRequest :> IHttpActionResult
         else
             let facets = (logField.Value |> storageReader.GroupWith)
-            me.Ok({facets with Facets = facets.Facets |> Seq.take limit }) :> IHttpActionResult
+            me.Ok({facets with Facets = facets.Facets |> Seq.truncate limit }) :> IHttpActionResult

@@ -114,6 +114,7 @@
 				fromPicker.datetimepicker(options).on("dp.change", function () {
 					this.filter.from(fromPicker.data('date'));
 				}.bind(this));
+
 				tillPicker.datetimepicker(options).on("dp.change", function (e) {
 					if (e.date !== null) {
 						fromPicker.data("DateTimePicker").maxDate(e.date);
