@@ -41,6 +41,7 @@
     <Compile Include="FileSystem\Search_StorageReaderSpecs.fs" />
     <Compile Include="FileSystem\Filters_StorageReaderSpecs.fs" />
     <Compile Include="FileSystem\Sort_StorageReaderSpecs.fs" />
+    <Compile Include="FileSystem\TermsSearch_StorageReader.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">

@@ -18,7 +18,7 @@ type Filters_StorageReaderSpecs() =
     [<Fact>]
     member me.``After date filter should find nothing when it's out of scope``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
+        let path = me.GenerateTempPath()
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
         let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
@@ -37,7 +37,7 @@ type Filters_StorageReaderSpecs() =
     [<Fact>]
     member me.``After date filter should find only expected values``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
+        let path = me.GenerateTempPath()
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
         let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
@@ -62,7 +62,7 @@ type Filters_StorageReaderSpecs() =
     [<Fact>]
     member me.``Before date filter should find nothing when it's out of scope``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
+        let path = me.GenerateTempPath()
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
         let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
@@ -81,7 +81,7 @@ type Filters_StorageReaderSpecs() =
     [<Fact>]
     member me.``Before date filter should find only expected values``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
+        let path = me.GenerateTempPath()
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
         let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
@@ -104,7 +104,7 @@ type Filters_StorageReaderSpecs() =
     [<Fact>]
     member me.``Between date filter should find nothing when it's out of scope``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
+        let path = me.GenerateTempPath()
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
         let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
@@ -123,7 +123,7 @@ type Filters_StorageReaderSpecs() =
     [<Fact>]
     member me.``Between date filter should find only expected values``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
+        let path = me.GenerateTempPath()
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
         let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
@@ -146,7 +146,7 @@ type Filters_StorageReaderSpecs() =
     [<Fact>]
     member me.``Combining an ordinary search query and between date filter should find only expected values``() =
         // Given
-        let path = Path.Combine(Variables.TempFolderPath.Value, "NBlast_" + Guid.NewGuid().ToString())
+        let path = me.GenerateTempPath()
         let writer = new StorageWriter(me.MakeDirectoryProvider(path)) :> IStorageWriter
         let sut = me.MakeStorageReader(path)
         let date = DateTime.Now
