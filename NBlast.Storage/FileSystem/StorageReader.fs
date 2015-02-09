@@ -10,6 +10,7 @@ open NBlast.Storage.Core
 open NBlast.Storage.Core.Index
 open Lucene.Net.QueryParsers
 open Lucene.Net.Util
+open Lucene.Net.Analysis
 open Lucene.Net.Search
 open Lucene.Net.Documents
 open Lucene.Net.Store
@@ -82,6 +83,40 @@ type StorageReader (directoryProvider: IDirectoryProvider,
             let field = new SortField(sort.Value.Field.GetName(), ft, sort.Value.Reverse)
             Sort(field) |> Some
 
+    member private this.Search searchQuery 
+                               (getQuery: (Analysis.Analyzer) -> Query) =
+
+        use directory     = directoryProvider.Provide()
+        use indexSearcher = new IndexSearcher(directory, true)
+        use analyzer      = new StandardAnalyzer(version)
+            
+        let (skip, take)  = (searchQuery.Skip |? 0, searchQuery.Take |? itemsPerPage)
+        let query         = getQuery(analyzer)
+        let filter        = this.GetRangeFilter(searchQuery.Filter)
+        let sort          = this.GetSort(searchQuery.Sort)
+            
+        let search = 
+            if sort.IsNone 
+                then fun() -> indexSearcher.Search(query, filter, skip + take) 
+                else fun() -> indexSearcher.Search(query, filter, skip + take, sort.Value) :> TopDocs
+
+        let searchTimer   = new Timer<_>(fun () -> search())
+        let topDocs       = searchTimer.WrapExecution()
+            
+        let getHit = fun (index) -> 
+            let sd    = topDocs.ScoreDocs.[index - 1]
+            let score = if (Single.IsNaN(sd.Score)) then None else Some(sd.Score)
+            (indexSearcher.Doc(sd.Doc), score)
+
+        let hitsSection = paginator.GetFollowingSection skip take topDocs.TotalHits 
+        let hits = hitsSection 
+                    |> Seq.map (getHit >> this.HitToDocument) // TODO Weak place, needs to be processed with parallel sequences
+                    |> Seq.toList 
+
+        { Hits          = hits
+          Total         = topDocs.TotalHits
+          QueryDuration = searchTimer.GetElapsedMilliseconds() }
+
     interface IStorageReader with
         member me.GroupWith (field: LogField, docsPerGroup) =
             use directory       = directoryProvider.Provide()
@@ -107,38 +142,17 @@ type StorageReader (directoryProvider: IDirectoryProvider,
 
         member me.GroupWith (field: LogField) = (me :> IStorageReader).GroupWith(field, 0)
         
-        member this.SearchByField searchQuery =
-            use directory     = directoryProvider.Provide()
-            use indexSearcher = new IndexSearcher(directory, true)
-            use analyzer      = new StandardAnalyzer(version)
-            
-            let (skip, take)  = (searchQuery.Skip |? 0, searchQuery.Take |? itemsPerPage)
-            let parser        = new MultiFieldQueryParser(version, LogField.Names, analyzer)
-            let query         = _parseQuery searchQuery.Expression parser
-            let filter        = this.GetRangeFilter(searchQuery.Filter)
-            let sort          = this.GetSort(searchQuery.Sort)
-            
-            let search = 
-                if sort.IsNone 
-                    then fun() -> indexSearcher.Search(query, filter, skip + take) 
-                    else fun() -> indexSearcher.Search(query, filter, skip + take, sort.Value) :> TopDocs
+        member me.SearchByField searchQuery = 
+            (fun (analyzer) -> 
+                let parser  = new MultiFieldQueryParser(version, LogField.Names, analyzer)
+                _parseQuery searchQuery.Expression parser
+            ) |> me.Search searchQuery
 
-            let searchTimer   = new Timer<_>(fun () -> search())
-            let topDocs       = searchTimer.WrapExecution()
-            
-            let getHit = fun (index) -> 
-                let sd    = topDocs.ScoreDocs.[index - 1]
-                let score = if (Single.IsNaN(sd.Score)) then None else Some(sd.Score)
-                (indexSearcher.Doc(sd.Doc), score)
 
-            let hitsSection = paginator.GetFollowingSection skip take topDocs.TotalHits 
-            let hits = hitsSection 
-                        |> Seq.map (getHit >> this.HitToDocument) // TODO Weak place, needs to be processed with parallel sequences
-                        |> Seq.toList 
-
-            { Hits          = hits
-              Total         = topDocs.TotalHits
-              QueryDuration = searchTimer.GetElapsedMilliseconds() }
+        member me.SearchByTerm (term: LogField) (searchQuery: SearchQuery) = 
+            (fun (analyzer) -> 
+                (new TermQuery(new Term(term.GetName(), searchQuery.Expression))) :> Query
+            ) |> me.Search searchQuery
 
         member me.FindAll ?skipOp ?takeOp = 
             let query = { (SearchQuery.GetOnlyExpression "*:*") 
