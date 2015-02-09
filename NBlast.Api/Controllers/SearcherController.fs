@@ -46,25 +46,7 @@ type SearcherController(storageReader: IStorageReader,
                       from: Nullable<DateTime>,
                       till: Nullable<DateTime>) =
 
-        let sf = LogField.ConvertFrom(sf)
-        let searchQuery = {
-            Expression = q
-            Take = itemsPerPage.Value |> Some
-            Skip = ((p - 1) * itemsPerPage.Value) |> Some
-            Filter = if (from.HasValue && till.HasValue) 
-                        then FilterQuery.Between(from.Value, till.Value) |> Some
-                     else if (from.HasValue)
-                        then FilterQuery.After(from.Value)  |> Some
-                     else if (till.HasValue)
-                         then FilterQuery.Before(till.Value) |> Some
-                     else None
-            Sort = if sf.IsNone 
-                    then None
-                    else { Field = sf.Value 
-                           Reverse = if sr.HasValue 
-                                        then sr.Value 
-                                        else false} |> Some
-        }
+        let searchQuery = me.AssembleSearchQuery(q, p, sf, sr, from, till)
         searchQuery |> sprintf "Complex search with %A" |> logger.Debug
         let result = storageReader.SearchByField(searchQuery)
         result
@@ -85,4 +67,39 @@ type SearcherController(storageReader: IStorageReader,
     [<Route("count-all")>]
     member me.CountAll () =
         storageReader.CountAll()
+
+    member private me.CombineExpression q = 
+        SearchQuery.GetOnlyExpression(q)
+
+    member private me.CombinePage p query = 
+        { query with Take = itemsPerPage.Value |> Some 
+                     Skip = ((p - 1) * itemsPerPage.Value) |> Some }
+
+    member private me.CombineSort sf (sr: Nullable<Boolean>) query = 
+        let sf = LogField.ConvertFrom(sf)
+        { query with Sort = if sf.IsNone 
+                            then None
+                            else { Field = sf.Value 
+                                   Reverse = if sr.HasValue 
+                                                then sr.Value 
+                                                else false} |> Some }
+
+    member private me.CombineFilter (from: Nullable<DateTime>) 
+                                    (till: Nullable<DateTime>) 
+                                    query = 
+        { query with Filter = if (from.HasValue && till.HasValue) 
+                                then FilterQuery.Between(from.Value, till.Value) |> Some
+                              else if (from.HasValue)
+                                then FilterQuery.After(from.Value)  |> Some
+                              else if (till.HasValue)
+                                then FilterQuery.Before(till.Value) |> Some
+                              else None }
+
+    member private me.AssembleSearchQuery (q, p, sf, sr, from, till) = 
+        q |> (me.CombineExpression 
+                >> (me.CombinePage p) 
+                >> (me.CombineSort sf sr) 
+                >> (me.CombineFilter from till))
+
+        
 
