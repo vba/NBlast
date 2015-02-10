@@ -48,9 +48,11 @@
     <Compile Include="Models\LogModel.fs" />
     <Compile Include="Async\IndexingQueueKeeper.fs" />
     <Compile Include="Async\QueueProcessingTask.fs" />
+    <Compile Include="Controllers\ControllerExtensions.fs" />
     <Compile Include="Controllers\SearcherController.fs" />
     <Compile Include="Controllers\IndexerController.fs" />
     <Compile Include="Controllers\DashboardController.fs" />
+    <Compile Include="Controllers\TermSearcherController.fs" />
     <Compile Include="UnityResolver.fs" />
     <Compile Include="UnityConfig.fs" />
     <Compile Include="SchedulerConfig.fs" />
