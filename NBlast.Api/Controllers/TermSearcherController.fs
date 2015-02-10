@@ -20,22 +20,22 @@ type TermSearcherController(storageReader: IStorageReader,
 
     [<HttpGet>]
     [<Route("search")>]
-    member me.TermSearch (k, q) = me.TermSearch(k, q, 1)
+    member me.Search (k, q) = me.Search(k, q, 1)
 
     [<HttpGet>]
     [<Route("search")>]
-    member me.TermSearch (k, q, p) =
-        me.TermSearch (k, q, p, null, new Nullable<_>(), new Nullable<_>(), new Nullable<_>())
+    member me.Search (k, q, p) =
+        me.Search (k, q, p, null, new Nullable<_>(), new Nullable<_>(), new Nullable<_>())
 
     [<HttpGet>]
     [<Route("search")>]
-    member me.TermSearch (k    : string,
-                          q    : string,
-                          p    : int,
-                          sf   : string,
-                          sr   : Nullable<Boolean>,
-                          from : Nullable<DateTime>,
-                          till : Nullable<DateTime>) =
+    member me.Search (k    : string,
+                      q    : string,
+                      p    : int,
+                      sf   : string,
+                      sr   : Nullable<Boolean>,
+                      from : Nullable<DateTime>,
+                      till : Nullable<DateTime>) =
 
         let logField = k |> LogField.ConvertFrom
         if logField.IsNone then
@@ -43,5 +43,5 @@ type TermSearcherController(storageReader: IStorageReader,
         else
             let searchQuery = me.AssembleSearchQuery(q, p, itemsPerPage, sf, sr, from, till)
             searchQuery |> sprintf "Term search with term key %s and %A" k |> logger.Debug
-            let result = (searchQuery |> storageReader.SearchByTerm logField.Value) 
+            let result = (storageReader.SearchByTerm (logField.Value, searchQuery)) 
             me.Ok(result) :> IHttpActionResult

@@ -42,6 +42,7 @@
     <Compile Include="Controllers\SearcherControllerSpecs.fs" />
     <Compile Include="Controllers\IndexerControllerSpecs.fs" />
     <Compile Include="Controllers\DashboardControllerSpecs.fs" />
+    <Compile Include="Controllers\TermSearcherControllerSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">

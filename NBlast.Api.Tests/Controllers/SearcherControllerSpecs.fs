@@ -30,7 +30,7 @@ type SearcherControllerSpecs() =
         result.Should().Be(0, "0 count is expected") |> ignore
 
     [<Fact>]
-    member me.``Search full of parameters must pass all of them to search``() =
+    member me.``Search full of parameters must pass all of them to storage reader``() =
         // Given
         let query = "expression"
         let fromDate = DateTime.Now.AddDays(-2.0)

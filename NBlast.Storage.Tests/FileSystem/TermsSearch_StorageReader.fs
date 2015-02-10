@@ -24,7 +24,7 @@ type TermsSearch_StorageReader() =
         let query = SearchQuery.GetOnlyExpression  "sender1"
 
         // When
-        let actuals = (sut.SearchByTerm LogField.Sender query).Hits 
+        let actuals = (sut.SearchByTerm (LogField.Sender, query)).Hits 
         
         // Then
         (actuals |> List.length).Should().Be(0, "No document must be found") |> ignore
@@ -39,7 +39,7 @@ type TermsSearch_StorageReader() =
         let query = SearchQuery.GetOnlyExpression  "sender1 sender6"
 
         // When
-        let actuals = (sut.SearchByTerm LogField.Sender query).Hits 
+        let actuals = (sut.SearchByTerm (LogField.Sender, query)).Hits 
         
         // Then
         (actuals |> List.length).Should().Be(1, "Only 1 document must be found") |> ignore
@@ -55,7 +55,7 @@ type TermsSearch_StorageReader() =
         let query = SearchQuery.GetOnlyExpression  "sender6 sender1"
 
         // When
-        let actuals = (sut.SearchByTerm LogField.Sender query).Hits 
+        let actuals = (sut.SearchByTerm (LogField.Sender, query)).Hits 
         
         // Then
         (actuals |> List.length).Should().Be(2, "Only 2 documents must be found") |> ignore
@@ -80,7 +80,7 @@ type TermsSearch_StorageReader() =
         }
 
         // When
-        let actuals = (sut.SearchByTerm LogField.Sender query).Hits 
+        let actuals = (sut.SearchByTerm (LogField.Sender, query)).Hits 
         
         // Then
         (actuals |> List.length).Should().Be(2, "Only 2 documents must be found") |> ignore

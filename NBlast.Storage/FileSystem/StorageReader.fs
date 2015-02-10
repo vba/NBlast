@@ -149,7 +149,7 @@ type StorageReader (directoryProvider: IDirectoryProvider,
             ) |> me.Search searchQuery
 
 
-        member me.SearchByTerm (term: LogField) (searchQuery: SearchQuery) = 
+        member me.SearchByTerm (term: LogField, searchQuery: SearchQuery) = 
             (fun (analyzer) -> 
                 (new TermQuery(new Term(term.GetName(), searchQuery.Expression))) :> Query
             ) |> me.Search searchQuery
