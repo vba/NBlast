@@ -9,7 +9,6 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<form>
-
 					<div class="form-group">
 						<label for="searchTypeButton">Search type:</label>
 						<div class="form-group">
@@ -31,7 +30,6 @@
 							</div>
 						</div>
 					</div>
-
 					<div class="form-group">
 						<label for="sorbyFieldButton">Sort by:</label>
 						<div class="form-group">
@@ -49,12 +47,18 @@
 									<li><a href="javascript:" data-bind="click: sortField.bind($root,'level')">Level</a></li>
 								</ul>
 							</div>
-							<div class="btn-group" data-toggle="buttons" data-bind="visible: sortField">
-								<label data-bind="click: function() {sortReverse(false)}, attr: {class: 'btn btn-default btn-xs '+ (!sortReverse() ? 'active' : '')}">
+							<div class="btn-group disabled" data-toggle="buttons">
+								<label data-bind="click: function() {sortReverse(false)},
+												  attr: {class: 'btn btn-default btn-xs '+
+												    (!sortReverse() ? 'active ' : ' ') +
+												    (!sortField() ? 'disabled' : '')}">
 									<input type="radio" autocomplete="off" name="sortReverse">
 									<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
 								</label>
-								<label data-bind="click: function() {sortReverse(true)}, attr: {class: 'btn btn-default btn-xs '+ (sortReverse() ? 'active' : '')}">
+								<label data-bind="click: function() {sortReverse(true)},
+												  attr: {class: 'btn btn-default btn-xs '+
+												    (sortReverse() ? 'active ' : ' ') +
+												    (!sortField() ? 'disabled' : '')}">
 									<input type="radio" autocomplete="off" name="sortReverse">
 									<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 								</label>
