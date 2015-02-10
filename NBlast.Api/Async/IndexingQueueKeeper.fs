@@ -34,7 +34,7 @@ type IndexingQueueKeeper() =
             | (true, model) -> Some model
 
         member me.Enqueue model = 
-                model |> sprintf "Enqueuing model %A" |> logger.Debug
+                model |> sprintf "Enqueuing model %O" |> logger.Debug
                 queue.Enqueue(model)
 
         member me.Consume() = 

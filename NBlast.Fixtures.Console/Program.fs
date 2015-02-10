@@ -30,11 +30,11 @@ module App =
 
         if (log.Level = "fatal" || log.Level = "error") then
             request.AddParameter("error", log.Error) |> ignore
-        request.AddParameter("createdAt", log.CreatedAt) |> ignore
+        request.AddParameter("createdAt", log.CreatedAt.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture )) |> ignore
         
         let response = restClient.Execute(request)
         //response.StatusCode |> printfn "Response status code is %A"
-        response.StatusCode
+        response
 
     let generate () =
         let message = 
@@ -44,7 +44,7 @@ module App =
 
         let levels = ["fatal"; "error"; "warn"; "info"; "debug"; "trace"]
 
-        fixture.CreateMany<LogModel>(fixturesLimit) |> PSeq.map (fun x -> 
+        fixture.CreateMany<LogModel>(fixturesLimit) |> Seq.map (fun x -> 
             x.Level <- levels.[(new Random()).Next(levels.Length)]
             x.Logger <- Address.UsState().ToLower()
             x.Sender <- Company.Name()
@@ -57,12 +57,16 @@ module App =
     let main argv = 
         fixturesLimit |> printfn "Sending %d fake log(s) to the server"
 
-        let processed = 
+        let result = 
             generate() 
                 |> PSeq.map (fun log -> log |> index)
-                |> PSeq.filter (fun status -> status = HttpStatusCode.OK) 
+                |> PSeq.filter (fun x -> x.StatusCode <> HttpStatusCode.OK) 
                 |> PSeq.toList
-        processed.Length |> printfn "%d records were indexed successfully, Press any key for exit"
+        (fixturesLimit - result.Length) |> printfn "%d records were indexed successfully, Press any key for exit"
+        (for ko in result do
+            (ko.StatusCode, ko.Content) |> printfn "Unprocessed tuple (status, content): %A"
+        ) |> ignore
+
         System.Console.ReadLine() |> ignore
         0
 

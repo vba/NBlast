@@ -34,3 +34,11 @@ type LogModel () =
 
     [<JsonIgnore>]
     member me.CreatedAtOp with get() = if (me.CreatedAt.HasValue) then Some me.CreatedAt.Value else None
+
+    override me.ToString() = 
+        sprintf "{sender=%s, logger=%s, level=%s, message=%s, createdAt=%s}" 
+                    me.Sender 
+                    me.Logger
+                    me.Level
+                    me.Message
+                    (if me.CreatedAt.HasValue then me.CreatedAt.Value.ToString() else "<NULL>")

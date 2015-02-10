@@ -13,6 +13,8 @@ open System.Web.Http.Cors
 type IndexerController(queueKeeper: IIndexingQueueKeeper) =
     inherit ApiController()
 
+    static let logger = NLog.LogManager.GetCurrentClassLogger()
+
     [<HttpPost>]
     [<Route("index")>]
     member me.Index (model: LogModel) =
@@ -20,6 +22,7 @@ type IndexerController(queueKeeper: IIndexingQueueKeeper) =
             queueKeeper.Enqueue(model)
             me.Ok(model) :> IHttpActionResult
         else
+            model |> sprintf "Log model %O is INVALID" |> logger.Debug
             me.BadRequest(me.ModelState) :> IHttpActionResult
     
     [<HttpGet>]
