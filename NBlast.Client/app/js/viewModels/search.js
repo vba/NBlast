@@ -27,7 +27,7 @@
 
 		//noinspection JSUnusedGlobalSymbols
 		var SearchViewModel = jsface.Class(BaseSearchViewModel, {
-			constructor: function (page, expression) {
+			constructor: function (page, expression, termKey) {
 
 				SearchViewModel.$super.call(this);
 
@@ -36,6 +36,9 @@
 				}
 				if (!_.isString(expression)) {
 					throw new Error('expression param must be a string');
+				}
+				if (_.isString(termKey) && !_.isEmpty(termKey)) {
+					this.searchType = ko.observable(termKey);
 				}
 
 				this.searchResult = ko.observable({});
@@ -107,18 +110,30 @@
 					}
 				};
 			},
+			getTermSearchParams: function () {
+				var result = this.getSearchParams();
+				result.search = {
+					type : this.searchType()
+				};
+				return result;
+			},
+			termSearchMode: function () {
+				return /(?:id|sender|logger|level)/gi.test(this.searchType());
+			},
 			onSearchDone: function (data) {
 				var result = data || {total: 0};
 				this.searchResult(result);
 				this.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
 			},
+			requestSearch: function () {
+				return this.termSearchMode()
+					? searchService.searchByTerm(this.getTermSearchParams())
+					: searchService.search(this.getSearchParams());
+			},
 			bind: function () {
 				markupService.applyBindings(this, searchView);
 				this.initExternals();
-
-				searchService
-					.search(this.getSearchParams())
-					.done(this.onSearchDone.bind(this));
+				this.requestSearch().done(this.onSearchDone.bind(this));
 			}
 		});
 		return SearchViewModel;

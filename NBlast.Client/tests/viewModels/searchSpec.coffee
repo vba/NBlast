@@ -128,9 +128,10 @@ define deps, (chai, sinon, markupService, searchService, SearchViewModel) ->
 				sut.clearAdvancedDetails()
 
 				# Then
-				storeStub.calledTwice.should.be.true()
+				storeStub.callCount.should.be.equal(3)
 				storeStub.calledWith('filter', null).should.be.true()
 				storeStub.calledWith('sort', null).should.be.true()
+				storeStub.calledWith('search', null).should.be.true()
 				sortFieldSpy.calledWith('').should.be.true()
 				sortReverseSpy.calledOnce.should.be.true()
 				fromSpy.calledOnce.should.be.true()

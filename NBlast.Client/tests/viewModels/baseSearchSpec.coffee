@@ -80,7 +80,7 @@ define deps, (chai, sinon, amplify, moment, BaseSearchViewModel) ->
 				sut.storeAdvancedDetails()
 
 				# Then
-				captured.length.should.be.equal(2)
+				captured.length.should.be.equal(3)
 				captured[0].from.split('T')[0]
 					.should.be.equal(fromDate.toISOString().split('T')[0])
 				captured[0].till.split('T')[0]

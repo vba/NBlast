@@ -20,7 +20,6 @@
 				this.totalPages = ko.observable(0);
 				this.page = ko.observable();
 				this.expression = ko.observable();
-				this.searchType = ko.observable("");
 				this.searchResult = false;
 				this.initAdvancedDetails();
 				//noinspection JSUnusedGlobalSymbols
@@ -61,6 +60,8 @@
 			clearAdvancedDetails: function () {
 				amplify.store('filter', null);
 				amplify.store('sort', null);
+				amplify.store('search', null);
+				this.searchType('');
 				this.sortField('');
 				this.sortReverse(false);
 				this.filter.from('');
@@ -75,16 +76,22 @@
 					sort = {
 						reverse: this.sortReverse(),
 						field: $.trim(this.sortField())
+					},
+					search = {
+						type: this.searchType()
 					};
 
 				amplify.store('filter', filter);
 				amplify.store('sort', sort);
+				amplify.store('search', search);
 			},
 			initAdvancedDetails: function() {
 				var format = BaseSearchViewModel.displayDateTimeFormat,
 					filter = amplify.store('filter') || {},
-					sort = amplify.store('sort') || {};
+					sort = amplify.store('sort') || {},
+					search = amplify.store('search') || {};
 
+				this.searchType = ko.observable(search.type || '');
 				this.sortField = ko.observable(sort.field || '');
 				this.sortReverse = ko.observable(sort.reverse || false);
 				this.filter = {
