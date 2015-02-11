@@ -16,16 +16,16 @@
 								<button type="button" id="searchTypeButton" data-toggle="dropdown"
 								        class="btn btn-default dropdown-toggle form-control">
 									<span class="caret"></span>
-									<span data-bind2="text: sortFieldLabel">Any expression</span>
+									<span data-bind="text: searchTypeLabel">Any expression</span>
 								</button>
 								<ul class="dropdown-menu" role="menu">
 									<li role="presentation" class="dropdown-header"><strong>Generic</strong></li>
-									<li><a href="javascript:" data-bind2="click: sortField.bind($root,'')">Any expression</a></li>
+									<li><a href="javascript:" data-bind="click: searchType.bind($root,'')">Any expression</a></li>
 									<li role="presentation" class="dropdown-header"><strong>Specific (by field)</strong></li>
-									<li><a href="javascript:" data-bind2="click: sortField.bind($root,'sender')">Identifier</a></li>
-									<li><a href="javascript:" data-bind2="click: sortField.bind($root,'sender')">Sender</a></li>
-									<li><a href="javascript:" data-bind2="click: sortField.bind($root,'logger')">Logger</a></li>
-									<li><a href="javascript:" data-bind2="click: sortField.bind($root,'level')">Level</a></li>
+									<li><a href="javascript:" data-bind="click: searchType.bind($root,'id')">Identifier</a></li>
+									<li><a href="javascript:" data-bind="click: searchType.bind($root,'sender')">Sender</a></li>
+									<li><a href="javascript:" data-bind="click: searchType.bind($root,'logger')">Logger</a></li>
+									<li><a href="javascript:" data-bind="click: searchType.bind($root,'level')">Level</a></li>
 								</ul>
 							</div>
 						</div>

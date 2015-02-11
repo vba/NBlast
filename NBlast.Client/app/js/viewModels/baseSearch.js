@@ -20,11 +20,16 @@
 				this.totalPages = ko.observable(0);
 				this.page = ko.observable();
 				this.expression = ko.observable();
+				this.searchType = ko.observable("");
 				this.searchResult = false;
 				this.initAdvancedDetails();
 				//noinspection JSUnusedGlobalSymbols
 				this.sortFieldLabel = ko.computed(function() {
 					return this.mapSortFieldLabel(this.sortField());
+				}.bind(this));
+				//noinspection JSUnusedGlobalSymbols
+				this.searchTypeLabel = ko.computed(function() {
+					return this.mapSearchTypeLabel(this.searchType());
 				}.bind(this));
 			},
 			mapSortFieldLabel: function(value) {
@@ -34,6 +39,14 @@
 						LOGGER: 'Logger',
 						LEVEL: 'Level'
 					}[value.toUpperCase()] || 'Relevance';
+			},
+			mapSearchTypeLabel: function (value) {
+				return {
+						ID: 'Identifier',
+						SENDER: 'Sender',
+						LOGGER: 'Logger',
+						LEVEL: 'Level'
+					}[value.toUpperCase()] || 'Any expression';
 			},
 			getDatesAsISO: function () {
 				var format = BaseSearchViewModel.displayDateTimeFormat,

@@ -89,6 +89,26 @@ define deps, (chai, sinon, amplify, moment, BaseSearchViewModel) ->
 				captured[1].field.should.be.equal('sender')
 
 		describe 'When data transformation methods are in use', ->
+			it 'Should map search type for an existent name', ->
+				# Given
+				sut = new BaseSearchViewModel()
+
+				# When
+				actual = [
+					sut.mapSearchTypeLabel('Id')
+					sut.mapSearchTypeLabel('SenDer')
+					sut.mapSearchTypeLabel('logger')
+					sut.mapSearchTypeLabel('level')
+					sut.mapSearchTypeLabel('')
+				]
+
+				# Then
+				actual[0].should.be.equal('Identifier')
+				actual[1].should.be.equal('Sender')
+				actual[2].should.be.equal('Logger')
+				actual[3].should.be.equal('Level')
+				actual[4].should.be.equal('Any expression')
+
 			it 'Should map sort field for an existent name', ->
 				# Given
 				sut = new BaseSearchViewModel()
@@ -119,3 +139,12 @@ define deps, (chai, sinon, amplify, moment, BaseSearchViewModel) ->
 				# Then
 				actual.should.be.equal('Relevance')
 
+			it 'Should map not existent search type to the value by default', ->
+				# Given
+				sut = new BaseSearchViewModel()
+
+				# When
+				actual = sut.mapSearchTypeLabel('Some case')
+
+				# Then
+				actual.should.be.equal('Any expression')

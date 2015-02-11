@@ -131,7 +131,7 @@ define deps, (chai, sinon, markupService, searchService, SearchViewModel) ->
 				storeStub.calledTwice.should.be.true()
 				storeStub.calledWith('filter', null).should.be.true()
 				storeStub.calledWith('sort', null).should.be.true()
-				sortFieldSpy.calledOnce.should.be.true()
+				sortFieldSpy.calledWith('').should.be.true()
 				sortReverseSpy.calledOnce.should.be.true()
 				fromSpy.calledOnce.should.be.true()
 				tillSpy.calledOnce.should.be.true()

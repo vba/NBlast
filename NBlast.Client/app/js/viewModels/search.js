@@ -28,6 +28,7 @@
 		//noinspection JSUnusedGlobalSymbols
 		var SearchViewModel = jsface.Class(BaseSearchViewModel, {
 			constructor: function (page, expression) {
+
 				SearchViewModel.$super.call(this);
 
 				if (!_.isNumber(page)) {
