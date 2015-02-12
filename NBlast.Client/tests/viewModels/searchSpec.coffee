@@ -157,12 +157,49 @@ define deps, (chai, sinon, markupService, searchService, SearchViewModel) ->
 				sut.page().should.be.equal(expectedPage)
 				sut.expression().should.be.equal(expectedExpression)
 
+			it 'Should detected terms search type correctly', ->
+				# Given
+				expectedParams = {val: true}
+				sut = new SearchViewModel(1, '*')
+				termSearchModeStub = mocker.stub(sut, 'termSearchMode', -> true)
+				getTermSearchParamsStub = mocker.stub(sut, 'getTermSearchParams')
+				searchByTermStub = mocker.stub(searchService, 'searchByTerm')
+
+				getTermSearchParamsStub.returns(expectedParams)
+				searchByTermStub.withArgs(expectedParams).returns('yeah!')
+
+				# When
+				expected = sut.requestSearch()
+
+				# Then
+				expected.should.be.eql('yeah!')
+				termSearchModeStub.calledOnce.should.be.true()
+
+			it 'Should detected simple search type correctly', ->
+				# Given
+				expectedParams = {val: true}
+				sut = new SearchViewModel(1, '*')
+				termSearchModeStub = mocker.stub(sut, 'termSearchMode', -> false)
+				getSearchParamsStub = mocker.stub(sut, 'getSearchParams')
+				searchStub = mocker.stub(searchService, 'search')
+
+				getSearchParamsStub.returns(expectedParams)
+				searchStub.withArgs(expectedParams).returns('yeah!')
+
+				# When
+				expected = sut.requestSearch()
+
+				# Then
+				expected.should.be.eql('yeah!')
+				termSearchModeStub.calledOnce.should.be.true()
+
 		describe 'When search view is bind', ->
 			it 'Should apply binding, init externals and accomplish a search request', ->
 				# Given
 				actualSearchParams = {}
 				actualSearchCallback = ->
 				sut = new SearchViewModel(10, '*')
+				termSearchModeStub = mocker.stub(sut, 'termSearchMode', -> false)
 				applyBindingsStub = mocker.stub(markupService, 'applyBindings', ->)
 				initExternalsStub = mocker.stub(sut, 'initExternals', ->)
 				searchStub = mocker.stub(searchService, 'search', (p) ->
@@ -171,12 +208,13 @@ define deps, (chai, sinon, markupService, searchService, SearchViewModel) ->
 						actualSearchCallback = cb
 				)
 
-
 				# When
 				sut.bind()
 
 				# Then
+
 				applyBindingsStub.calledWith(sut, sinon.match.string)
+				termSearchModeStub.calledOnce.should.be.true()
 				initExternalsStub.calledOnce.should.be.true()
 				searchStub.calledOnce.should.be.true()
 				actualSearchParams.expression.should.be.equal('*')
