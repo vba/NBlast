@@ -11,7 +11,7 @@
 	];
 	define(dependencies, function(_, $, moment, amplify, ko, ctor) {
 		//noinspection JSUnusedGlobalSymbols
-		var BaseSearchViewModel = ctor(function(prototype, _keys, _protected) {
+		var BaseSearchViewModel = ctor(function(prototype, $keys, $protected) {
 			//$statics: {
 			//	displayDateTimeFormat: 'HH:mm DD/MM/YYYY'
 			//},
@@ -31,6 +31,43 @@
 					return this.mapSearchTypeLabel(this.searchType());
 				}.bind(this));
 			};
+
+			$protected.storeFilters = function () {
+				var dates = this.getDatesAsISO(),
+					filter = {
+						from: dates.from,
+						till: dates.till
+					};
+				amplify.store('filter', filter);
+			};
+			$protected.storeSort = function () {
+				var sort = {
+						reverse: this.sortReverse(),
+						field: $.trim(this.sortField())
+					};
+				amplify.store('sort', sort);
+			};
+			$protected.storeSearch = function () {
+				var search = {
+					type: this.searchType()
+				};
+				amplify.store('search', search);
+			};
+			$protected.clearFilters = function () {
+				amplify.store('filter', null);
+				this.filter.from('');
+				this.filter.till('');
+			};
+			$protected.clearSort = function () {
+				amplify.store('sort', null);
+				this.sortField('');
+				this.sortReverse(false);
+			};
+			$protected.clearSearch = function () {
+				amplify.store('search', null);
+				this.searchType('');
+			};
+
 			prototype.mapSortFieldLabel = function(value) {
 				return {
 						CREATEDAT: 'Date',
@@ -58,32 +95,14 @@
 				};
 			};
 			prototype.clearAdvancedDetails = function () {
-				amplify.store('filter', null);
-				amplify.store('sort', null);
-				amplify.store('search', null);
-				this.searchType('');
-				this.sortField('');
-				this.sortReverse(false);
-				this.filter.from('');
-				this.filter.till('');
+				$protected.clearFilters.call(this);
+				$protected.clearSort.call(this);
+				$protected.clearSearch.call(this);
 			};
 			prototype.storeAdvancedDetails = function() {
-				var dates = this.getDatesAsISO(),
-					filter = {
-						from: dates.from,
-						till: dates.till
-					},
-					sort = {
-						reverse: this.sortReverse(),
-						field: $.trim(this.sortField())
-					},
-					search = {
-						type: this.searchType()
-					};
-
-				amplify.store('filter', filter);
-				amplify.store('sort', sort);
-				amplify.store('search', search);
+				$protected.storeFilters.call(this);
+				$protected.storeSort.call(this);
+				$protected.storeSearch.call(this);
 			};
 			prototype.initAdvancedDetails = function() {
 				var format = BaseSearchViewModel.displayDateTimeFormat,

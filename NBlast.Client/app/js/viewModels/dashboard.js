@@ -3,42 +3,42 @@
 	var dependencies = [
 		'underscore',
 		'knockout',
-		'jsface',
+		'mozart',
 		'services/dashboard',
 		'services/markup',
 		'text!views/dashboard'
 	];
 	define(dependencies, function(_,
 	                              ko,
-	                              jsface,
+	                              ctor,
 	                              dashboardService,
 	                              markupService,
 	                              dashboardView) {
 
-		//noinspection JSUnusedGlobalSymbols
-		var DashboardViewModel = jsface.Class({
-			constructor: function () {
+		//noinspection JSUnusedGlobalSymbols,UnnecessaryLocalVariableJS
+		var DashboardViewModel = ctor(function(prototype){
+			prototype.init = function () {
 				this.levelCounters = ko.observable({});
 				this.topSenders = ko.observableArray([]);
 				this.topLoggers = ko.observableArray([]);
-			},
-			onGroupByLevelDone: function (data) {
+			};
+			prototype.onGroupByLevelDone = function (data) {
 				var counters = _.reduce(data.facets || [], function (aggregator, counter) {
 					aggregator[counter.name.toLowerCase()] = counter.count;
 					return aggregator;
 				}, {});
 				this.levelCounters(counters);
-			},
-			onGroupBySenderDone: function (data) {
+			};
+			prototype.onGroupBySenderDone = function (data) {
 				this.topSenders(data.facets || []);
-			},
-			onGroupByLoggerDone: function (data) {
+			};
+			prototype.onGroupByLoggerDone = function (data) {
 				this.topLoggers(data.facets || []);
-			},
-			searchExactUri: function (name) {
+			};
+			prototype.searchExactUri = function (name) {
 				return '#/search/' + encodeURIComponent(['"', name, '"'].join(''));
-			},
-			bind: function() {
+			};
+			prototype.bind = function() {
 				markupService.applyBindings(this, dashboardView);
 
 				dashboardService
@@ -52,7 +52,7 @@
 				dashboardService
 					.groupBy('logger', 7)
 					.done(this.onGroupByLoggerDone.bind(this));
-			}
+			};
 		});
 		return DashboardViewModel;
 	});
