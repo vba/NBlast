@@ -6,7 +6,6 @@
 		'knockout',
 		'sammy',
 		'amplify',
-		'jsface',
 		'services/markup',
 		'services/search',
 		'services/settings',
@@ -18,18 +17,18 @@
 	                               ko,
 	                               sammy,
 	                               amplify,
-	                               jsface,
 	                               markupService,
 	                               searchService,
 	                               settings,
 	                               searchView,
 	                               BaseSearchViewModel) {
 
-		//noinspection JSUnusedGlobalSymbols
-		var SearchViewModel = jsface.Class(BaseSearchViewModel, {
-			constructor: function (page, expression, termKey) {
+		//noinspection JSUnusedGlobalSymbols,UnnecessaryLocalVariableJS
+		var SearchViewModel = BaseSearchViewModel.subclass(function(prototype, _keys, _protected) {
+			prototype.init = function (page, expression, termKey) {
 
-				SearchViewModel.$super.call(this);
+				prototype.super.init.call(this);
+				//SearchViewModel.$super.call(this);
 
 				if (!_.isNumber(page)) {
 					throw new Error('page param must be a number');
@@ -45,8 +44,8 @@
 				this.page = ko.observable(page);
 				this.expression = ko.observable(expression);
 				this.sammy = sammy();
-			},
-			getPages: function () {
+			};
+			prototype.getPages = function () {
 				var lower, upper,
 					index = 1,
 					links = 10,
@@ -67,8 +66,8 @@
 					}
 				}
 				return _.range(lower, upper + 1);
-			},
-			defineFoundIcon: function (level) {
+			};
+			prototype.defineFoundIcon = function (level) {
 				return {
 						DEBUG: 'cog',
 						INFO: 'info',
@@ -76,15 +75,15 @@
 						ERROR: 'bolt',
 						FATAL: 'fire'
 					}[level.toUpperCase()] || 'asterisk';
-			},
-			getFoundHits: function () {
+			};
+			prototype.getFoundHits = function () {
 				return this.searchResult().hits || [];
-			},
-			getSearchResume: function () {
+			};
+			prototype.getSearchResume = function () {
 				var result = this.searchResult();
 				return [result.total, ' record(s) found in ', result.queryDuration, ' ms'].join('');
-			},
-			makeSearch : function () {
+			};
+			prototype.makeSearch  = function () {
 				var query = this.expression() || '*:*',
 					path = ['/#/search/', encodeURIComponent(query)].join('');
 				this.storeAdvancedDetails();
@@ -94,8 +93,8 @@
 					this.sammy.setLocation(path);
 				}
 				return false;
-			},
-			getSearchParams: function () {
+			};
+			prototype.getSearchParams = function () {
 				var dates = this.getDatesAsISO();
 				return {
 					expression: this.expression(),
@@ -109,32 +108,32 @@
 						till: dates.till
 					}
 				};
-			},
-			getTermSearchParams: function () {
+			};
+			prototype.getTermSearchParams = function () {
 				var result = this.getSearchParams();
 				result.search = {
 					type : this.searchType()
 				};
 				return result;
-			},
-			termSearchMode: function () {
+			};
+			prototype.termSearchMode = function () {
 				return /(?:id|sender|logger|level)/gi.test(this.searchType());
-			},
-			onSearchDone: function (data) {
+			};
+			prototype.onSearchDone = function (data) {
 				var result = data || {total: 0};
 				this.searchResult(result);
 				this.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
-			},
-			requestSearch: function () {
+			};
+			prototype.requestSearch = function () {
 				return this.termSearchMode()
 					? searchService.searchByTerm(this.getTermSearchParams())
 					: searchService.search(this.getSearchParams());
-			},
-			bind: function () {
+			};
+			prototype.bind = function () {
 				markupService.applyBindings(this, searchView);
 				this.initExternals();
 				this.requestSearch().done(this.onSearchDone.bind(this));
-			}
+			};
 		});
 		return SearchViewModel;
 	});

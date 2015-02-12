@@ -15,12 +15,12 @@
 				sammy: '../../bower_components/sammy/lib/sammy',
 				moment: '../../bower_components/moment/moment',
 				amplify: '../../bower_components/amplify/lib/amplify.store.min',
-				jsface: '../../bower_components/jsface/jsface',
+				mozart: '../../bower_components/mozart/mozart',
 				views: '../views'
 			},
 			shim: {
-				jsface: {
-					exports: 'jsface'
+				mozart: {
+					exports: 'mozart'
 				},
 				amplify: {
 					exports: 'amplify'

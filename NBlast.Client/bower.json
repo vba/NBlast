@@ -13,8 +13,8 @@
     "moment": "~2.9.0",
     "eonasdan-bootstrap-datetimepicker": "~4.0.0",
     "amplify": "~1.1.2",
-    "jsface": "~2.3.0",
     "mocha": "~2.1.0",
-    "chai": "~1.10.0"
+    "chai": "~1.10.0",
+    "mozart": "~0.1.0"
   }
 }

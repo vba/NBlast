@@ -6,16 +6,16 @@
 		'moment',
 		'amplify',
 		'knockout',
-		'jsface',
+		'mozart',
 		'bootstrap-picker'
 	];
-	define(dependencies, function(_, $, moment, amplify, ko, jsface) {
+	define(dependencies, function(_, $, moment, amplify, ko, ctor) {
 		//noinspection JSUnusedGlobalSymbols
-		var BaseSearchViewModel = jsface.Class({
-			$statics: {
-				displayDateTimeFormat: 'HH:mm DD/MM/YYYY'
-			},
-			constructor: function() {
+		var BaseSearchViewModel = ctor(function(prototype, _keys, _protected) {
+			//$statics: {
+			//	displayDateTimeFormat: 'HH:mm DD/MM/YYYY'
+			//},
+			prototype.init = function() {
 				this.moment = moment;
 				this.totalPages = ko.observable(0);
 				this.page = ko.observable();
@@ -30,24 +30,24 @@
 				this.searchTypeLabel = ko.computed(function() {
 					return this.mapSearchTypeLabel(this.searchType());
 				}.bind(this));
-			},
-			mapSortFieldLabel: function(value) {
+			};
+			prototype.mapSortFieldLabel = function(value) {
 				return {
 						CREATEDAT: 'Date',
 						SENDER: 'Sender',
 						LOGGER: 'Logger',
 						LEVEL: 'Level'
 					}[value.toUpperCase()] || 'Relevance';
-			},
-			mapSearchTypeLabel: function (value) {
+			};
+			prototype.mapSearchTypeLabel = function (value) {
 				return {
 						ID: 'Identifier',
 						SENDER: 'Sender',
 						LOGGER: 'Logger',
 						LEVEL: 'Level'
 					}[value.toUpperCase()] || 'Any expression';
-			},
-			getDatesAsISO: function () {
+			};
+			prototype.getDatesAsISO = function () {
 				var format = BaseSearchViewModel.displayDateTimeFormat,
 					fromDate = this.moment(this.filter.from(), format),
 					tillDate = this.moment(this.filter.till(), format);
@@ -56,8 +56,8 @@
 					from: fromDate.isValid() ? fromDate.toISOString() : '',
 					till: tillDate.isValid() ? tillDate.toISOString()  : ''
 				};
-			},
-			clearAdvancedDetails: function () {
+			};
+			prototype.clearAdvancedDetails = function () {
 				amplify.store('filter', null);
 				amplify.store('sort', null);
 				amplify.store('search', null);
@@ -66,8 +66,8 @@
 				this.sortReverse(false);
 				this.filter.from('');
 				this.filter.till('');
-			},
-			storeAdvancedDetails: function() {
+			};
+			prototype.storeAdvancedDetails = function() {
 				var dates = this.getDatesAsISO(),
 					filter = {
 						from: dates.from,
@@ -84,8 +84,8 @@
 				amplify.store('filter', filter);
 				amplify.store('sort', sort);
 				amplify.store('search', search);
-			},
-			initAdvancedDetails: function() {
+			};
+			prototype.initAdvancedDetails = function() {
 				var format = BaseSearchViewModel.displayDateTimeFormat,
 					filter = amplify.store('filter') || {},
 					sort = amplify.store('sort') || {},
@@ -98,32 +98,32 @@
 					from : ko.observable(!filter.from ? '' : moment(new Date(filter.from)).format(format)),
 					till : ko.observable(!filter.till ? '' : moment(new Date(filter.till)).format(format))
 				};
-			},
-			changeSortOrder: function(value) {
+			};
+			prototype.changeSortOrder = function(value) {
 				this.sortReverse(value);
-			},
-			getFoundHits: function() {
+			};
+			prototype.getFoundHits = function() {
 				return [];
-			},
-			getPages: function() {
+			};
+			prototype.getPages = function() {
 				return [];
-			},
-			getSearchResume: function() {
+			};
+			prototype.getSearchResume = function() {
 				return "";
-			},
-			enterSearch : function(data, event) {
+			};
+			prototype.enterSearch = function(data, event) {
 				if (event.keyCode === 13) {
 					return this.makeSearch();
 				}
 				return true;
-			},
-			makeSearch: function() {
+			};
+			prototype.makeSearch = function() {
 				throw new Error("[Not yet implemented]");
-			},
-			bind: function() {
+			};
+			prototype.bind = function() {
 				throw new Error("[Not yet implemented]");
-			},
-			initExternals: function () {
+			};
+			prototype.initExternals = function () {
 				var fromPicker = $('#filterFromDate'),
 					tillPicker = $('#filterTillDate'),
 					options = {
@@ -141,8 +141,9 @@
 					}
 					this.filter.till(tillPicker.data('date'));
 				}.bind(this));
-			}
+			};
 		});
+		BaseSearchViewModel.displayDateTimeFormat = 'HH:mm DD/MM/YYYY';
 		return BaseSearchViewModel;
 	});
 })();
