@@ -8,16 +8,23 @@ watch       = require 'gulp-watch'
 less        = require 'gulp-less'
 jscs        = require 'gulp-jscs'
 jshint      = require 'gulp-jshint'
+uglify      = require 'gulp-uglify'
 mocha       = require 'gulp-mocha-phantomjs'
+browserify  = require 'gulp-browserify'
+stringify   = require 'stringify'
 
 config =
 	paths :
 		app :
-			js : './app/js/*.js'
+			views: './app/views/**/*.html'
+			js : './app/js/**/*.js'
 			less : './app/css/*.less'
+			main : './app/js/main.js'
 		test :
 			coffee: './tests/**/*.coffee'
 			runner: './test.html'
+		out :
+			bundle: './out/bundle'
 
 CommonTasks =
 	compileSpecs: () ->
@@ -41,8 +48,33 @@ gulp.task 'lint',  ->
 		.pipe(jshint.reporter('jshint-stylish'))
 		.pipe(jscs({configPath: '.jscsrc'}))
 
+gulp.task 'bundle', ->
+	gutil.log(gutil.colors.bgGreen('Start bundling...'))
+	gulp.src(config.paths.app.main, {read:false})
+		.pipe browserify {
+			debug: true
+#			shim:
+#				jquery:
+#					path: './bower_components/jquery/dist/jquery'
+#					exports: 'jQuery'
+#				sammy:
+#					path: './bower_components/sammy/lib/sammy'
+#					depends: {jquery:'jQuery'}
+#				bootstrap:
+#					path: './bower_components/bootstrap/dist/js/bootstrap'
+#					depends: {jquery:'jQuery'}
+#				'bootstrap-picker':
+#					path: './bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'
+#					depends: {bootstrap:'bootstrap'}
+			transform: stringify {
+				extensions: ['.html'], minify: false
+			}
+		}
+#		.pipe uglify {preserveComments: 'all'}
+		.pipe gulp.dest config.paths.out.bundle
 
-gulp.task 'watch', ['lint'], ->
-	#gutil.log(gutil.colors.bgGreen('Watching for changes...'))
+gulp.task 'watch', ->
+	app = config.paths.app
+	gulp.watch([app.js, app.views], ['bundle'])
 
-gulp.task('default', ['watch'])
+gulp.task('default', ['bundle', 'watch'])

@@ -204,3 +204,4 @@ NBlast.Client/app/css/*.css
 NBlast.Client/tests/**/*.js*
 **/*.map
 NBlast.Client/gulp-tasks.js
+NBlast.Client/out/*

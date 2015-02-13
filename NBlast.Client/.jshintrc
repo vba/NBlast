@@ -80,8 +80,10 @@
     "globals"       : {
         "_" : false,
         "NBlast" : false,
-        "angular" : false,
+        "module" : false,
         // require.js
+        "moment" : false,
+        "Sammy" : false,
         "define" : false,
         "require": false,
         "requirejs": false,
