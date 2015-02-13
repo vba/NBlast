@@ -21,7 +21,6 @@
 			return false;
 		};
 		prototype.bind = function () {
-			debugger
 			markupService.applyBindings(this, searchView);
 			this.initExternals();
 		};

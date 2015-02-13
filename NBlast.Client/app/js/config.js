@@ -1,6 +1,7 @@
 (function () {
 	'use strict';
 
+	//noinspection UnnecessaryLocalVariableJS
 	var config = {
 		jquery: function() {
 			return jQuery;
