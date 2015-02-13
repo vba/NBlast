@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 	var config               = require('./config'),
-		//DetailsViewModel     = require('./viewModels/details'),
+		DetailsViewModel     = require('./viewModels/details'),
 		DashboardViewModel   = require('./viewModels/dashboard'),
 		EmptySearchViewModel = require('./viewModels/emptySearch'),
 		SearchViewModel      = require('./viewModels/search'),
@@ -10,10 +10,10 @@
 
 	routes = sammy(function () {
 		var me = this;
-/*		me.get('#/details/:uuid', function () {
+		me.get('#/details/:uuid', function () {
 			var params = this.params;
 			new DetailsViewModel(params.uuid).bind();
-		});*/
+		});
 		me.get('#/search/:page/:expression', function () {
 			var params = this.params;
 			new SearchViewModel(parseInt(params.page, 10), params.expression).bind();
