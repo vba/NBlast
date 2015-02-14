@@ -1,10 +1,9 @@
 sinon       = require 'sinon'
-WeakMap     = require 'WeakMap'
 config      = require '../../app/js/config'
 mocker      = sinon.sandbox.create()
 chai        = require 'chai'
 getSutType  = -> require '../../app/js/viewModels/baseSearch'
-amplify     = {store: -> throw 'Stub Me'}
+amplify     = {store: -> ''}
 moment      = require 'moment'
 $           = {trim: (x) -> [x].join('').trim()}
 _           = require 'underscore'

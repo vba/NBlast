@@ -16,7 +16,7 @@
 			return '#pageWrapper';
 		},
 		isTestEnv: function () {
-			return _.isFunction(window.describe) && _.isFunction(window.it);
+			return _.isFunction(describe) && _.isFunction(it);
 		}
 	};
 	//noinspection JSUnresolvedVariable
