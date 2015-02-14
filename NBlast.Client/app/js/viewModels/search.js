@@ -1,20 +1,21 @@
 (function () {
 	'use strict';
-	var _ = require('underscore'),
-		ko = require('knockout'),
-		sammy = require('../config').sammy(),
-		markupService = require('../services/markup'),
-		searchService = require('../services/search'),
-		settings = require('../services/settings'),
-		searchView = require('../../views/search.html'),
+	var _                   = require('underscore'),
+		ko                  = require('knockout'),
+		sammy               = require('../config').sammy(),
+		Class               = require('jsface').Class,
+		markupService       = require('../services/markup'),
+		searchService       = require('../services/search'),
+		settings            = require('../services/settings'),
+		searchView          = require('../../views/search.html'),
 		BaseSearchViewModel = require('./baseSearch'),
 		SearchViewModel;
 
-	SearchViewModel = BaseSearchViewModel.subclass(function(prototype) {
-		prototype.init = function (page, expression, termKey) {
+	SearchViewModel = Class(BaseSearchViewModel,function() {
+		var prototype = {};
 
-			prototype.super.init.call(this);
-			//SearchViewModel.$super.call(this);
+		prototype.constructor = function (page, expression, termKey) {
+			SearchViewModel.$super.call(this);
 
 			if (!_.isNumber(page)) {
 				throw new Error('page param must be a number');
@@ -55,12 +56,12 @@
 		};
 		prototype.defineFoundIcon = function (level) {
 			return {
-					DEBUG: 'cog',
-					INFO: 'info',
-					WARN: 'warning',
-					ERROR: 'bolt',
-					FATAL: 'fire'
-				}[level.toUpperCase()] || 'asterisk';
+				DEBUG: 'cog',
+				INFO: 'info',
+				WARN: 'warning',
+				ERROR: 'bolt',
+				FATAL: 'fire'
+			}[level.toUpperCase()] || 'asterisk';
 		};
 		prototype.getFoundHits = function () {
 			return this.searchResult().hits || [];
@@ -120,6 +121,8 @@
 			this.initExternals();
 			this.requestSearch().done(this.onSearchDone.bind(this));
 		};
+
+		return prototype;
 	});
 	//noinspection JSUnresolvedVariable
 	module.exports = SearchViewModel;

@@ -201,7 +201,7 @@ test/tmp/
 bower_components
 .idea/
 NBlast.Client/app/css/*.css
-NBlast.Client/tests/**/*.js*
+NBlast.Client/test*/**/*.js*
 **/*.map
 NBlast.Client/gulp-tasks.js
 NBlast.Client/out/*

@@ -3,15 +3,15 @@ config      = require '../../app/js/config'
 mocker      = sinon.sandbox.create()
 chai        = require 'chai'
 _           = require 'underscore'
-$           = require 'jquery'
+$           = {getJSON: -> ''}
 settings    = -> require '../../app/js/services/settings'
 search      = -> require '../../app/js/services/search'
 chai.should()
 
 describe 'When we use search service', ->
 	beforeEach( ->
-		sinon.sandbox.create()
-		mocker.stub(config, 'jquery', -> {getJSON: ->})
+		mocker = sinon.sandbox.create()
+		mocker.stub(config, 'jquery', -> $)
 	)
 	afterEach( -> mocker.restore())
 
