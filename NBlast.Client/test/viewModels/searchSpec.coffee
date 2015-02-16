@@ -1,13 +1,13 @@
-sinon         = require 'sinon'
-config        = require '../../app/js/config'
-mocker        = sinon.sandbox.create()
-chai          = require 'chai'
-searchService = require '../../app/js/services/search'
-markupService = require '../../app/js/services/markup'
-views         = require('../../app/js/views')
-getSutType    = -> require '../../app/js/viewModels/search'
-amplify       = {store: -> ''}
-$             = {trim: (x) -> [x].join('').trim()}
+mocker          = null
+sinon           = require 'sinon'
+config          = require '../../app/js/config'
+chai            = require 'chai'
+searchService   = require '../../app/js/services/search'
+markupService   = require '../../app/js/services/markup'
+views           = require '../../app/js/views'
+amplify         = {store: -> ''}
+$               = {trim: (x) -> [x].join('').trim()}
+SearchViewModel = require '../../app/js/viewModels/search'
 sammy =
 	setLocation: ->
 	getLocation: ->
@@ -26,13 +26,12 @@ describe 'When search page is used', ->
 	afterEach( -> mocker.restore())
 
 	describe 'When search view pagination is used', ->
-		Sut = getSutType()
 		check_12_pages = (page, expected) ->
 			check_pages(page, expected, 12)
 
 		check_pages = (page, expected, totalPages = 12) ->
 			# Given
-			sut = new Sut(page, '*')
+			sut = new SearchViewModel(page, '*')
 			# When
 			sut.totalPages(totalPages)
 			sut.searchResult({total:120})
@@ -42,7 +41,7 @@ describe 'When search page is used', ->
 
 		it 'Should paginate nothing for an empty total', ->
 			# Given
-			sut = new Sut(1, '*')
+			sut = new SearchViewModel(1, '*')
 			# When
 			actual = sut.getPages()
 			# Then
@@ -50,7 +49,7 @@ describe 'When search page is used', ->
 
 		it 'Should paginate 50 results and select relative range starting with 1st page', ->
 			# Given
-			sut = new Sut(1, '*')
+			sut = new SearchViewModel(1, '*')
 			# When
 			sut.totalPages(5)
 			sut.searchResult({total:50})
@@ -60,7 +59,7 @@ describe 'When search page is used', ->
 
 		it 'Should paginate 50 results and select relative range starting with 2nd page', ->
 			# Given
-			sut = new Sut(2, '*')
+			sut = new SearchViewModel(2, '*')
 			# When
 			sut.totalPages(5)
 			sut.searchResult({total:50})
@@ -104,10 +103,9 @@ describe 'When search page is used', ->
 			check_12_pages(1, [1,2,3,4,5,6,7,8,9,10])
 
 	describe 'When search view displays UI elements', ->
-		Sut = getSutType()
 		it 'Should define found icon by level', ->
 			# Given
-			sut = new Sut(1, '*')
+			sut = new SearchViewModel(1, '*')
 
 			# When
 			actualIcons = [
@@ -131,7 +129,7 @@ describe 'When search page is used', ->
 
 		it 'Should clear advanced details every time when user clicks the button', ->
 			# Given
-			sut = new Sut(10, '*')
+			sut = new SearchViewModel(10, '*')
 			storeStub = mocker.stub(amplify, 'store', ->)
 			sortFieldSpy = mocker.spy(sut, 'sortField')
 			sortReverseSpy = mocker.spy(sut, 'sortReverse')
@@ -152,14 +150,13 @@ describe 'When search page is used', ->
 			tillSpy.calledOnce.should.equal(true)
 
 	describe 'When search view is instantiated', ->
-		Sut = getSutType()
 		it 'Should fails when init params are invalid', ->
 			# Given
 			# When
 			# Then
-			chai.expect( -> new Sut() )
+			chai.expect( -> new SearchViewModel() )
 				.to.throw('page param must be a number')
-			chai.expect( -> new Sut(1) )
+			chai.expect( -> new SearchViewModel(1) )
 				.to.throw('expression param must be a string')
 
 		it 'Should initialize with correct data', ->
@@ -167,7 +164,7 @@ describe 'When search page is used', ->
 			expectedExpression = 'level: up'
 			expectedPage = 10
 			# When
-			sut = new Sut(expectedPage, expectedExpression)
+			sut = new SearchViewModel(expectedPage, expectedExpression)
 			# Then
 			sut.page().should.be.equal(expectedPage)
 			sut.expression().should.be.equal(expectedExpression)
@@ -175,7 +172,7 @@ describe 'When search page is used', ->
 		it 'Should detected terms search type correctly', ->
 			# Given
 			expectedParams = {val: true}
-			sut = new Sut(1, '*')
+			sut = new SearchViewModel(1, '*')
 			termSearchModeStub = mocker.stub(sut, 'termSearchMode', -> true)
 			getTermSearchParamsStub = mocker.stub(sut, 'getTermSearchParams')
 			searchByTermStub = mocker.stub(searchService, 'searchByTerm')
@@ -193,7 +190,7 @@ describe 'When search page is used', ->
 		it 'Should detected simple search type correctly', ->
 			# Given
 			expectedParams = {val: true}
-			sut = new Sut(1, '*')
+			sut = new SearchViewModel(1, '*')
 			termSearchModeStub = mocker.stub(sut, 'termSearchMode', -> false)
 			getSearchParamsStub = mocker.stub(sut, 'getSearchParams')
 			searchStub = mocker.stub(searchService, 'search')
@@ -209,12 +206,11 @@ describe 'When search page is used', ->
 			termSearchModeStub.calledOnce.should.equal(true)
 
 	describe 'When search view is bind', ->
-		Sut = getSutType()
 		it 'Should apply binding, init externals and accomplish a search request', ->
 			# Given
 			actualSearchParams = {}
 			actualSearchCallback = ->
-			sut = new Sut(10, '*')
+			sut = new SearchViewModel(10, '*')
 			termSearchModeStub = mocker.stub(sut, 'termSearchMode', -> false)
 			applyBindingsStub = mocker.stub(markupService, 'applyBindings', ->)
 			initExternalsStub = mocker.stub(sut, 'initExternals', ->)
@@ -237,10 +233,9 @@ describe 'When search page is used', ->
 			actualSearchParams.page.should.be.equal(10)
 
 	describe 'When view model needs to interact with server', ->
-		Sut = getSutType()
 		it 'Should run route during search request when location remains equal to requested path', ->
 			# Given
-			sut = new Sut(1, '*')
+			sut = new SearchViewModel(1, '*')
 			path = '/#/search/' + encodeURIComponent('*')
 			storeStub = mocker.stub(sut, 'storeAdvancedDetails', -> true)
 			getLocationStub = mocker.stub(sut.sammy(), 'getLocation')
@@ -259,7 +254,7 @@ describe 'When search page is used', ->
 
 		it 'Should set location during search request when location does not remain equal to requested path', ->
 			# Given
-			sut = new Sut(1, '*')
+			sut = new SearchViewModel(1, '*')
 			path = '/#/search/' + encodeURIComponent('*')
 			storeStub = mocker.stub(sut, 'storeAdvancedDetails', -> true)
 			setLocationStub = mocker.stub(sut.sammy(), 'setLocation', -> true)

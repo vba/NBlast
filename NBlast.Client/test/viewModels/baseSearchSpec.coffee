@@ -1,14 +1,12 @@
-sinon       = require 'sinon'
-config      = require '../../app/js/config'
-mocker      = sinon.sandbox.create()
-chai        = require 'chai'
-getSutType  = -> require '../../app/js/viewModels/baseSearch'
-amplify     = {store: -> ''}
-moment      = require 'moment'
-$           = {trim: (x) -> [x].join('').trim()}
-_           = require 'underscore'
-Sut         = null
-
+BaseSearchViewModel  = require '../../app/js/viewModels/baseSearch'
+sinon                = require 'sinon'
+config               = require '../../app/js/config'
+mocker               = sinon.sandbox.create()
+chai                 = require 'chai'
+amplify              = {store: -> ''}
+moment               = require 'moment'
+$                    = {trim: (x) -> [x].join('').trim()}
+_                    = require 'underscore'
 
 chai.should()
 
@@ -18,14 +16,13 @@ describe 'When common search features are in use', ->
 		mocker.stub(config, 'amplify', -> amplify)
 		mocker.stub(config, 'jquery', -> $)
 		mocker.stub(config, 'sammy', -> ->)
-		Sut = getSutType()
 	)
 	afterEach( -> mocker.restore())
 	describe 'When UI needs to store advanced details before make a request', ->
 		it 'Should initialize empty details', ->
 			# Given
 			storeStub = mocker.stub(amplify, 'store')
-			sut = new Sut()
+			sut = new BaseSearchViewModel()
 			storeStub.withArgs('filter').returns null
 			storeStub.withArgs('sort').returns null
 
@@ -40,11 +37,11 @@ describe 'When common search features are in use', ->
 
 		it 'Should initialize stored advanced details', ->
 			# Given
-			format = getSutType().displayDateTimeFormat
+			format = BaseSearchViewModel.displayDateTimeFormat
 			storeStub = mocker.stub(amplify, 'store')
 			fromDate = moment().subtract(5, 'years')
 			tillDate = moment().subtract(1, 'years')
-			sut = new Sut()
+			sut = new BaseSearchViewModel()
 			stored =
 				filter:
 					from: fromDate.toISOString()
@@ -69,7 +66,7 @@ describe 'When common search features are in use', ->
 
 		it 'Should store filter and sort details', ->
 			# Given
-			format = getSutType().displayDateTimeFormat
+			format = BaseSearchViewModel.displayDateTimeFormat
 			fromDate = moment().subtract(5, 'years')
 			tillDate = moment().subtract(1, 'years')
 			sortField = 'sender'
@@ -77,7 +74,7 @@ describe 'When common search features are in use', ->
 			captured = []
 			mocker.stub(amplify, 'store', (x, y) ->if _.isEmpty(y) is false then captured.push(y))
 #			initDetailsStub = mocker.stub(sut, 'initAdvancedDetails')
-			sut = new Sut()
+			sut = new BaseSearchViewModel()
 
 			sut.filter =
 				from: -> fromDate.format(format)
@@ -102,7 +99,7 @@ describe 'When common search features are in use', ->
 		it 'Should map search type for an existent name', ->
 			# Given
 			mocker.stub(amplify, 'store', ->)
-			sut = new Sut()
+			sut = new BaseSearchViewModel()
 
 			# When
 			actual = [
@@ -123,7 +120,7 @@ describe 'When common search features are in use', ->
 		it 'Should map sort field for an existent name', ->
 			# Given
 			mocker.stub(amplify, 'store', ->)
-			sut = new Sut()
+			sut = new BaseSearchViewModel()
 
 			# When
 			actual = [
@@ -144,7 +141,7 @@ describe 'When common search features are in use', ->
 		it 'Should map not existent sort field to the value by default', ->
 			# Given
 			mocker.stub(amplify, 'store', ->)
-			sut = new Sut()
+			sut = new BaseSearchViewModel()
 
 			# When
 			actual = sut.mapSortFieldLabel('Some case')
@@ -155,7 +152,7 @@ describe 'When common search features are in use', ->
 		it 'Should map not existent search type to the value by default', ->
 			# Given
 			mocker.stub(amplify, 'store', ->)
-			sut = new Sut()
+			sut = new BaseSearchViewModel()
 
 			# When
 			actual = sut.mapSearchTypeLabel('Some case')

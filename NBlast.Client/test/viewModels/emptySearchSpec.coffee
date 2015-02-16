@@ -1,9 +1,9 @@
-sinon       = require 'sinon'
-config      = require '../../app/js/config'
-mocker      = sinon.sandbox.create()
-chai        = require 'chai'
-getSutType  = -> require '../../app/js/viewModels/emptySearch'
-sammy       = {setLocation: ->}
+mocker               = null
+sinon                = require 'sinon'
+config               = require '../../app/js/config'
+chai                 = require 'chai'
+sammy                = {setLocation: ->}
+EmptySearchViewModel = require '../../app/js/viewModels/emptySearch'
 
 chai.should()
 
@@ -19,9 +19,8 @@ describe 'When user interacts with empty search page', ->
 
 	it 'Should store details and redirect to complete search page', ->
 		# Given
-		Sut = getSutType()
-		storeStub = mocker.stub(Sut.prototype, 'storeAdvancedDetails', -> )
-		sut = new Sut()
+		storeStub = mocker.stub(EmptySearchViewModel.prototype, 'storeAdvancedDetails', -> )
+		sut = new EmptySearchViewModel()
 		setLocationStub = mocker.stub(sammy, 'setLocation', -> )
 
 		# When
