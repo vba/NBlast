@@ -1,55 +1,76 @@
 (function() {
 	'use strict';
-	var $       = require('../config').jquery(),
-		moment  = require('../config').moment(),
-		amplify = require('../config').amplify(),
-		ko      = require('knockout'),
-		Class   = require('jsface').Class,
+	var config   = require('../config'),
+		ko       = require('knockout'),
 		BaseSearchViewModel;
 
+	//noinspection JSUnresolvedFunction
+	config.bootstrapComponents();
+
 	//noinspection JSUnusedGlobalSymbols
-	BaseSearchViewModel = Class(function() {
-		var $private = {},
-			prototype = {$statics: {}};
+	BaseSearchViewModel = (function() {
+
+		var $private = {};
+
+		function BaseSearchViewModel() {
+			this.moment         = config.moment();
+			this.totalPages     = ko.observable(0);
+			this.page           = ko.observable();
+			this.expression     = ko.observable();
+			this.searchResult   = false;
+			this.sammy          = config.sammy();
+			this.initAdvancedDetails();
+			//noinspection JSUnusedGlobalSymbols
+			this.sortFieldLabel = ko.computed(function() {
+				return this.mapSortFieldLabel(this.sortField());
+			}.bind(this));
+			//noinspection JSUnusedGlobalSymbols
+			this.searchTypeLabel = ko.computed(function() {
+				return this.mapSearchTypeLabel(this.searchType());
+			}.bind(this));
+		}
 
 		$private.storeFilters = function () {
-			var dates = this.getDatesAsISO(),
+			var store = config.amplify().store,
+				dates = this.getDatesAsISO(),
 				filter = {
 					from: dates.from,
 					till: dates.till
 				};
-			amplify.store('filter', filter);
+			store('filter', filter);
 		};
 		$private.storeSort = function () {
-			var sort = {
+			var store = config.amplify().store,
+				$ = config.jquery(),
+				sort = {
 				reverse: this.sortReverse(),
 				field: $.trim(this.sortField())
 			};
-			amplify.store('sort', sort);
+			store('sort', sort);
 		};
 		$private.storeSearch = function () {
 			var search = {
 				type: this.searchType()
 			};
-			amplify.store('search', search);
+			config.amplify().store('search', search);
 		};
 		$private.clearFilters = function () {
-			amplify.store('filter', null);
+			config.amplify().store('filter', null);
 			this.filter.from('');
 			this.filter.till('');
 		};
 		$private.clearSort = function () {
-			amplify.store('sort', null);
+			config.amplify().store('sort', null);
 			this.sortField('');
 			this.sortReverse(false);
 		};
 		$private.clearSearch = function () {
-			amplify.store('search', null);
+			config.amplify().store('search', null);
 			this.searchType('');
 		};
 
-		prototype.constructor = function() {
-			this.moment = moment;
+/*		prototype.constructor = function() {
+			this.moment = config.moment();
 			this.totalPages = ko.observable(0);
 			this.page = ko.observable();
 			this.expression = ko.observable();
@@ -63,9 +84,9 @@
 			this.searchTypeLabel = ko.computed(function() {
 				return this.mapSearchTypeLabel(this.searchType());
 			}.bind(this));
-		}
+		}*/
 
-		prototype.mapSortFieldLabel = function(value) {
+		BaseSearchViewModel.prototype.mapSortFieldLabel = function(value) {
 			return {
 				CREATEDAT: 'Date',
 				SENDER: 'Sender',
@@ -73,7 +94,7 @@
 				LEVEL: 'Level'
 			}[value.toUpperCase()] || 'Relevance';
 		};
-		prototype.mapSearchTypeLabel = function (value) {
+		BaseSearchViewModel.prototype.mapSearchTypeLabel = function (value) {
 			return {
 				ID: 'Identifier',
 				SENDER: 'Sender',
@@ -81,7 +102,7 @@
 				LEVEL: 'Level'
 			}[value.toUpperCase()] || 'Any expression';
 		};
-		prototype.getDatesAsISO = function () {
+		BaseSearchViewModel.prototype.getDatesAsISO = function () {
 			var format = BaseSearchViewModel.displayDateTimeFormat,
 				fromDate = this.moment(this.filter.from(), format),
 				tillDate = this.moment(this.filter.till(), format);
@@ -91,59 +112,60 @@
 				till: tillDate.isValid() ? tillDate.toISOString()  : ''
 			};
 		};
-		prototype.clearAdvancedDetails = function () {
+		BaseSearchViewModel.prototype.clearAdvancedDetails = function () {
 			$private.clearFilters.call(this);
 			$private.clearSort.call(this);
 			$private.clearSearch.call(this);
 		};
-		prototype.storeAdvancedDetails = function() {
+		BaseSearchViewModel.prototype.storeAdvancedDetails = function() {
 			$private.storeFilters.call(this);
 			$private.storeSort.call(this);
 			$private.storeSearch.call(this);
 		};
-		prototype.initAdvancedDetails = function() {
+		BaseSearchViewModel.prototype.initAdvancedDetails = function() {
 			var format = BaseSearchViewModel.displayDateTimeFormat,
-				filter = amplify.store('filter') || {},
-				sort = amplify.store('sort') || {},
-				search = amplify.store('search') || {};
+				filter = config.amplify().store('filter') || {},
+				sort = config.amplify().store('sort') || {},
+				search = config.amplify().store('search') || {};
 
 			this.searchType = ko.observable(search.type || '');
 			this.sortField = ko.observable(sort.field || '');
 			this.sortReverse = ko.observable(sort.reverse || false);
 			this.filter = {
-				from : ko.observable(!filter.from ? '' : moment(new Date(filter.from)).format(format)),
-				till : ko.observable(!filter.till ? '' : moment(new Date(filter.till)).format(format))
+				from : ko.observable(!filter.from ? '' : this.moment(new Date(filter.from)).format(format)),
+				till : ko.observable(!filter.till ? '' : this.moment(new Date(filter.till)).format(format))
 			};
 		};
 		//noinspection JSUnusedGlobalSymbols
-		prototype.changeSortOrder = function(value) {
+		BaseSearchViewModel.prototype.changeSortOrder = function(value) {
 			this.sortReverse(value);
 		};
 		//noinspection JSUnusedGlobalSymbols
-		prototype.getFoundHits = function() {
+		BaseSearchViewModel.prototype.getFoundHits = function() {
 			return [];
 		};
-		prototype.getPages = function() {
+		BaseSearchViewModel.prototype.getPages = function() {
 			return [];
 		};
 		//noinspection JSUnusedGlobalSymbols
-		prototype.getSearchResume = function() {
+		BaseSearchViewModel.prototype.getSearchResume = function() {
 			return "";
 		};
-		prototype.enterSearch = function(data, event) {
+		BaseSearchViewModel.prototype.enterSearch = function(data, event) {
 			if (event.keyCode === 13) {
 				return this.makeSearch();
 			}
 			return true;
 		};
-		prototype.makeSearch = function() {
+		BaseSearchViewModel.prototype.makeSearch = function() {
 			throw new Error("[Not yet implemented]");
 		};
-		prototype.bind = function() {
+		BaseSearchViewModel.prototype.bind = function() {
 			throw new Error("[Not yet implemented]");
 		};
-		prototype.initExternals = function () {
-			var fromPicker = $('#filterFromDate'),
+		BaseSearchViewModel.prototype.initExternals = function () {
+			var $ = config.jquery(),
+				fromPicker = $('#filterFromDate'),
 				tillPicker = $('#filterTillDate'),
 				options = {
 					format: BaseSearchViewModel.displayDateTimeFormat,
@@ -161,8 +183,8 @@
 				this.filter.till(tillPicker.data('date'));
 			}.bind(this));
 		};
-		prototype.$statics.displayDateTimeFormat = 'HH:mm DD/MM/YYYY';
-		return prototype;
-	});
+		BaseSearchViewModel.displayDateTimeFormat = 'HH:mm DD/MM/YYYY';
+		return BaseSearchViewModel;
+	})();
 	module.exports = BaseSearchViewModel;
 })();

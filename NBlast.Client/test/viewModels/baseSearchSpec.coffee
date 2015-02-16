@@ -7,6 +7,7 @@ amplify     = {store: -> ''}
 moment      = require 'moment'
 $           = {trim: (x) -> [x].join('').trim()}
 _           = require 'underscore'
+Sut         = null
 
 
 chai.should()
@@ -16,14 +17,14 @@ describe 'When common search features are in use', ->
 		mocker = sinon.sandbox.create()
 		mocker.stub(config, 'amplify', -> amplify)
 		mocker.stub(config, 'jquery', -> $)
-		mocker.stub(config, 'moment', -> moment)
+		mocker.stub(config, 'sammy', -> ->)
+		Sut = getSutType()
 	)
 	afterEach( -> mocker.restore())
 	describe 'When UI needs to store advanced details before make a request', ->
 		it 'Should initialize empty details', ->
 			# Given
 			storeStub = mocker.stub(amplify, 'store')
-			Sut = getSutType()
 			sut = new Sut()
 			storeStub.withArgs('filter').returns null
 			storeStub.withArgs('sort').returns null
@@ -43,7 +44,6 @@ describe 'When common search features are in use', ->
 			storeStub = mocker.stub(amplify, 'store')
 			fromDate = moment().subtract(5, 'years')
 			tillDate = moment().subtract(1, 'years')
-			Sut = getSutType()
 			sut = new Sut()
 			stored =
 				filter:
@@ -77,7 +77,6 @@ describe 'When common search features are in use', ->
 			captured = []
 			mocker.stub(amplify, 'store', (x, y) ->if _.isEmpty(y) is false then captured.push(y))
 #			initDetailsStub = mocker.stub(sut, 'initAdvancedDetails')
-			Sut = getSutType()
 			sut = new Sut()
 
 			sut.filter =
@@ -103,7 +102,6 @@ describe 'When common search features are in use', ->
 		it 'Should map search type for an existent name', ->
 			# Given
 			mocker.stub(amplify, 'store', ->)
-			Sut = getSutType()
 			sut = new Sut()
 
 			# When
@@ -125,7 +123,6 @@ describe 'When common search features are in use', ->
 		it 'Should map sort field for an existent name', ->
 			# Given
 			mocker.stub(amplify, 'store', ->)
-			Sut = getSutType()
 			sut = new Sut()
 
 			# When
@@ -147,7 +144,6 @@ describe 'When common search features are in use', ->
 		it 'Should map not existent sort field to the value by default', ->
 			# Given
 			mocker.stub(amplify, 'store', ->)
-			Sut = getSutType()
 			sut = new Sut()
 
 			# When
@@ -159,7 +155,6 @@ describe 'When common search features are in use', ->
 		it 'Should map not existent search type to the value by default', ->
 			# Given
 			mocker.stub(amplify, 'store', ->)
-			Sut = getSutType()
 			sut = new Sut()
 
 			# When

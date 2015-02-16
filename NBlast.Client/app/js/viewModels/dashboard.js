@@ -3,15 +3,15 @@
 
 	var _                 = require('underscore'),
 		ko                = require('knockout'),
+		views             = require('../views'),
 		Class             = require('jsface').Class,
 		markupService     = require('../services/markup'),
-		dashboardView     = require('../../views/dashboard.html'),
 		dashboardService  = require('../services/dashboard'),
 		DashboardViewModel;
 
 	//noinspection JSUnusedGlobalSymbols,UnnecessaryLocalVariableJS
 	DashboardViewModel = Class(function() {
-		var prototype = {}, $private = {}
+		var prototype = {}, $private = {};
 
 		$private.onGroupByLevelDone = function (data) {
 			var counters = _.reduce(data.facets || [], function (aggregator, counter) {
@@ -37,7 +37,7 @@
 			return '#/search/' + encodeURIComponent(['"', name, '"'].join(''));
 		};
 		prototype.bind = function() {
-			markupService.applyBindings(this, dashboardView);
+			markupService.applyBindings(this, views.getDashboard());
 
 			dashboardService
 				.groupBy('level')

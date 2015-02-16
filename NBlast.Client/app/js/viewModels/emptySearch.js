@@ -1,35 +1,36 @@
 (function() {
 	'use strict';
-	var sammy               = require('../config').sammy(),
-		Class               = require('jsface').Class,
+	var views               = require('../views'),
+		object              = require('../tools/object'),
 		markupService       = require('../services/markup'),
 		BaseSearchViewModel = require('./baseSearch'),
 		EmptySearchViewModel;
 
 	//noinspection UnnecessaryLocalVariableJS
-	EmptySearchViewModel = Class(BaseSearchViewModel, function() {
-		var prototype = {};
-
-		prototype.constructor = function() {
-			EmptySearchViewModel.$super.call(this);
+	EmptySearchViewModel = (function($super) {
+		function EmptySearchViewModel() {
+			$super.call(this);
 			this.searchType('');
-			this.sammy = sammy();
-		};
-		prototype.makeSearch = function () {
+		}
+
+		object.extends(EmptySearchViewModel, $super);
+
+		EmptySearchViewModel.prototype.makeSearch = function () {
 			var query = this.expression() || '*:*',
 				path = ['/#/search/', encodeURIComponent(query)].join('');
 			this.storeAdvancedDetails();
-			this.sammy.setLocation(path);
+			this.sammy().setLocation(path);
 			return false;
 		};
-		prototype.bind = function () {
-			var searchView = require('../../views/search.html')
+
+		EmptySearchViewModel.prototype.bind = function () {
+			var searchView = views.getSearch();
 			markupService.applyBindings(this, searchView);
 			this.initExternals();
 		};
 
-		return prototype;
-	});
+		return EmptySearchViewModel;
+	})(BaseSearchViewModel);
 
 	//noinspection JSUnresolvedVariable
 	module.exports = EmptySearchViewModel;

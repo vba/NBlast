@@ -1,4 +1,4 @@
-(function () {
+(function (global) {
 	'use strict';
 	var _ = require('underscore'), settings;
 
@@ -16,12 +16,18 @@
 			return '#pageWrapper';
 		},
 		isTestEnv: function () {
-			return _.isFunction(describe) && _.isFunction(it);
+			return (typeof describe) !== 'undefined' && (typeof it) !== 'undefined';
+		},
+		loadConfig: function () {
+			if (this.isTestEnv()) {
+				throw Error("Needs to be a stub");
+			}
+			return require('../config');
 		}
 	};
 	//noinspection JSUnresolvedVariable
 	module.exports = settings;
-})();
+})(this);
 
 /*define(['underscore'], function(_) {
 	'use strict';

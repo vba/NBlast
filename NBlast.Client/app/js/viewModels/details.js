@@ -4,14 +4,14 @@
 	var _             = require('underscore'),
 		ko            = require('knockout'),
 		Class         = require('jsface').Class,
-		detailsView   = require('../../views/details.html'),
+		views         = require('../views'),
 		markupService = require('../services/markup'),
 		searchService = require('../services/search'),
 		DetailsViewModel;
 
 
 	DetailsViewModel = Class(function () {
-		var prototype = {}, $private = {}
+		var prototype = {}, $private = {};
 
 		$private.onGetByIdDone = function(found) {
 			this.details(_.first((found || {}).hits));
@@ -29,7 +29,7 @@
 				.getById(this.uuid())
 				.done($private.onGetByIdDone.bind(this));
 
-			markupService.applyBindings(this, detailsView);
+			markupService.applyBindings(this, views.getDetails());
 		};
 
 		return prototype;
