@@ -25,7 +25,6 @@
 		getLocation: nothing,
 		runRoute: nothing
 	};
-
 	fakes = {
 		mocker: function() {
 			return mocker;
