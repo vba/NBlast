@@ -1,30 +1,13 @@
-mocker          = null
 sinon           = require 'sinon'
-config          = require '../../app/js/config'
 chai            = require 'chai'
 searchService   = require '../../app/js/services/search'
 markupService   = require '../../app/js/services/markup'
-views           = require '../../app/js/views'
-amplify         = {store: -> ''}
-$               = {trim: (x) -> [x].join('').trim()}
 SearchViewModel = require '../../app/js/viewModels/search'
-sammy =
-	setLocation: ->
-	getLocation: ->
-	runRoute: ->
+fakes           = require '../fakes'
 
 chai.should()
 
 describe 'When search page is used', ->
-	beforeEach ->
-		mocker = sinon.sandbox.create()
-		mocker.stub(config, 'sammy', -> -> sammy)
-		mocker.stub(config, 'amplify', -> amplify)
-		mocker.stub(config, 'jquery', -> $)
-		mocker.stub(views, 'getSearch', -> '')
-
-	afterEach( -> mocker.restore())
-
 	describe 'When search view pagination is used', ->
 		check_12_pages = (page, expected) ->
 			check_pages(page, expected, 12)
@@ -130,11 +113,11 @@ describe 'When search page is used', ->
 		it 'Should clear advanced details every time when user clicks the button', ->
 			# Given
 			sut = new SearchViewModel(10, '*')
-			storeStub = mocker.stub(amplify, 'store', ->)
-			sortFieldSpy = mocker.spy(sut, 'sortField')
-			sortReverseSpy = mocker.spy(sut, 'sortReverse')
-			fromSpy = mocker.spy(sut.filter, 'from')
-			tillSpy = mocker.spy(sut.filter, 'till')
+			storeStub = fakes.mocker().stub(fakes.amplify(), 'store', ->)
+			sortFieldSpy = fakes.mocker().spy(sut, 'sortField')
+			sortReverseSpy = fakes.mocker().spy(sut, 'sortReverse')
+			fromSpy = fakes.mocker().spy(sut.filter, 'from')
+			tillSpy = fakes.mocker().spy(sut.filter, 'till')
 
 			# When
 			sut.clearAdvancedDetails()
@@ -173,9 +156,9 @@ describe 'When search page is used', ->
 			# Given
 			expectedParams = {val: true}
 			sut = new SearchViewModel(1, '*')
-			termSearchModeStub = mocker.stub(sut, 'termSearchMode', -> true)
-			getTermSearchParamsStub = mocker.stub(sut, 'getTermSearchParams')
-			searchByTermStub = mocker.stub(searchService, 'searchByTerm')
+			termSearchModeStub = fakes.mocker().stub(sut, 'termSearchMode', -> true)
+			getTermSearchParamsStub = fakes.mocker().stub(sut, 'getTermSearchParams')
+			searchByTermStub = fakes.mocker().stub(searchService, 'searchByTerm')
 
 			getTermSearchParamsStub.returns(expectedParams)
 			searchByTermStub.withArgs(expectedParams).returns('yeah!')
@@ -191,9 +174,9 @@ describe 'When search page is used', ->
 			# Given
 			expectedParams = {val: true}
 			sut = new SearchViewModel(1, '*')
-			termSearchModeStub = mocker.stub(sut, 'termSearchMode', -> false)
-			getSearchParamsStub = mocker.stub(sut, 'getSearchParams')
-			searchStub = mocker.stub(searchService, 'search')
+			termSearchModeStub = fakes.mocker().stub(sut, 'termSearchMode', -> false)
+			getSearchParamsStub = fakes.mocker().stub(sut, 'getSearchParams')
+			searchStub = fakes.mocker().stub(searchService, 'search')
 
 			getSearchParamsStub.returns(expectedParams)
 			searchStub.withArgs(expectedParams).returns('yeah!')
@@ -211,10 +194,10 @@ describe 'When search page is used', ->
 			actualSearchParams = {}
 			actualSearchCallback = ->
 			sut = new SearchViewModel(10, '*')
-			termSearchModeStub = mocker.stub(sut, 'termSearchMode', -> false)
-			applyBindingsStub = mocker.stub(markupService, 'applyBindings', ->)
-			initExternalsStub = mocker.stub(sut, 'initExternals', ->)
-			searchStub = mocker.stub(searchService, 'search', (p) ->
+			termSearchModeStub = fakes.mocker().stub(sut, 'termSearchMode', -> false)
+			applyBindingsStub = fakes.mocker().stub(markupService, 'applyBindings', ->)
+			initExternalsStub = fakes.mocker().stub(sut, 'initExternals', ->)
+			searchStub = fakes.mocker().stub(searchService, 'search', (p) ->
 				actualSearchParams = p
 				done: (cb) ->
 					actualSearchCallback = cb
@@ -237,9 +220,9 @@ describe 'When search page is used', ->
 			# Given
 			sut = new SearchViewModel(1, '*')
 			path = '/#/search/' + encodeURIComponent('*')
-			storeStub = mocker.stub(sut, 'storeAdvancedDetails', -> true)
-			getLocationStub = mocker.stub(sut.sammy(), 'getLocation')
-			runRouteStub = mocker.stub(sut.sammy(), 'runRoute')
+			storeStub = fakes.mocker().stub(sut, 'storeAdvancedDetails', -> true)
+			getLocationStub = fakes.mocker().stub(sut.sammy(), 'getLocation')
+			runRouteStub = fakes.mocker().stub(sut.sammy(), 'runRoute')
 
 			getLocationStub.returns(path)
 			runRouteStub.withArgs('get', path).returns(true)
@@ -256,8 +239,8 @@ describe 'When search page is used', ->
 			# Given
 			sut = new SearchViewModel(1, '*')
 			path = '/#/search/' + encodeURIComponent('*')
-			storeStub = mocker.stub(sut, 'storeAdvancedDetails', -> true)
-			setLocationStub = mocker.stub(sut.sammy(), 'setLocation', -> true)
+			storeStub = fakes.mocker().stub(sut, 'storeAdvancedDetails', -> true)
+			setLocationStub = fakes.mocker().stub(sut.sammy(), 'setLocation', -> true)
 
 			# When
 			actual = sut.enterSearch(null, {keyCode: 13})

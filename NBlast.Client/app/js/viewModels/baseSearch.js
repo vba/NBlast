@@ -43,9 +43,9 @@
 			var store = config.amplify().store,
 				$ = config.jquery(),
 				sort = {
-				reverse: this.sortReverse(),
-				field: $.trim(this.sortField())
-			};
+					reverse: this.sortReverse(),
+					field: $.trim(this.sortField())
+				};
 			store('sort', sort);
 		};
 		$private.storeSearch = function () {

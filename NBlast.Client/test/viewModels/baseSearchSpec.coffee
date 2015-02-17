@@ -1,27 +1,17 @@
 BaseSearchViewModel  = require '../../app/js/viewModels/baseSearch'
+fakes                = require '../fakes'
 sinon                = require 'sinon'
-config               = require '../../app/js/config'
-mocker               = sinon.sandbox.create()
 chai                 = require 'chai'
-amplify              = {store: -> ''}
 moment               = require 'moment'
-$                    = {trim: (x) -> [x].join('').trim()}
 _                    = require 'underscore'
 
 chai.should()
 
 describe 'When common search features are in use', ->
-	beforeEach( ->
-		mocker = sinon.sandbox.create()
-		mocker.stub(config, 'amplify', -> amplify)
-		mocker.stub(config, 'jquery', -> $)
-		mocker.stub(config, 'sammy', -> ->)
-	)
-	afterEach( -> mocker.restore())
 	describe 'When UI needs to store advanced details before make a request', ->
 		it 'Should initialize empty details', ->
 			# Given
-			storeStub = mocker.stub(amplify, 'store')
+			storeStub = fakes.mocker().stub(fakes.amplify(), 'store')
 			sut = new BaseSearchViewModel()
 			storeStub.withArgs('filter').returns null
 			storeStub.withArgs('sort').returns null
@@ -38,7 +28,7 @@ describe 'When common search features are in use', ->
 		it 'Should initialize stored advanced details', ->
 			# Given
 			format = BaseSearchViewModel.displayDateTimeFormat
-			storeStub = mocker.stub(amplify, 'store')
+			storeStub = fakes.mocker().stub(fakes.amplify(), 'store')
 			fromDate = moment().subtract(5, 'years')
 			tillDate = moment().subtract(1, 'years')
 			sut = new BaseSearchViewModel()
@@ -72,8 +62,8 @@ describe 'When common search features are in use', ->
 			sortField = 'sender'
 			sortReverse = 'false'
 			captured = []
-			mocker.stub(amplify, 'store', (x, y) ->if _.isEmpty(y) is false then captured.push(y))
-#			initDetailsStub = mocker.stub(sut, 'initAdvancedDetails')
+			fakes.mocker().stub(fakes.amplify(), 'store', (x, y) ->if _.isEmpty(y) is false then captured.push(y))
+#			initDetailsStub = fakes.mocker().stub(sut, 'initAdvancedDetails')
 			sut = new BaseSearchViewModel()
 
 			sut.filter =
@@ -98,7 +88,7 @@ describe 'When common search features are in use', ->
 	describe 'When data transformation methods are in use', ->
 		it 'Should map search type for an existent name', ->
 			# Given
-			mocker.stub(amplify, 'store', ->)
+			fakes.mocker().stub(fakes.amplify(), 'store', ->)
 			sut = new BaseSearchViewModel()
 
 			# When
@@ -119,7 +109,7 @@ describe 'When common search features are in use', ->
 
 		it 'Should map sort field for an existent name', ->
 			# Given
-			mocker.stub(amplify, 'store', ->)
+			fakes.mocker().stub(fakes.amplify(), 'store', ->)
 			sut = new BaseSearchViewModel()
 
 			# When
@@ -140,7 +130,7 @@ describe 'When common search features are in use', ->
 
 		it 'Should map not existent sort field to the value by default', ->
 			# Given
-			mocker.stub(amplify, 'store', ->)
+			fakes.mocker().stub(fakes.amplify(), 'store', ->)
 			sut = new BaseSearchViewModel()
 
 			# When
@@ -151,7 +141,7 @@ describe 'When common search features are in use', ->
 
 		it 'Should map not existent search type to the value by default', ->
 			# Given
-			mocker.stub(amplify, 'store', ->)
+			fakes.mocker().stub(fakes.amplify(), 'store', ->)
 			sut = new BaseSearchViewModel()
 
 			# When

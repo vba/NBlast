@@ -1,27 +1,20 @@
 sinon       = require 'sinon'
-config      = require '../../app/js/config'
-mocker      = sinon.sandbox.create()
 chai        = require 'chai'
 _           = require 'underscore'
-$           = {getJSON: -> ''}
+fakes       = require '../fakes'
 settings    = -> require '../../app/js/services/settings'
 search      = -> require '../../app/js/services/search'
+
 chai.should()
 
 describe 'When we use search service', ->
-	beforeEach( ->
-		mocker = sinon.sandbox.create()
-		mocker.stub(config, 'jquery', -> $)
-	)
-	afterEach( -> mocker.restore())
-
 	describe 'When we try to get a log item by identifier', ->
 		it 'Should retrieve this item when it exists', ->
 			# Given
 			uuid = 'uuid1'
 			callUrl = 'http://nblast.kz/'+uuid
-			appendToBackendUrlStub = mocker.stub(settings(), 'appendToBackendUrl')
-			getJsonStub = mocker.stub($, 'getJSON')
+			appendToBackendUrlStub = fakes.mocker().stub(settings(), 'appendToBackendUrl')
+			getJsonStub = fakes.mocker().stub(fakes.jquery(), 'getJSON')
 			expected = {promise: true}
 
 			appendToBackendUrlStub
@@ -43,8 +36,8 @@ describe 'When we use search service', ->
 			# Given
 			expression = '*:*'
 			callUrl = 'http://nblast.kz/searcher/search'
-			appendToBackendUrlStub = mocker.stub(settings(), 'appendToBackendUrl')
-			getJsonStub = mocker.stub($, 'getJSON')
+			appendToBackendUrlStub = fakes.mocker().stub(settings(), 'appendToBackendUrl')
+			getJsonStub = fakes.mocker().stub(fakes.jquery(), 'getJSON')
 			expected = {promise: true}
 
 			appendToBackendUrlStub
@@ -80,8 +73,8 @@ describe 'When we use search service', ->
 					till: '2015.01.01'
 
 			callUrl = 'http://nblast.kz/searcher/search'
-			appendToBackendUrlStub = mocker.stub(settings(), 'appendToBackendUrl')
-			getJsonStub = mocker.stub($, 'getJSON')
+			appendToBackendUrlStub = fakes.mocker().stub(settings(), 'appendToBackendUrl')
+			getJsonStub = fakes.mocker().stub(fakes.jquery(), 'getJSON')
 			expected = {promise: true}
 
 			appendToBackendUrlStub
