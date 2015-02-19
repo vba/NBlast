@@ -1,4 +1,5 @@
 (function () {
+	'use strict';
 	var BaseSearchViewModel = require('../../app/js/viewModels/baseSearch'),
 		fakes               = require('../fakes'),
 		sinon               = require('sinon'),
