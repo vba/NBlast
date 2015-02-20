@@ -5,7 +5,8 @@
 </div>
 <div class="row">
 	<section class="col-lg-4 col-md-5">
-		<div class="panel panel-primary tile">
+		<a href="javascript:" data-bind="click: function(d, e) {$root.searchTerm('level', 'trace')}"
+		   class="panel panel-primary tile">
 			<div class="pull-left">
 				<div class="circle trace">
 					<i class="fa fa-asterisk"></i>
@@ -15,10 +16,11 @@
 				<div class="counter" data-bind="text: levelCounters().trace">Loading...</div>
 				<div class="title">Trace</div>
 			</div>
-		</div>
+		</a>
 	</section>
 	<section class="col-lg-4 col-md-5">
-		<div class="panel panel-primary tile">
+		<a class="panel panel-primary tile"
+		   href="javascript:" data-bind="click: function(d, e) {$root.searchTerm('level', 'debug')}">
 			<div class="pull-left">
 				<div class="circle debug">
 					<i class="fa fa-cog"></i>
@@ -28,10 +30,11 @@
 				<div class="counter" data-bind="text: levelCounters().debug">Loading...</div>
 				<div class="title">Debug</div>
 			</div>
-		</div>
+		</a>
 	</section>
 	<section class="col-lg-4 col-md-5">
-		<div class="panel panel-primary tile">
+		<a class="panel panel-primary tile"
+		   href="javascript:" data-bind="click: function(d, e) {$root.searchTerm('level', 'info')}">
 			<div class="pull-left">
 				<div class="circle info">
 					<i class="fa fa-info"></i>
@@ -41,12 +44,13 @@
 				<div class="counter" data-bind="text: levelCounters().info">Loading...</div>
 				<div class="title">Info</div>
 			</div>
-		</div>
+		</a>
 	</section>
 </div>
 <div class="row">
 	<section class="col-lg-4 col-md-5">
-		<div class="panel panel-primary tile">
+		<a class="panel panel-primary tile"
+		   href="javascript:" data-bind="click: function(d, e) {$root.searchTerm('level', 'warn')}">
 			<div class="pull-left">
 				<div class="circle warn">
 					<i class="fa fa-warning"></i>
@@ -56,10 +60,11 @@
 				<div class="counter" data-bind="text: levelCounters().warn">Loading...</div>
 				<div class="title">Warn</div>
 			</div>
-		</div>
+		</a>
 	</section>
 	<section class="col-lg-4 col-md-5">
-		<div class="panel panel-primary tile">
+		<a class="panel panel-primary tile"
+		   href="javascript:" data-bind="click: function(d, e) {$root.searchTerm('level', 'error')}">
 			<div class="pull-left">
 				<div class="circle error">
 					<i class="fa fa-flash"></i>
@@ -69,10 +74,11 @@
 				<div class="counter" data-bind="text: levelCounters().error">Loading...</div>
 				<div class="title">Error</div>
 			</div>
-		</div>
+		</a>
 	</section>
 	<section class="col-lg-4 col-md-5">
-		<div class="panel panel-primary tile">
+		<a class="panel panel-primary tile"
+		   href="javascript:" data-bind="click: function(d, e) {$root.searchTerm('level', 'fatal')}">
 			<div class="pull-left">
 				<div class="circle fatal">
 					<i class="fa fa-fire"></i>
@@ -82,7 +88,7 @@
 				<div class="counter" data-bind="text: levelCounters().fatal">Loading...</div>
 				<div class="title">Fatal</div>
 			</div>
-		</div>
+		</a>
 	</section>
 </div>
 
@@ -96,7 +102,8 @@
 					<li class="list-group-item">
 						<span class="badge" data-bind="text: $data.count"></span>
 						<a href="javascript:"
-						   data-bind="text: $data.name, attr: {href: $root.searchExactUri($data.name)}"></a>
+						   data-bind="text: $data.name,
+							          click: function(d, e) {$root.searchTerm('sender', $data.name)}"></a>
 					</li>
 					<!-- /ko -->
 				</ul>
@@ -112,7 +119,8 @@
 					<li class="list-group-item">
 						<span class="badge" data-bind="text: $data.count"></span>
 						<a href="javascript:"
-						   data-bind="text: $data.name, attr: {href: $root.searchExactUri($data.name)}"></a>
+						   data-bind="text: $data.name,
+						              click: function(d, e) {$root.searchTerm('logger', $data.name)}"></a>
 					</li>
 					<!-- /ko -->
 				</ul>

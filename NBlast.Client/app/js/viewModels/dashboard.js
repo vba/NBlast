@@ -4,8 +4,10 @@
 	var _                 = require('underscore'),
 		ko                = require('knockout'),
 		views             = require('../views'),
+		config            = require('../config'),
 		markupService     = require('../services/markup'),
 		dashboardService  = require('../services/dashboard'),
+		StorageService    = require('../services/storage'),
 		DashboardViewModel;
 
 	//noinspection JSUnusedGlobalSymbols,UnnecessaryLocalVariableJS
@@ -14,6 +16,7 @@
 			this.levelCounters = ko.observable({});
 			this.topSenders = ko.observableArray([]);
 			this.topLoggers = ko.observableArray([]);
+			this.sammy = config.sammy();
 		}
 
 		var $private = {};
@@ -33,8 +36,14 @@
 		};
 
 		//noinspection JSUnusedGlobalSymbols
-		DashboardViewModel.prototype.searchExactUri = function (name) {
-			return '#/search/' + encodeURIComponent(['"', name, '"'].join(''));
+		DashboardViewModel.prototype.searchTerm = function (type, value) {
+			var path = '#/search/' + encodeURIComponent(value);
+			new StorageService()
+				.clearAll()
+				.storeSearch(type)
+				.storeSort('createdAt', true);
+
+			this.sammy().setLocation(path);
 		};
 		DashboardViewModel.prototype.bind = function() {
 			markupService.applyBindings(this, views.getDashboard());

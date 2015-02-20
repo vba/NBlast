@@ -1,7 +1,8 @@
 (function() {
 	'use strict';
-	var config   = require('../config'),
-		ko       = require('knockout'),
+	var config          = require('../config'),
+		ko              = require('knockout'),
+		StorageService  = require('../services/storage'),
 		BaseSearchViewModel;
 
 	//noinspection JSUnresolvedFunction
@@ -10,7 +11,7 @@
 	//noinspection JSUnusedGlobalSymbols
 	BaseSearchViewModel = (function() {
 
-		var $private = {};
+		var $private = {}, storageService = new StorageService();
 
 		function BaseSearchViewModel() {
 			this.moment         = config.moment();
@@ -31,60 +32,30 @@
 		}
 
 		$private.storeFilters = function () {
-			var store = config.amplify().store,
-				dates = this.getDatesAsISO(),
-				filter = {
-					from: dates.from,
-					till: dates.till
-				};
-			store('filter', filter);
+			var dates = this.getDatesAsISO();
+			storageService.storeFilters(dates.from, dates.till);
 		};
 		$private.storeSort = function () {
-			var store = config.amplify().store,
-				$ = config.jquery(),
-				sort = {
-					reverse: this.sortReverse(),
-					field: $.trim(this.sortField())
-				};
-			store('sort', sort);
+			var $ = config.jquery();
+			storageService.storeSort($.trim(this.sortField()), this.sortReverse());
 		};
 		$private.storeSearch = function () {
-			var search = {
-				type: this.searchType()
-			};
-			config.amplify().store('search', search);
+			storageService.storeSearch(this.searchType());
 		};
 		$private.clearFilters = function () {
-			config.amplify().store('filter', null);
+			storageService.clearFilters();
 			this.filter.from('');
 			this.filter.till('');
 		};
 		$private.clearSort = function () {
-			config.amplify().store('sort', null);
+			storageService.clearSort();
 			this.sortField('');
 			this.sortReverse(false);
 		};
 		$private.clearSearch = function () {
-			config.amplify().store('search', null);
+			storageService.clearSearch();
 			this.searchType('');
 		};
-
-/*		prototype.constructor = function() {
-			this.moment = config.moment();
-			this.totalPages = ko.observable(0);
-			this.page = ko.observable();
-			this.expression = ko.observable();
-			this.searchResult = false;
-			this.initAdvancedDetails();
-			//noinspection JSUnusedGlobalSymbols
-			this.sortFieldLabel = ko.computed(function() {
-				return this.mapSortFieldLabel(this.sortField());
-			}.bind(this));
-			//noinspection JSUnusedGlobalSymbols
-			this.searchTypeLabel = ko.computed(function() {
-				return this.mapSearchTypeLabel(this.searchType());
-			}.bind(this));
-		}*/
 
 		BaseSearchViewModel.prototype.mapSortFieldLabel = function(value) {
 			return {
