@@ -1,17 +1,29 @@
 <div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">Details</h1>
-    </div>
+	<div class="col-lg-12">
+		<h1 class="page-header">Details</h1>
+	</div>
 </div>
-<div class="row">
-    <div class="col-sm-2">Sender</div>
-    <div class="col-sm-10" data-bind="text: details().sender"></div>
-    <div class="col-sm-2">Logger</div>
-    <div class="col-sm-10" data-bind="text: details().logger"></div>
-    <div class="col-sm-2">Level</div>
-    <div class="col-sm-10" data-bind="text: details().level"></div>
-    <div class="col-sm-2">Message</div>
-    <div class="col-sm-10" data-bind="text: details().message"></div>
-    <div class="col-sm-2">Error</div>
-    <div class="col-sm-10" data-bind="text: details().error"></div>
+<div class="row details">
+	<div class="col-sm-2">Sender:</div>
+	<div class="col-sm-10">
+		<span class="sender" data-bind="text: details().sender"></span>
+	</div>
+	<div class="col-sm-2">Logger:</div>
+	<div class="col-sm-10">
+		<span data-bind="text: details().logger"></span>
+	</div>
+	<div class="col-sm-2">Level:</div>
+	<div class="col-sm-10">
+		<span data-bind="text: details().level,
+		                 attr: {class: 'level '+ details().level }"></span>
+	</div>
+	<div class="col-sm-2">Message:</div>
+	<div class="col-sm-10">
+		<span data-bind="text: details().message"></span>
+	</div>
+
+	<div class="col-sm-2" data-bind="visible: details().error">Error:</div>
+	<div class="col-sm-10">
+		<pre data-bind="text: details().error"></pre>
+	</div>
 </div>

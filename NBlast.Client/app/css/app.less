@@ -1,3 +1,11 @@
+@fatal-text-color : #af111c;
+@error-text-color : #EC1D02;
+@warn-text-color : #E69D3B;
+@info-text-color : #337AB7;
+@debug-text-color : #23ae89;
+@trace-text-color : #2DACC8;
+@sender-text-color: #4e8040;
+
 html, body {
 	height: 100%;
 }
@@ -33,27 +41,15 @@ html, body {
 			/*            font-weight: bold;*/
 			text-transform: uppercase;
 		}
-		.fatal {
-			color: #af111c;
-		}
-		.error {
-			color: #EC1D02;
-		}
-		.warn {
-			color: #E69D3B;
-		}
-		.info {
-			color: #337AB7;
-		}
-		.debug {
-			color: #23ae89;
-		}
-		.trace {
-			color: #2DACC8;
-		}
+		.fatal { color: @fatal-text-color; }
+		.error { color: @error-text-color; }
+		.warn { color: @warn-text-color; }
+		.info { color: @info-text-color; }
+		.debug { color: @debug-text-color; }
+		.trace { color: @trace-text-color; }
 		.sender {
 			font-size: 18px;
-			color: #4e8040;
+			color: @sender-text-color;
 		}
 	}
 
@@ -167,5 +163,31 @@ html, body {
 	.form-control {
 		padding: .2em .4em;
 		height: auto;
+	}
+}
+
+.details {
+	.col-sm-2 {
+		font-size: 1.15em;
+		font-weight: bold;
+	}
+	.col-sm-10 {
+		margin-bottom: .5em;
+	}
+	.level {
+		text-transform: uppercase;
+	}
+	.fatal { color: @fatal-text-color; }
+	.error { color: @error-text-color; }
+	.warn { color: @warn-text-color; }
+	.info { color: @info-text-color; }
+	.debug { color: @debug-text-color; }
+	.trace { color: @trace-text-color; }
+	.sender {
+		font-size: 1.2em;
+		color: @sender-text-color;
+	}
+	pre {
+		font-size: 1.1em;
 	}
 }
