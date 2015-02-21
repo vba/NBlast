@@ -19,7 +19,8 @@
 			this.sammy = config.sammy();
 		}
 
-		var $private = {};
+		var $private = {},
+		    storageService = new StorageService();
 
 		$private.onGroupByLevelDone = function (data) {
 			var counters = _.reduce(data.facets || [], function (aggregator, counter) {
@@ -38,10 +39,9 @@
 		//noinspection JSUnusedGlobalSymbols
 		DashboardViewModel.prototype.searchTerm = function (type, value) {
 			var path = '#/search/' + encodeURIComponent(value);
-			new StorageService()
-				.clearAll()
-				.storeSearch(type)
-				.storeSort('createdAt', true);
+			storageService.clearAll();
+			storageService.storeSearch(type);
+			storageService.storeSort('createdAt', true);
 
 			this.sammy().setLocation(path);
 		};

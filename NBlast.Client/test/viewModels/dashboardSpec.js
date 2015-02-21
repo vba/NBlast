@@ -50,5 +50,32 @@
 			sut.levelCounters().n2.should.equal(2);
 			sut.levelCounters().n3.should.equal(3);
 		});
+
+		it('Should set location and prepare storage when searching by term', function () {
+			// Given
+			var StorageService = require('../../app/js/services/storage'),
+			    mocker = fakes.mocker(),
+			    clearAllStub = mocker.stub(StorageService.prototype, 'clearAll'),
+			    storeSearchStub = mocker.stub(StorageService.prototype, 'storeSearch'),
+			    storeSortStub = mocker.stub(StorageService.prototype, 'storeSort'),
+				sut = new DashboardViewModel(),
+			    sammyStub = mocker.stub(sut, 'sammy'),
+				sammy = {setLocation: mocker.stub()};
+
+			clearAllStub.returns(true);
+			storeSearchStub.withArgs('logger').returns(true);
+			storeSortStub.withArgs('createdAt', true).returns(true);
+			sammyStub.returns(sammy);
+
+			// When
+			sut.searchTerm('logger', 'alaska');
+
+			// Then
+			clearAllStub.calledOnce.should.equal(true);
+			storeSearchStub.calledWith('logger').should.equal(true);
+			storeSortStub.calledWith('createdAt', true).should.equal(true);
+			sammy.setLocation.calledOnce.should.equal(true);
+			sammy.setLocation.calledWith('#/search/'+ encodeURIComponent('alaska')).should.equal(true);
+		});
 	});
 })();
