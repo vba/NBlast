@@ -7,6 +7,7 @@
 		searchService       = require('../services/search'),
 		settings            = require('../services/settings'),
 		object              = require('../tools/object'),
+		indicator           = require('../tools/indicator'),
 		BaseSearchViewModel = require('./baseSearch'),
 		SearchViewModel;
 
@@ -108,11 +109,13 @@
 			return /(?:id|sender|logger|level)/gi.test(this.searchType());
 		};
 		SearchViewModel.prototype.onSearchDone = function (data) {
+			indicator.close();
 			var result = data || {total: 0};
 			this.searchResult(result);
 			this.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
 		};
 		SearchViewModel.prototype.requestSearch = function () {
+			indicator.display('Searching ...');
 			return this.termSearchMode()
 				? searchService.searchByTerm(this.getTermSearchParams())
 				: searchService.search(this.getSearchParams());

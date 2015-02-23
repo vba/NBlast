@@ -3,6 +3,7 @@
 	    chai            = require('chai'),
 	    searchService   = require('../../app/js/services/search'),
 	    markupService   = require('../../app/js/services/markup'),
+	    indicator       = require('../../app/js/tools/indicator'),
 	    SearchViewModel = require('../../app/js/viewModels/search'),
 	    fakes           = require('../fakes');
 
@@ -187,6 +188,8 @@
 				termSearchModeStub = fakes.mocker().stub(sut, 'termSearchMode', function () {
 					return true;
 				});
+				fakes.mocker().stub(indicator, 'display');
+				fakes.mocker().stub(indicator, 'close');
 				getTermSearchParamsStub = fakes.mocker().stub(sut, 'getTermSearchParams');
 				searchByTermStub = fakes.mocker().stub(searchService, 'searchByTerm');
 				getTermSearchParamsStub.returns(expectedParams);
@@ -204,6 +207,8 @@
 				var expected, expectedParams, getSearchParamsStub, searchStub, sut, termSearchModeStub;
 				expectedParams = { val: true};
 				sut = new SearchViewModel(1, '*');
+				fakes.mocker().stub(indicator, 'display');
+				fakes.mocker().stub(indicator, 'close');
 				termSearchModeStub = fakes.mocker().stub(sut, 'termSearchMode', function () {
 					return false;
 				});
@@ -240,6 +245,8 @@
 				actualSearchParams = {};
 				actualSearchCallback = function () {};
 				sut = new SearchViewModel(10, '*');
+				fakes.mocker().stub(indicator, 'display');
+				fakes.mocker().stub(indicator, 'close');
 				termSearchModeStub = fakes.mocker().stub(sut, 'termSearchMode', function () {
 					return false;
 				});

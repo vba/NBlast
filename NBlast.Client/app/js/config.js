@@ -1,12 +1,6 @@
 (function () {
 	'use strict';
-	var requireOrFalse = function(loader, path) {
-		if (loader()) {
-			require(path);
-			return true;
-		}
-		return false;
-	}, config;
+	var config;
 	//noinspection UnnecessaryLocalVariableJS
 	config = {
 		jquery: function() {
@@ -27,6 +21,13 @@
 		bootstrap: function() {
 			if (this.jquery()) {
 				require('../../bower_components/bootstrap/dist/js/bootstrap.min');
+				return true;
+			}
+			return false;
+		},
+		bootstrapNotify: function() {
+			if (this.bootstrap()) {
+				require('../../bower_components/remarkable-bootstrap-growl/bootstrap-notify.min');
 				return true;
 			}
 			return false;
