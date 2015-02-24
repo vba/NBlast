@@ -14,6 +14,85 @@ open System.Web.Http.Results
 type DashboardControllerSpecs() = 
 
     [<Fact>]
+    member me.``Levels per month should use storage reader and call all expected search by term``() =
+        // Given
+        let from = new DateTime(DateTime.Today.AddMonths(0).Year, DateTime.Today.AddMonths(0).Month, 1)
+        let reader = new Mock<IStorageReader>(MockBehavior.Strict)
+        let sut = me.MakeSut(reader.Object)
+        let expectedResult = {Total = 3; Hits = []; QueryDuration = 0L}
+        let query = fun x -> 
+            { SearchQuery.GetOnlyExpression(x) 
+               with Take = Some(1)
+                    Filter = FilterQuery.Between(from, from.AddMonths(1).AddDays(-1.0).AddHours(23.0).AddMinutes(59.0).AddSeconds(59.0)) |> Some }
+
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("trace"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("info"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("debug"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("warn"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("error"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("fatal"))).Returns(expectedResult) |> ignore
+
+        // Then
+        let actualResult =  sut.``Levels per month``(0)
+
+        reader.VerifyAll() |> ignore
+        actualResult.HasValues.Should().BeTrue("It must have values") |> ignore
+        actualResult.Count.Should().Be(6, "6 keys are expected") |> ignore
+
+    [<Fact>]
+    member me.``Levels per week should use storage reader and call all expected search by term``() =
+        // Given
+        let from = DateTime.Today.AddDays(-1.0 * float(DateTime.Today.DayOfWeek)).AddDays(-3.0 * 7.0)
+        let reader = new Mock<IStorageReader>(MockBehavior.Strict)
+        let sut = me.MakeSut(reader.Object)
+        let expectedResult = {Total = 3; Hits = []; QueryDuration = 0L}
+        let query = fun x -> 
+            { SearchQuery.GetOnlyExpression(x) 
+               with Take = Some(1)
+                    Filter = FilterQuery.Between(from, from.AddDays(6.0).AddHours(23.0).AddMinutes(59.0).AddSeconds(59.0)) |> Some }
+
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("trace"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("info"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("debug"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("warn"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("error"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("fatal"))).Returns(expectedResult) |> ignore
+
+        // Then
+        let actualResult =  sut.``Levels per week``(-3.0)
+
+        reader.VerifyAll() |> ignore
+        actualResult.HasValues.Should().BeTrue("It must have values") |> ignore
+        actualResult.Count.Should().Be(6, "6 keys are expected") |> ignore
+
+    [<Fact>]
+    member me.``Levels per day should use storage reader and call all expected search by term``() =
+        // Given
+        let today = DateTime.Today.Date.AddDays(-2.0)
+        let reader = new Mock<IStorageReader>(MockBehavior.Strict)
+        let sut = me.MakeSut(reader.Object)
+        let expectedResult = {Total = 3; Hits = []; QueryDuration = 0L}
+        let query = fun x -> 
+            { SearchQuery.GetOnlyExpression(x) 
+               with Take = Some(1)
+                    Filter = FilterQuery.Between(today, today.AddHours(23.0).AddMinutes(59.0).AddSeconds(59.0)) |> Some }
+
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("trace"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("info"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("debug"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("warn"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("error"))).Returns(expectedResult) |> ignore
+        reader.Setup(fun x -> x.SearchByTerm(LogField.Level, query("fatal"))).Returns(expectedResult) |> ignore
+
+        // Then
+        let actualResult =  sut.``Levels per day``(-2.0)
+
+        reader.VerifyAll() |> ignore
+        actualResult.HasValues.Should().BeTrue("It must have values") |> ignore
+        actualResult.Count.Should().Be(6, "6 keys are expected") |> ignore
+        
+
+    [<Fact>]
     member me.``Group by field should use storage reader and respect facet limit``() =
         // Given
         let limit = 1
