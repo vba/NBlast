@@ -35,8 +35,8 @@ type Search_StorageReaderSpecs() =
             actual.Sender.Should().StartWith("sender", "Sender value should start with 'sender'") |> ignore
             actual.Logger.Should().Be("log", "Logger value must be returned") |> ignore
             actual.Level.Should().Be("debug", "Debug value must be returned") |> ignore
-            actual.CreatedAt.Should().BeBefore(DateTime.Now, "created at must respect specified interval") |> ignore
-            actual.CreatedAt.Should().BeAfter(DateTime.Now.AddMinutes(-2.), "created at must respect specified interval") |> ignore
+            actual.CreatedAt.Should().BeBefore(DateTime.UtcNow, "created at must respect specified interval") |> ignore
+            actual.CreatedAt.Should().BeAfter(DateTime.UtcNow.AddMinutes(-2.), "created at must respect specified interval") |> ignore
             actual.Score.Should().BeGreaterThan(0.0f, "Score must be present") |> ignore
         )
 

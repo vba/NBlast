@@ -17,8 +17,8 @@ module App =
     let fixturesLimit     = configReader.ReadAsInt("NBlast.fixtures_limit")
     let restClient        = new RestClient(configReader.Read("NBlast.index_endpoint"))
     let fixture           = new Fixture()
-    let datetimeGenerator = new RandomDateTimeSequenceGenerator(DateTime.Now.AddYears(-2),
-                                                                DateTime.Now.AddMinutes(-5.0))
+    let datetimeGenerator = new RandomDateTimeSequenceGenerator(DateTime.UtcNow.AddYears(-2),
+                                                                DateTime.UtcNow.AddMinutes(-5.0))
     fixture.Customizations.Add(datetimeGenerator)
 
     let index (log: LogModel) = 
