@@ -45,6 +45,12 @@
 			}
 			return {};
 		},
+		chartist: function() {
+			if (typeof window !== 'undefined') {
+				return require('../../bower_components/chartist/dist/chartist.min');
+			}
+			return Object;
+		},
 		moment: function() {
 			var moment = require('moment');
 			if (typeof window !== 'undefined') {
