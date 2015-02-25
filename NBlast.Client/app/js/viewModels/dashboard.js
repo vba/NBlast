@@ -45,14 +45,17 @@
 								dashboardService.getLevelsPerMonth(-3),
 								dashboardService.getLevelsPerMonth(-4))
 					.then(function (month0, month1, month2, month3, month4) {
-						var data = {
+						var m0 = month0[0], m1 = month1[0], m2 = month2[0],
+						    m3 = month3[0], m4 = month4[0],
+							data = {
 							labels: ['month0', 'month1', 'month2', 'month3', 'month4'],
 							series: [
-								[month0[0].trace, month0[0].debug, month0[0].info, month0[0].warn, month0[0].error, month0[0].fatal],
-								[month1[0].trace, month1[0].debug, month1[0].info, month1[0].warn, month1[0].error, month1[0].fatal],
-								[month2[0].trace, month2[0].debug, month2[0].info, month2[0].warn, month2[0].error, month2[0].fatal],
-								[month3[0].trace, month3[0].debug, month3[0].info, month3[0].warn, month3[0].error, month3[0].fatal],
-								[month4[0].trace, month4[0].debug, month4[0].info, month4[0].warn, month4[0].error, month4[0].fatal]
+								[m0.trace, m1.trace, m2.trace, m3.trace, m4.trace],
+								[m0.debug, m1.debug, m2.debug, m3.debug, m4.debug],
+								[m0.info, m1.info, m2.info, m3.info, m4.info],
+								[m0.warn, m1.warn, m2.warn, m3.warn, m4.warn],
+								[m0.error, m1.error, m2.error, m3.error, m4.error],
+								[m0.fatal, m1.fatal, m2.fatal, m3.fatal, m4.fatal]
 							]
 						};
 
