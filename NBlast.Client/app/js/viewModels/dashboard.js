@@ -50,16 +50,16 @@
 							data = {
 							labels: ['month0', 'month1', 'month2', 'month3', 'month4'],
 							series: [
-								[m0.trace, m1.trace, m2.trace, m3.trace, m4.trace],
-								[m0.debug, m1.debug, m2.debug, m3.debug, m4.debug],
-								[m0.info, m1.info, m2.info, m3.info, m4.info],
-								[m0.warn, m1.warn, m2.warn, m3.warn, m4.warn],
-								[m0.error, m1.error, m2.error, m3.error, m4.error],
-								[m0.fatal, m1.fatal, m2.fatal, m3.fatal, m4.fatal]
+								{ name: "Trace", data: [m0.trace, m1.trace, m2.trace, m3.trace, m4.trace] },
+								{ name: "Debug", data: [m0.debug, m1.debug, m2.debug, m3.debug, m4.debug] },
+								{ name: "Info", data: [m0.info, m1.info, m2.info, m3.info, m4.info] },
+								{ name: "Warn", data: [m0.warn, m1.warn, m2.warn, m3.warn, m4.warn] },
+								{ name: "Error", data: [m0.error, m1.error, m2.error, m3.error, m4.error] },
+								{ name: "Fatal", data: [m0.fatal, m1.fatal, m2.fatal, m3.fatal, m4.fatal] }
 							]
 						};
-
-						return new Chartist.Bar('#levelsActivityChart', data);
+						new Chartist.Line('#levelsActivityChart', data);
+						$('#levelsActivityChart').find('.ct-point').tooltip({title: 'Yo'}); // http://jsbin.com/seruk
 					});
 			return result;
 		};
