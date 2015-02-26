@@ -4,10 +4,10 @@
 	var _                 = require('underscore'),
 		ko                = require('knockout'),
 		views             = require('../views'),
-		config            = require('../config'),
 		markupService     = require('../services/markup'),
+		config            = require('../config'),
 		dashboardService  = require('../services/dashboard'),
-		Chartist          = config.chartist(),
+		ActivityChart     = require('./partial/activityChart'),
 		StorageService    = require('../services/storage'),
 		DashboardViewModel;
 
@@ -36,32 +36,8 @@
 		$private.onGroupByLoggerDone = function (data) {
 			this.topLoggers(data.facets || []);
 		};
-		$private.bindMonthsChart = function() {
-			if (!Chartist.Bar) return;
-			var $ = config.jquery(),
-				result = $.when(dashboardService.getLevelsPerMonth(0),
-								dashboardService.getLevelsPerMonth(-1),
-								dashboardService.getLevelsPerMonth(-2),
-								dashboardService.getLevelsPerMonth(-3),
-								dashboardService.getLevelsPerMonth(-4))
-					.then(function (month0, month1, month2, month3, month4) {
-						var m0 = month0[0], m1 = month1[0], m2 = month2[0],
-						    m3 = month3[0], m4 = month4[0],
-							data = {
-							labels: ['month0', 'month1', 'month2', 'month3', 'month4'],
-							series: [
-								{ name: "Trace", data: [m0.trace, m1.trace, m2.trace, m3.trace, m4.trace] },
-								{ name: "Debug", data: [m0.debug, m1.debug, m2.debug, m3.debug, m4.debug] },
-								{ name: "Info", data: [m0.info, m1.info, m2.info, m3.info, m4.info] },
-								{ name: "Warn", data: [m0.warn, m1.warn, m2.warn, m3.warn, m4.warn] },
-								{ name: "Error", data: [m0.error, m1.error, m2.error, m3.error, m4.error] },
-								{ name: "Fatal", data: [m0.fatal, m1.fatal, m2.fatal, m3.fatal, m4.fatal] }
-							]
-						};
-						new Chartist.Line('#levelsActivityChart', data);
-						$('#levelsActivityChart').find('.ct-point').tooltip({title: 'Yo'}); // http://jsbin.com/seruk
-					});
-			return result;
+		$private.renderMonthsChart = function() {
+			return new ActivityChart().render();
 		};
 
 		//noinspection JSUnusedGlobalSymbols
@@ -88,7 +64,7 @@
 				.groupBy('logger', 7)
 				.done($private.onGroupByLoggerDone.bind(this));
 
-			$private.bindMonthsChart();
+			$private.renderMonthsChart();
 		};
 
 		return DashboardViewModel;
