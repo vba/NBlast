@@ -4,7 +4,8 @@
 		views = require('../app/js/views'),
 		sinon = require('sinon'),
 		mocker = null,
-		nothing, fakes, amplify, sammy, $;
+		$ = function() {},
+		nothing, fakes, amplify, sammy;
 
 	nothing = function () {
 		return '';
@@ -14,12 +15,11 @@
 			return '';
 		}
 	};
-	$ = {
-		trim: function (str) {
-			return [str].join('').trim();
-		},
-		getJSON: nothing
+	$.trim = function (str) {
+		return [str].join('').trim();
 	};
+	$.getJSON = nothing;
+
 	sammy = {
 		setLocation: nothing,
 		getLocation: nothing,

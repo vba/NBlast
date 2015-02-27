@@ -12,6 +12,8 @@
 			var mocker            = fakes.mocker(),
 				markupService     = require('../../app/js/services/markup'),
 			    dashboardService  = require('../../app/js/services/dashboard'),
+				activityChart     = require('../../app/js/viewModels/partial/activityChart'),
+				renderStub        = mocker.stub(activityChart.prototype, 'render'),
 			    applyBindingsStub = mocker.stub(markupService, 'applyBindings'),
 			    groupByStub       = mocker.stub(dashboardService, 'groupBy'),
 			    sut               = new DashboardViewModel(),
@@ -31,6 +33,7 @@
 				    }
 			    };
 
+			renderStub.returns(true);
 			applyBindingsStub.returns(true);
 			groupByStub.withArgs('level').returns(levelResult);
 			groupByStub.withArgs('logger', 7).returns(loggerResult);
@@ -40,6 +43,7 @@
 			sut.bind();
 
 			// Then
+			renderStub.calledOnce.should.equal(true);
 			applyBindingsStub.calledOnce.should.equal(true);
 			groupByStub.calledWith('level').should.equal(true);
 			groupByStub.calledWith('logger', 7).should.equal(true);

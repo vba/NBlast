@@ -9,12 +9,13 @@
 	ActivityChart = (function () {
 
 		function ActivityChart() {
+			var $ = config.jquery();
 			this.tooltip = $('#activityChartTooltip');
 		}
 
-		var $private = {
-			onMouseEnter: function () {
-				var point = $(this),
+		var $ = config.jquery(), $private = {
+			onMouseEnter: function (e) {
+				var point = $(e.target),
 				    value = point.attr('ct:value'),
 				    seriesName = point.parent().attr('ct:series-name');
 
@@ -25,8 +26,8 @@
 			},
 			onMouseMove: function (e) {
 				this.tooltip.css({
-					left: (e.offsetX || e.originalEvent.layerX) + (tooltip.width() / 4),
-					top : (e.offsetY || e.originalEvent.layerY) - tooltip.height() + 45
+					left: (e.offsetX || e.originalEvent.layerX) + (this.tooltip.width() / 4),
+					top : (e.offsetY || e.originalEvent.layerY) - this.tooltip.height() + 45
 				});
 			},
 			initEvents: function () {
@@ -56,8 +57,7 @@
 		};
 
 		ActivityChart.prototype.render = function () {
-			var $ = config.jquery(),
-			    request = dashboardService.getLevelsPerMonth;
+			var request = dashboardService.getLevelsPerMonth;
 
             return $.when(request(0),
 			              request(-1),
