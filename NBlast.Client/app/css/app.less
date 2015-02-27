@@ -55,12 +55,6 @@ html, body {
 
 }
 
-
-
-#pageWrapper {
-	min-height: calc(100% - 51px);
-}
-
 .navbar {
 	margin-bottom: 0;
 }
@@ -213,4 +207,10 @@ html, body {
 	.ct-series-d .ct-line, .ct-series-d .ct-point  { stroke: @warn-text-color; }
 	.ct-series-e .ct-line, .ct-series-e .ct-point { stroke: @error-text-color; }
 	.ct-series-f .ct-line, .ct-series-f .ct-point { stroke: @fatal-text-color; }
+}
+
+#pageWrapper {
+	display: block;
+	height: calc(~"100% - 50");
+	overflow: auto;
 }

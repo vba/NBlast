@@ -4,6 +4,7 @@
 	var config            = require('../../config'),
 	    dashboardService  = require('../../services/dashboard'),
 	    Chartist          = config.chartist(),
+	    moment            = config.moment(),
 		ActivityChart;
 
 	ActivityChart = (function () {
@@ -40,14 +41,20 @@
 				var m0 = month0[0], m1 = month1[0], m2 = month2[0],
 				    m3 = month3[0], m4 = month4[0],
 				    data = {
-					    labels: ['month0', 'month1', 'month2', 'month3', 'month4'],
+					    labels: [
+						    moment().subtract(4, 'months').format('MMMM'),
+						    moment().subtract(3, 'months').format('MMMM'),
+						    moment().subtract(2, 'months').format('MMMM'),
+						    moment().subtract(1, 'months').format('MMMM'),
+						    moment().format('MMMM')
+					    ],
 					    series: [
-						    {name: "Trace", data: [m0.trace, m1.trace, m2.trace, m3.trace, m4.trace]},
-						    {name: "Debug", data: [m0.debug, m1.debug, m2.debug, m3.debug, m4.debug]},
-						    {name: "Info", data: [m0.info, m1.info, m2.info, m3.info, m4.info]},
-						    {name: "Warn", data: [m0.warn, m1.warn, m2.warn, m3.warn, m4.warn]},
-						    {name: "Error", data: [m0.error, m1.error, m2.error, m3.error, m4.error]},
-						    {name: "Fatal", data: [m0.fatal, m1.fatal, m2.fatal, m3.fatal, m4.fatal]}
+						    {name: "Trace", data: [m4.trace, m3.trace, m2.trace, m1.trace, m0.trace]},
+						    {name: "Debug", data: [m4.debug, m3.debug, m2.debug, m1.debug, m0.debug]},
+						    {name: "Info", data:  [m4.info,  m3.info,  m2.info,  m1.info,  m0.info]},
+						    {name: "Warn", data:  [m4.warn,  m3.warn,  m2.warn,  m1.warn,  m0.warn]},
+						    {name: "Error", data: [m4.error, m3.error, m2.error, m1.error, m0.error]},
+						    {name: "Fatal", data: [m4.fatal, m3.fatal, m2.fatal, m1.fatal, m0.fatal]}
 					    ]
 				    },
 				    line = new Chartist.Line('#levelsActivityChart', data);
