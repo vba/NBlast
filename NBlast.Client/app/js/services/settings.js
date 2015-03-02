@@ -1,10 +1,22 @@
 (function () {
 	'use strict';
-	var settings;
+	var config = require('../config'),
+		//_      = require('underscore'),
+		DataType, settings;
+
+	 DataType = Object.freeze({
+		 JSON: 'json',
+		 JSONP: 'jsonp'
+	 });
 
 	settings = {
 		getBackendUrl: function () {
-			return "http://localhost:9090/api/";
+			var result = (config.amplify('settings') || {}).backendUrl;
+			return result || "http://localhost:9090/api/";
+		},
+		getCommunicationDataType: function () {
+			var result = (config.amplify('settings') || {}).communicationDataType;
+			return result || DataType.JSON;
 		},
 		appendToBackendUrl: function (path) {
 			return [this.getBackendUrl(), path].join('');

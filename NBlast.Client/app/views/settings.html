@@ -1,1 +1,31 @@
-<div class="row">No content</div>
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Settings</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<form>
+			<div class="form-group">
+				<label for="backendUrl">NBlast backend url:</label>
+				<input type="url" class="form-control" id="backendUrl" name="backendUrl"
+				       placeholder="http://localhost:9090/api/" data-bind="value: backendUrl">
+			</div>
+			<div class="from-group">
+				<div class="radio">
+					<label>
+						<input type="radio" name="dataType" value="json" data-bind="checked: dataType">
+						Use JSON via <strong>CORS</strong> approach for cross-domain API communication
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="dataType" value="jsonp" data-bind="checked: dataType">
+						Use <strong>JSONP</strong> data type for cross-domain API communication
+					</label>
+				</div>
+			</div>
+			<button type="button" class="btn btn-primary pull-right">Save</button>
+		</form>
+	</div>
+</div>

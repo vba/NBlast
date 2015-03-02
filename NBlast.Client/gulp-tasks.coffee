@@ -53,19 +53,6 @@ gulp.task 'bundle', ->
 	gulp.src(config.paths.app.main, {read:false})
 		.pipe browserify {
 			debug: true
-#			shim:
-#				jquery:
-#					path: './bower_components/jquery/dist/jquery'
-#					exports: 'jQuery'
-#				sammy:
-#					path: './bower_components/sammy/lib/sammy'
-#					depends: {jquery:'jQuery'}
-#				bootstrap:
-#					path: './bower_components/bootstrap/dist/js/bootstrap'
-#					depends: {jquery:'jQuery'}
-#				'bootstrap-picker':
-#					path: './bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'
-#					depends: {bootstrap:'bootstrap'}
 			transform: stringify {
 				extensions: ['.html'], minify: false
 			}
