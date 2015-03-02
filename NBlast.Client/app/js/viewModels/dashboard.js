@@ -36,7 +36,7 @@
 		$private.onGroupByLoggerDone = function (data) {
 			this.topLoggers(data.facets || []);
 		};
-		$private.renderMonthsChart = function() {
+		$private.renderActivityChart = function() {
 			return new ActivityChart().render();
 		};
 
@@ -64,7 +64,7 @@
 				.groupBy('logger', 7)
 				.done($private.onGroupByLoggerDone.bind(this));
 
-			$private.renderMonthsChart();
+			$private.renderActivityChart();
 		};
 
 		return DashboardViewModel;

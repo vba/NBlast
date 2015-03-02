@@ -4,6 +4,7 @@
 		DetailsViewModel     = require('./viewModels/details'),
 		DashboardViewModel   = require('./viewModels/dashboard'),
 		EmptySearchViewModel = require('./viewModels/emptySearch'),
+		SettingsViewModel    = require('./viewModels/settings'),
 		SearchViewModel      = require('./viewModels/search'),
 		sammy                = config.sammy(),
 		routes;
@@ -23,6 +24,9 @@
 		});
 		me.get('#/search', function () {
 			new EmptySearchViewModel().bind();
+		});
+		me.get('#/settings', function () {
+			new SettingsViewModel().bind();
 		});
 		me.get('#/search/:expression', function () {
 			var path = ['#/search/1/', encodeURIComponent(this.params.expression || '*:*')].join('');
