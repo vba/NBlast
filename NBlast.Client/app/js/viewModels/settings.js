@@ -1,23 +1,31 @@
 (function () {
 	'use strict';
 	var markupService     = require('../services/markup'),
-		settingsService   = require('../services/settings'),
 		ko                = require('knockout'),
 		views             = require('../views'),
 		Notifier          = require('../tools/notifier'),
-		SettingsViewModel;
+		StorageService    = require('../services/storage'),
+		SettingsViewModel, DataType;
+
+	DataType = Object.freeze({
+		JSON: 'json',
+		JSONP: 'jsonp'
+	});
 
 	SettingsViewModel = (function () {
 		function SettingsViewModel () {
-			this.backendUrl = ko.observable(settingsService.getBackendUrl());
-			this.dataType   = ko.observable(settingsService.getCommunicationDataType());
+			this.storageService = new StorageService();
+			this.backendUrl     = ko.observable(this.storageService.getBackendUrl() || "http://localhost:9090/api/");
+			//noinspection JSUnusedGlobalSymbols
+			this.dataType       = ko.observable(this.storageService.getCommunicationDataType() || DataType.JSON);
 		}
 		SettingsViewModel.prototype.bind = function () {
 			markupService.applyBindings(this, views.getSettings());
 		};
+		//noinspection JSUnusedGlobalSymbols
 		SettingsViewModel.prototype.save = function () {
-			var notifier = new Notifier();
-			notifier.success('Done');
+			new Notifier().success('Saved');
+			this.storageService.storeSettings(this.backendUrl(), this.dataType());
 		};
 
 		return SettingsViewModel;

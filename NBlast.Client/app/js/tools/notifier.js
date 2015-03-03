@@ -2,6 +2,7 @@
 	'use strict';
 
 	var config = require('../config'),
+	    views  = require('../views'),
 	    _      = require('underscore'),
 		Notifier;
 
@@ -13,8 +14,8 @@
 				element: '#notificationZone',
 				type: 'info',
 				allow_dismiss: true,
-				delay: 2000,
-				timer: 0,
+				delay: 1500,
+				timer: 1500,
 				spacing: 2,
 				offset: 5,
 				newest_on_top: true
@@ -24,7 +25,10 @@
 
 		Notifier.prototype.display = function(message, type) {
 			var $ = config.jquery(),
-				local = _.extend(this.settings, {type: type || 'info'});
+				local = _.extend(this.settings, {
+					type: type || 'info',
+					template: views.getNotification()
+				});
 			if (!_.isEmpty(this.container)) {
 				$(this.settings.element).html('');
 			}

@@ -10,6 +10,9 @@
 		getSettings: function() {
 			return require('../views/settings.html');
 		},
+		getNotification: function() {
+			return require('../views/notification.html');
+		},
 		getDetails: function() {
 			return require('../views/details.html');
 		}

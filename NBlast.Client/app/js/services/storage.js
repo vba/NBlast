@@ -6,6 +6,23 @@
 	StorageService = (function () {
 		function StorageService() { }
 
+		StorageService.prototype.getBackendUrl = function () {
+			return (config.amplify().store('settings') || {}).backendUrl;
+		};
+
+		StorageService.prototype.getCommunicationDataType = function () {
+			return (config.amplify().store('settings') || {}).communicationDataType;
+		};
+
+		StorageService.prototype.storeSettings = function (backendUrl, dataType) {
+			var store = config.amplify().store;
+			store('settings', {
+				communicationDataType: dataType,
+				backendUrl: backendUrl
+			});
+			return this;
+		};
+
 		StorageService.prototype.storeFilters = function (from, till) {
 			var store = config.amplify().store,
 			    filter = {
