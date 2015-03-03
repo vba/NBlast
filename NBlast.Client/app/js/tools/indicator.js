@@ -22,5 +22,5 @@
 		return Indicator;
 	})(Notifier);
 
-	module.exports = new Indicator();
+	module.exports = Indicator;
 })();

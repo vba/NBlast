@@ -7,7 +7,7 @@
 		searchService       = require('../services/search'),
 		settings            = require('../services/settings'),
 		object              = require('../tools/object'),
-		indicator           = require('../tools/indicator'),
+		Indicator           = require('../tools/indicator'),
 		BaseSearchViewModel = require('./baseSearch'),
 		SearchViewModel;
 
@@ -30,6 +30,7 @@
 			this.page         = ko.observable(page);
 		}
 
+		var indicator = new Indicator();
 		object.extends(SearchViewModel, $super);
 
 		SearchViewModel.prototype.getPages = function () {

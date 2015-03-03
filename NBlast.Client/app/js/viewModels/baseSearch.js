@@ -113,14 +113,14 @@
 		};
 		//noinspection JSUnusedGlobalSymbols
 		BaseSearchViewModel.prototype.getFoundHits = function() {
-			return [];
+			return []; // cover:false
 		};
 		BaseSearchViewModel.prototype.getPages = function() {
-			return [];
+			return []; // cover:false
 		};
 		//noinspection JSUnusedGlobalSymbols
 		BaseSearchViewModel.prototype.getSearchResume = function() {
-			return "";
+			return ""; // cover:false
 		};
 		BaseSearchViewModel.prototype.enterSearch = function(data, event) {
 			if (event.keyCode === 13) {
@@ -129,10 +129,10 @@
 			return true;
 		};
 		BaseSearchViewModel.prototype.makeSearch = function() {
-			throw new Error("[Not yet implemented]");
+			throw new Error("[Not yet implemented]"); // cover:false
 		};
 		BaseSearchViewModel.prototype.bind = function() {
-			throw new Error("[Not yet implemented]");
+			throw new Error("[Not yet implemented]"); // cover:false
 		};
 		BaseSearchViewModel.prototype.initExternals = function () {
 			var $ = config.jquery(),
