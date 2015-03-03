@@ -1,5 +1,6 @@
 (function () {
 	'use strict';
+	//#JSCOVERAGE_IF
 	var config;
 	//noinspection UnnecessaryLocalVariableJS
 	config = {
@@ -62,4 +63,5 @@
 
 	//noinspection JSUnresolvedVariable
 	module.exports = config;
+	//#JSCOVERAGE_ENDIF
 })();

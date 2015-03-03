@@ -13,6 +13,7 @@ mocha       = require 'gulp-mocha'
 cover       = require 'gulp-coverage'
 browserify  = require 'gulp-browserify'
 stringify   = require 'stringify'
+debug       = require 'gulp-debug'
 
 config =
 	paths :
@@ -42,11 +43,13 @@ CommonTasks =
 
 gulp.task 'test', ->
 	gulp.src([config.paths.test.js], {read: false})
-#		.pipe cover.instrument({pattern: '**/baseSearch*'})
+		.pipe cover.instrument({
+			pattern: [ '**/app/**']
+		})
 		.pipe mocha()
-#		.pipe cover.gather()
-#		.pipe cover.format()
-#		.pipe gulp.dest('./test/reports')
+		.pipe cover.gather()
+		.pipe cover.format()
+		.pipe gulp.dest('./out/test-reports')
 
 gulp.task 'lint',  ->
 	gulp.src([config.paths.app.js])

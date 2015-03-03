@@ -14,11 +14,11 @@
     "gulp-coffee": "^2.2.0",
     "gulp-concat": "^2.4.2",
     "gulp-coverage": "^0.3.34",
+    "gulp-debug": "^2.0.1",
     "gulp-jscs": "^1.4.0",
     "gulp-jshint": "^1.9.0",
     "gulp-less": "^1.3.6",
     "gulp-mocha": "^2.0.0",
-    "gulp-mocha-phantomjs": "^0.5.3",
     "gulp-sourcemaps": "^1.3.0",
     "gulp-uglify": "^1.1.0",
     "gulp-util": "^3.0.1",
@@ -30,13 +30,10 @@
     "karma": "0.12.28",
     "knockout": "^3.2.0",
     "moment": "^2.9.0",
-    "mozart": "^0.1.0",
-    "phantomjs": "^1.9.15",
     "protractor": "1.4.0",
     "sinon": "^1.12.2",
     "stringify": "^3.1.0",
-    "underscore": "^1.7.0",
-    "weakmap": "0.0.6"
+    "underscore": "^1.7.0"
   },
   "scripts": {
     "test": "node node_modules/karma/bin/karma start test/karma.conf.js",

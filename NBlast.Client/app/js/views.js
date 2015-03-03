@@ -1,5 +1,6 @@
 (function() {
 	'use strict';
+	//#JSCOVERAGE_IF
 	var views = {
 		getSearch: function() {
 			return require('../views/search.html');
@@ -17,6 +18,6 @@
 			return require('../views/details.html');
 		}
 	};
-
 	module.exports = views;
+	//#JSCOVERAGE_ENDIF
 })();
