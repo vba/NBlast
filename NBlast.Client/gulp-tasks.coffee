@@ -9,7 +9,8 @@ less        = require 'gulp-less'
 jscs        = require 'gulp-jscs'
 jshint      = require 'gulp-jshint'
 uglify      = require 'gulp-uglify'
-mocha       = require 'gulp-mocha-phantomjs'
+mocha       = require 'gulp-mocha'
+cover       = require 'gulp-coverage'
 browserify  = require 'gulp-browserify'
 stringify   = require 'stringify'
 
@@ -22,6 +23,7 @@ config =
 			main : './app/js/main.js'
 		test :
 			coffee: './tests/**/*.coffee'
+			js: './test/**/*Spec.js'
 			runner: './test.html'
 		out :
 			bundle: './out/bundle'
@@ -39,8 +41,12 @@ CommonTasks =
 			.pipe mocha({silentMode: Boolean(silentMode)}).on('error', gutil.log)
 
 gulp.task 'test', ->
-	CommonTasks.compileSpecs()
-	CommonTasks.runSpecs(false)
+	gulp.src([config.paths.test.js], {read: false})
+#		.pipe cover.instrument({pattern: '**/baseSearch*'})
+		.pipe mocha()
+#		.pipe cover.gather()
+#		.pipe cover.format()
+#		.pipe gulp.dest('./test/reports')
 
 gulp.task 'lint',  ->
 	gulp.src([config.paths.app.js])
