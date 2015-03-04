@@ -8,6 +8,7 @@
 
 html, body {
 	height: 100%;
+	overflow: hidden;
 }
 
 .result-count {
@@ -186,16 +187,20 @@ html, body {
 	}
 }
 
-.indication {
+.indication,
+.notification {
 	.alert {
 		font-size: .9em;
-		width: auto;
 		padding: .4em .6em;
 	}
 	.close {
 		font-size: 1.4em;
 		margin-left: .3em;
 	}
+}
+
+.indication {
+	.alert {width: auto;}
 }
 
 .chart-tooltip {

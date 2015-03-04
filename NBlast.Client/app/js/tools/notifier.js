@@ -29,9 +29,6 @@
 					type: type || 'info',
 					template: views.getNotification()
 				});
-			if (!_.isEmpty(this.container)) {
-				$(this.settings.element).html('');
-			}
 			this.container = $.notify({message: message}, local);
 		};
 

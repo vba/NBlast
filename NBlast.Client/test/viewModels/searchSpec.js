@@ -256,8 +256,14 @@
 					actualSearchParams = p;
 					return {
 						done: function (cb) {
-							return actualSearchCallback = cb;
+							actualSearchCallback = cb;
+							return {
+								error: function () {
+									return actualSearchCallback;
+								}
+							};
 						}
+
 					};
 				});
 

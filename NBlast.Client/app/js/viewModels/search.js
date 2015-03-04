@@ -109,6 +109,9 @@
 		SearchViewModel.prototype.termSearchMode = function () {
 			return /(?:id|sender|logger|level)/gi.test(this.searchType());
 		};
+		SearchViewModel.prototype.onSearchError = function () {
+			indicator.close();
+		};
 		SearchViewModel.prototype.onSearchDone = function (data) {
 			indicator.close();
 			var result = data || {total: 0};
@@ -125,7 +128,9 @@
 			var searchView = views.getSearch();
 			markupService.applyBindings(this, searchView);
 			this.initExternals();
-			this.requestSearch().done(this.onSearchDone.bind(this));
+			this.requestSearch()
+				.done(this.onSearchDone.bind(this))
+				.error(this.onSearchError.bind(this));
 		};
 
 		return SearchViewModel;
