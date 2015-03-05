@@ -6,6 +6,7 @@
 		views         = require('../views'),
 		markupService = require('../services/markup'),
 		searchService = require('../services/search'),
+		Indicator     = require('../tools/indicator'),
 		DetailsViewModel;
 
 
@@ -17,13 +18,17 @@
 			this.uuid = ko.observable(uuid);
 			this.details = ko.observable({});
 		}
-		var $private = {};
+		var indicator = new Indicator(), $private = {};
+
 		$private.onGetByIdDone = function(found) {
 			this.details(_.first((found || {}).hits));
+			indicator.close();
 		};
 		DetailsViewModel.prototype.bind = function() {
+			indicator.display('Loading ...');
 			searchService
 				.getById(this.uuid())
+				.error(indicator.close.bind(indicator))
 				.done($private.onGetByIdDone.bind(this));
 
 			markupService.applyBindings(this, views.getDetails());

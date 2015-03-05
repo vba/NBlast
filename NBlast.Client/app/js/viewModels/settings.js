@@ -23,7 +23,8 @@
 			markupService.applyBindings(this, views.getSettings());
 		};
 		//noinspection JSUnusedGlobalSymbols
-		SettingsViewModel.prototype.save = function () {
+		SettingsViewModel.prototype.save = function (d, e) {
+			e.stopPropagation();
 			new Notifier().success('Saved');
 			this.storageService.storeSettings(this.backendUrl(), this.dataType());
 		};
