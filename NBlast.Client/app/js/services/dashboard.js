@@ -1,7 +1,6 @@
 (function() {
 	'use strict';
-	var $        = require('../config').jquery(),
-	    _        = require('underscore'),
+	var _        = require('underscore'),
 		settings = require('./settings'),
 		dashboard;
 
@@ -16,14 +15,15 @@
 		resourcePart = [number, '/', 'levels-per-' + granularity.toLowerCase()].join('');
 		url = settings.appendToBackendUrl('dashboard/' + resourcePart);
 
-		return $.getJSON(url);
+		return settings.makeRequest(url);
 	}
 
+	//noinspection JSUnusedGlobalSymbols
 	dashboard = {
 		groupBy: function (field, limit) {
 			var resourcesPart = [field, '/', parseInt(limit, 10) || 10].join(''),
 				url = settings.appendToBackendUrl('dashboard/group-by/' + resourcesPart);
-			return $.getJSON(url);
+			return settings.makeRequest(url);
 		},
 		getLevelsPerMonth: function (number) {
 			return getLevelsPer('month', number);

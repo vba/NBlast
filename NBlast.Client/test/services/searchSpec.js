@@ -16,14 +16,14 @@
 		describe('When we try to get a log item by identifier', function () {
 			it('Should retrieve this item when it exists', function () {
 				// Given
-				var actual, appendToBackendUrlStub, callUrl, expected, getJsonStub, uuid;
+				var actual, appendToBackendUrlStub, callUrl, expected, ajaxStub, uuid;
 				uuid = 'uuid1';
 				callUrl = 'http://nblast.kz/' + uuid;
 				appendToBackendUrlStub = fakes.mocker().stub(settings, 'appendToBackendUrl');
-				getJsonStub = fakes.mocker().stub(fakes.jquery(), 'getJSON');
+				ajaxStub = fakes.mocker().stub(fakes.jquery(), 'ajax');
 				expected = { promise: true};
 				appendToBackendUrlStub.withArgs('searcher/' + uuid + '/get').returns(callUrl);
-				getJsonStub.withArgs(callUrl).returns(expected);
+				ajaxStub.withArgs(sinon.match({url: callUrl})).returns(expected);
 
 				// When
 				actual = search.getById(uuid);
@@ -35,16 +35,16 @@
 		return describe('When we try to search', function () {
 			it('Should take expression param, prepare it and make a request', function () {
 				// Given
-				var actual, appendToBackendUrlStub, callUrl, expected, expression, getJsonStub;
+				var actual, appendToBackendUrlStub, callUrl, expected, expression, ajaxStub;
 				expression = '*:*';
 				callUrl = 'http://nblast.kz/searcher/search';
 				appendToBackendUrlStub = fakes.mocker().stub(settings, 'appendToBackendUrl');
-				getJsonStub = fakes.mocker().stub(fakes.jquery(), 'getJSON');
+				ajaxStub = fakes.mocker().stub(fakes.jquery(), 'ajax');
 				expected = { promise: true};
 				appendToBackendUrlStub.withArgs('searcher/search').returns(callUrl);
-				getJsonStub.withArgs(callUrl, sinon.match({
+				ajaxStub.withArgs(sinon.match({url:callUrl, data:{
 					q: expression, p: 1, sf: '', sr: '', from: '', till: ''
-				})).returns(expected);
+				}})).returns(expected);
 
 				// When
 				actual = search.search(expression);
@@ -54,7 +54,7 @@
 			});
 			return it('Should take passed params, prepare them and make a request', function () {
 				// Given
-				var actual, appendToBackendUrlStub, callUrl, expected, getJsonStub, params;
+				var actual, appendToBackendUrlStub, callUrl, expected, ajaxStub, params;
 				params = {
 					expression: 'level: up',
 					page: 10,
@@ -69,17 +69,17 @@
 				};
 				callUrl = 'http://nblast.kz/searcher/search';
 				appendToBackendUrlStub = fakes.mocker().stub(settings, 'appendToBackendUrl');
-				getJsonStub = fakes.mocker().stub(fakes.jquery(), 'getJSON');
+				ajaxStub = fakes.mocker().stub(fakes.jquery(), 'ajax');
 				expected = { promise: true};
 				appendToBackendUrlStub.withArgs('searcher/search').returns(callUrl);
-				getJsonStub.withArgs(callUrl, sinon.match({
+				ajaxStub.withArgs(sinon.match({url:callUrl, data: {
 					q: params.expression,
 					p: params.page,
 					sf: params.sort.field,
 					sr: params.sort.reverse,
 					from: params.filter.from,
 					till: params.filter.till
-				})).returns(expected);
+				}})).returns(expected);
 
 				// When
 				actual = search.search(params);

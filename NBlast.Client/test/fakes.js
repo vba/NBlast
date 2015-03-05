@@ -10,6 +10,7 @@
 	nothing = function () {
 		return '';
 	};
+	//noinspection JSUnusedGlobalSymbols
 	amplify = {
 		store: function () {
 			return '';
@@ -19,6 +20,7 @@
 		return [str].join('').trim();
 	};
 	$.getJSON = nothing;
+	$.ajax = nothing;
 
 	sammy = {
 		setLocation: nothing,

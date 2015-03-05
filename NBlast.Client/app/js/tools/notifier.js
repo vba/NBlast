@@ -14,8 +14,9 @@
 				element: '#notificationZone',
 				type: 'info',
 				allow_dismiss: true,
-				delay: 1500,
-				timer: 1500,
+				delay: 2000,
+				timer: 2000,
+				mouse_over: 'pause',
 				spacing: 2,
 				offset: 5,
 				newest_on_top: true

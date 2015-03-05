@@ -1,14 +1,15 @@
 (function () {
 	'use strict';
-	var _        = require('underscore'),
-		config   = require('../config'),
-		settings = require('./settings'),
-		Class    = require('jsface').Class,
+	var _               = require('underscore'),
+		settings        = require('./settings'),
 		SearchService;
 
 
-	SearchService = Class(function () {
-		var $private = {}, $public;
+	SearchService = (function () {
+
+		function SearchService() { }
+
+		var $private = {};
 
 		$private.prepareSearchParams = function (q) {
 			var result = {};
@@ -25,34 +26,27 @@
 			return result;
 		};
 
-		$private.getRequester = function() {
-			var $ = config.jquery();
-			return $.getJSON;
+		SearchService.prototype.search = function (query) {
+			var url = settings.appendToBackendUrl('searcher/search'),
+				params = $private.prepareSearchParams(query || {});
+			return settings.makeRequest(url, params);
 		};
 
-		$public = {
-			$singleton: true,
-			search: function (query) {
-				var url = settings.appendToBackendUrl('searcher/search'),
-					params = $private.prepareSearchParams(query || {});
-
-				return $private.getRequester()(url, params);
-			},
-			searchByTerm: function (query) {
-				var url = settings.appendToBackendUrl('term-searcher/search'),
-					params = $private.prepareSearchParams(query || {});
-
-				return $private.getRequester()(url, params);
-			},
-			getById: function (uuid) {
-				var url = settings.appendToBackendUrl('searcher/' + uuid + '/get');
-				return $private.getRequester()(url);
-			}
+		SearchService.prototype.searchByTerm = function (query) {
+			var url = settings.appendToBackendUrl('term-searcher/search'),
+				params = $private.prepareSearchParams(query || {});
+			return settings.makeRequest(url, params);
 		};
-		return $public;
-	});
+
+		SearchService.prototype.getById = function (uuid) {
+			var url = settings.appendToBackendUrl('searcher/' + uuid + '/get');
+			return settings.makeRequest(url);
+		};
+
+		return SearchService;
+	})();
 
     //noinspection JSUnresolvedVariable
-	module.exports = SearchService;
+	module.exports = new SearchService();
 
 })();

@@ -2,6 +2,7 @@
 	'use strict';
 	var StorageService  = require('./storage'),
 		storageService  = new StorageService(),
+		config          = require('../config'),
 		settings;
 
 	settings = {
@@ -14,6 +15,15 @@
 		getViewsContainer: function () {
 			return '#pageWrapper';
 		},
+		makeRequest: function (url, params) {
+			var $ = config.jquery();
+			return $.ajax({
+				data: params || null,
+				dataType: storageService.getCommunicationDataType(),
+				jsonp: 'callback',
+				url: url
+			});
+	},
 		isTestEnv: function () {
 			return (typeof describe) !== 'undefined' && (typeof it) !== 'undefined';
 		}

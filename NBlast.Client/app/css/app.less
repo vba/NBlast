@@ -192,15 +192,14 @@ html, body {
 	.alert {
 		font-size: .9em;
 		padding: .4em .6em;
+		width: auto;
+		max-width: 20em;
+		overflow: hidden;
 	}
 	.close {
 		font-size: 1.4em;
 		margin-left: .3em;
 	}
-}
-
-.indication {
-	.alert {width: auto;}
 }
 
 .chart-tooltip {
@@ -220,6 +219,7 @@ html, body {
 
 #pageWrapper {
 	display: block;
+	//noinspection CssInvalidPropertyValue
 	height: calc(~"100% - 51px");
 	overflow: auto;
 }
