@@ -5,6 +5,9 @@
 		getSearch: function() {
 			return require('../views/search.html');
 		},
+		getQueue: function() {
+			return require('../views/queue.html');
+		},
 		getDashboard: function() {
 			return require('../views/dashboard.html');
 		},
