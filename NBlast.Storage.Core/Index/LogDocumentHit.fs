@@ -3,15 +3,15 @@
 open Newtonsoft.Json
 
 type LogDocumentHit = 
-    { [<field: JsonProperty("sender")>]    Sender   : string
-      [<field: JsonProperty("id")>]        Id       : string
-      [<field: JsonProperty("error")>]     Error    : string
-      [<field: JsonProperty("message")>]   Message  : string
-      [<field: JsonProperty("logger")>]    Logger   : string
-      [<field: JsonProperty("level")>]     Level    : string
-      [<field: JsonProperty("boost")>]     Boost    : float32
-      [<field: JsonProperty("createdAt")>] CreatedAt: System.DateTime
-      [<field: JsonProperty("score")>]     Score    : float32 } 
+    { [<field: JsonProperty("sender")>]    Sender    : string
+      [<field: JsonProperty("id")>]        Id        : string
+      [<field: JsonProperty("error")>]     Error     : string
+      [<field: JsonProperty("message")>]   Message   : string
+      [<field: JsonProperty("logger")>]    Logger    : string
+      [<field: JsonProperty("level")>]     Level     : string
+      [<field: JsonProperty("boost")>]     Boost     : float32
+      [<field: JsonProperty("createdAt")>] CreatedAt : System.DateTime
+      [<field: JsonProperty("score")>]     Score     : float32 } 
 
 type LogDocumentHits = 
     { [<field: JsonProperty("hits")>]          Hits          : List<LogDocumentHit>
