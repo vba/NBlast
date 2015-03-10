@@ -17,13 +17,20 @@ type QueueControllerSpecs() =
     [<Fact>]
     member me.``Queue requesting should always return a result``() =
         // Given
-        let sut = me.MakeSut()
+        let queueKeeper = new Mock<IIndexingQueueKeeper>(MockBehavior.Strict)
+        let sut = me.MakeSut(queueKeeper.Object)
+
+        queueKeeper.Setup(fun x -> x.Count()).Returns(0) |> ignore
+        queueKeeper.Setup(fun x -> x.PeekTop(10)).Returns([]) |> ignore
 
         // When
         let actual = sut.Top(10)
         
         // Then
-        actual.Should().NotBeNull("Expected resutl should never be null")
+        queueKeeper.VerifyAll() |> ignore
+        actual.Should().NotBeNull("Expected resutl should never be null") |> ignore
+        actual.Logs.ShouldBeEquivalentTo([], "Empty logs expected") |> ignore
+        actual.Total.ShouldBeEquivalentTo(0, "Empty total expected") |> ignore
 
     member private me.MakeSut(?queueKeeper: IIndexingQueueKeeper): QueueController =
                                

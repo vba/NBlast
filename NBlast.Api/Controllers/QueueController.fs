@@ -11,12 +11,15 @@ open NBlast.Storage.Core.Extensions
 open System.Web.Http.Cors
 
 
-[<RoutePrefix("api/searcher")>]
+[<RoutePrefix("api/queue")>]
 [<EnableCors("*", "*", "GET")>]
 type QueueController(indexingQueuekeeper: IIndexingQueueKeeper) = 
     inherit ApiController()
 
     [<HttpGet>]
     [<Route("{amount}/top")>]
-    member me.Top (amount) = {Logs = []; Total = 0}
+    member me.Top (amount) = {
+        Logs = indexingQueuekeeper.PeekTop amount; 
+        Total = indexingQueuekeeper.Count()
+    }
 
