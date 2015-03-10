@@ -1,5 +1,6 @@
 ﻿namespace NBlast.Api
 
+open NBlast.Storage.Core
 open NBlast.Api.Async
 open FluentScheduler
 open FluentScheduler.Model
@@ -11,10 +12,11 @@ open System
             member me.GetTaskInstance() =
                 container.Resolve<ITask>()
 
-    type ScheduleRegistry() as me =
+    type ScheduleRegistry(?minutes: int) as me =
         inherit Registry()
         do
-            me.Schedule<QueueProcessingTask>().ToRunNow().AndEvery(1).Minutes() |> ignore
+            let minutes = defaultArg minutes 1 
+            me.Schedule<QueueProcessingTask>().ToRunNow().AndEvery(minutes).Minutes() |> ignore
             
     module SchedulerConfig = 
         let private logger = NLog.LogManager.GetCurrentClassLogger()
@@ -25,7 +27,14 @@ open System
         let Configure(container: IUnityContainer) =
             logger.Debug("Start to configure task scheduler")
 
+            let configReader = container.Resolve<IConfigReader>()
+            let minutes      = configReader.ReadAsInt("NBlast.indexing.scheduler.run_every_minutes")
+            let registry     = new ScheduleRegistry(minutes)
+            let eventHandler = new GenericEventHandler<TaskExceptionInformation, UnhandledExceptionEventArgs>(onTaskException)
+
+            logger.Debug("Schedule task runner for every {0} minute(s)", minutes)
+
             TaskManager.TaskFactory <- new TaskFactory(container)
-            TaskManager.add_UnobservedTaskException(new GenericEventHandler<TaskExceptionInformation, UnhandledExceptionEventArgs>(onTaskException))
-            TaskManager.Initialize(new ScheduleRegistry())
+            TaskManager.add_UnobservedTaskException(eventHandler)
+            TaskManager.Initialize(registry)
 
