@@ -3,3 +3,22 @@
 		<h1 class="page-header">Waiting queue</h1>
 	</div>
 </div>
+
+<div class="row">
+	<div class="col-md-9">
+		<!-- Queue content -->
+		<section class="list-group search-result" data-bind="foreach: logs()">
+			<article class="list-group-item">
+				<span data-bind="attr: {'class': 'pull-right ' + $data.level.toLowerCase()}">
+					<span data-bind="text: $data.level"></span>
+					<i data-bind="attr: {'class': 'fa fa-' + $root.defineFoundIcon($data.level)}"></i>
+				</span>
+				<a class="list-group-item-heading sender"
+				   data-bind="attr: {href: '#/details/'+$data.id}, text: $data.sender"></a>
+				<p class="list-group-item-text message" data-bind="text: $data.message"></p>
+				<p class="list-group-item-text date"
+				   data-bind="text: 'Created on '+ $root.moment($data.createdAt).format('MMM d, YYYY [at] hh:mm:ss')"></p>
+			</article>
+		</section>
+	</div>
+</div>

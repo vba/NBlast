@@ -52,6 +52,8 @@
 		mocker.stub(views, 'getSearch', nothing);
 		mocker.stub(views, 'getDashboard', nothing);
 		mocker.stub(views, 'getDetails', nothing);
+		mocker.stub(views, 'getNotification', nothing);
+		mocker.stub(views, 'getQueue', nothing);
 	});
 
 	afterEach(function(){ // jshint ignore:line

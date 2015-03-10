@@ -24,19 +24,25 @@
 		});
 		it('Should call get details by id and render it via markup service', function () {
 			// Given
-			var mocker            = fakes.mocker(),
-			    uuid              = 'uuid1',
-			    markupService     = require('../../app/js/services/markup'),
-			    searchService     = require('../../app/js/services/search'),
-				sut               = new DetailsViewModel(uuid),
-				getByIdStub       = mocker.stub(searchService, 'getById'),
-			    applyBindingsStub = mocker.stub(markupService, 'applyBindings'),
-				result            = {
-					done: function(callback) {
-						callback({hits: ['some']});
+			var mocker              = fakes.mocker(),
+			    $                   = fakes.jquery(),
+			    uuid                = 'uuid1',
+			    markupService       = require('../../app/js/services/markup'),
+			    searchService       = require('../../app/js/services/search'),
+				sut                 = new DetailsViewModel(uuid),
+				getByIdStub         = mocker.stub(searchService, 'getById'),
+			    applyBindingsStub   = mocker.stub(markupService, 'applyBindings'),
+				result              = {
+					error: function() {
+						return {
+							done: function(callback) {
+								callback({hits: ['some']});
+							}
+						};
 					}
 				};
 
+			$.notify = mocker.stub();
 			applyBindingsStub.returns(true);
 			getByIdStub.withArgs(uuid).returns(result);
 
