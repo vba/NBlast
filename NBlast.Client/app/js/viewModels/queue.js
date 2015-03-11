@@ -27,7 +27,7 @@
 
 		QueueViewModel.prototype.defineFoundIcon = function() {
 			var args = [].slice.call(arguments, 0);
-			SearchViewModel.prototype.defineFoundIcon.apply(this, args);
+			return SearchViewModel.prototype.defineFoundIcon.apply(this, args);
 		};
 
 		QueueViewModel.prototype.bind = function () {
