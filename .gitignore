@@ -206,3 +206,4 @@ NBlast.Client/app/css/*.css
 NBlast.Client/gulp-tasks.js
 NBlast.Client/out/*
 NBlast.Client/.cover*
+paket.exe

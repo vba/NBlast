@@ -8,8 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{46217C58-3DFE-49B4-817B-E3D58B7C6378}"
 	ProjectSection(SolutionItems) = preProject
 		build.fsx = build.fsx
-		install.ps1 = install.ps1
-		install.sh = install.sh
+		paket.dependencies = paket.dependencies
+		restore.ps1 = restore.ps1
+		restore.sh = restore.sh
 	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "NBlast.Api.Tests", "NBlast.Api.Tests\NBlast.Api.Tests.fsproj", "{4BB2F9C8-629C-43A6-8371-6336D4D9422A}"
