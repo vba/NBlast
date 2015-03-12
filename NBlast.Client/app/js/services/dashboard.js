@@ -7,7 +7,7 @@
 	function getLevelsPer(granularity, number) {
 		var resourcePart, url;
 		if (!/^(?:month|week|day)$/ig.test(granularity)) {
-			throw new Error ('Unexpected granularity ' + granularity);
+			throw new Error ('Unexpected granularity ' + granularity); // cover:false
 		}
 		if (!_.isNumber(number)) {
 			throw new Error ('Number expected instead of ' + number);
@@ -36,6 +36,6 @@
 		}
 	};
 	//noinspection JSUnresolvedVariable
-	module.exports = settings.isTestEnv() ? dashboard : Object.freeze(dashboard);
+	module.exports = settings.isTestEnv() ? dashboard : Object.freeze(dashboard); // cover:false
 })();
 

@@ -1,12 +1,14 @@
 (function () {
 	'use strict';
 
-	var ko                = require('knockout'),
+	var _                 = require('underscore'),
+		ko                = require('knockout'),
 		queue             = require('../services/queue'),
 	    views             = require('../views'),
 	    config            = require('../config'),
 	    Indicator         = require('../tools/indicator'),
 	    markupService     = require('../services/markup'),
+	    settingsService   = require('../services/settings'),
 	    SearchViewModel   = require('../viewModels/search'),
 	    QueueViewModel;
 
@@ -40,6 +42,9 @@
 				.done($private.onPeekTopDone.bind(this));
 		};
 
+		if (settingsService.isTestEnv()) {
+			_.extend(QueueViewModel.prototype, _.clone($private));
+		}
 
 		return QueueViewModel;
 	})();
