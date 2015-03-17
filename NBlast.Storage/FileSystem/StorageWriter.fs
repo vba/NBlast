@@ -22,8 +22,8 @@ type StorageWriter(directoryProvider: IDirectoryProvider) =
         member this.InsertMany(documents: seq<IStorageDocument>) =
             documents |> Seq.length |> sprintf "Indexing %d documents" |> logger.Debug
             use directory = directoryProvider.Provide()
-            use analyser = new StandardAnalyzer(Version.LUCENE_30)
-            use writer = new IndexWriter(directory, analyser, IndexWriter.MaxFieldLength.UNLIMITED)
+            use analyser  = new StandardAnalyzer(Version.LUCENE_30)
+            use writer    = new IndexWriter(directory, analyser, IndexWriter.MaxFieldLength.UNLIMITED)
 
             documents |> Seq.iter (fun x -> writer.AddDocument(x.ToLuceneDocument()))
 

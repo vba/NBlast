@@ -83,10 +83,11 @@ type StorageReader (directoryProvider: IDirectoryProvider,
             let field = new SortField(sort.Value.Field.GetName(), ft, sort.Value.Reverse)
             Sort(field) |> Some
 
-    member private this.Search searchQuery 
-                               (getQuery: (Analysis.Analyzer) -> Query) =
 
-        use directory     = directoryProvider.Provide()
+    member private this.SearchInDirectory searchQuery
+                                          directory
+                                          (getQuery: (Analysis.Analyzer) -> Query) =
+
         use indexSearcher = new IndexSearcher(directory, true)
         use analyzer      = new StandardAnalyzer(version)
             
@@ -117,28 +118,42 @@ type StorageReader (directoryProvider: IDirectoryProvider,
           Total         = topDocs.TotalHits
           QueryDuration = searchTimer.GetElapsedMilliseconds() }
 
+    member private this.Search searchQuery 
+                               (getQuery: (Analysis.Analyzer) -> Query) =
+
+        let directoryOpt = directoryProvider.TryProvide()
+        if directoryOpt.IsNone 
+        then LogDocumentHits.GetEmpty()
+        else
+            use directory = directoryOpt.Value
+            getQuery |> this.SearchInDirectory searchQuery directory
+
     interface IStorageReader with
         member me.GroupWith (field: LogField, docsPerGroup) =
-            use directory       = directoryProvider.Provide()
-            use indexReader     = IndexReader.Open(directory, true)
-            use analyzer        = new StandardAnalyzer(version)
-
-            SimpleFacetedSearch.MAX_FACETS <- indexReader.NumDocs()
-
-            use facetedSearcher = new SimpleFacetedSearch(indexReader, field.GetName())
-            let parser          = new MultiFieldQueryParser(version, LogField.Names, analyzer)
-            let query           = _parseQuery "*:*" parser
-            let searchTimer     = new Timer<_>(fun () -> facetedSearcher.Search(query, docsPerGroup))
-            let hits            = searchTimer.WrapExecution()
+            let directoryOpt = directoryProvider.TryProvide()
             
-            let facets = hits.HitsPerFacet 
-                         |> Seq.map (fun x -> {Name = x.Name.ToString(); Count = x.HitCount }) 
-                         |> Seq.sortBy (fun x -> -x.Count)
-                         |> Seq.toList
+            if directoryOpt.IsNone then SimpleFacets.GetEmpty()
+            else 
+                use directory       = directoryOpt.Value
+                use indexReader     = IndexReader.Open(directory, true)
+                use analyzer        = new StandardAnalyzer(version)
 
-            { Facets        = facets
-              QueryDuration = searchTimer.GetElapsedMilliseconds() 
-              Total         = Seq.length facets}
+                SimpleFacetedSearch.MAX_FACETS <- indexReader.NumDocs()
+
+                use facetedSearcher = new SimpleFacetedSearch(indexReader, field.GetName())
+                let parser          = new MultiFieldQueryParser(version, LogField.Names, analyzer)
+                let query           = _parseQuery "*:*" parser
+                let searchTimer     = new Timer<_>(fun () -> facetedSearcher.Search(query, docsPerGroup))
+                let hits            = searchTimer.WrapExecution()
+            
+                let facets = hits.HitsPerFacet 
+                             |> Seq.map (fun x -> {Name = x.Name.ToString(); Count = x.HitCount }) 
+                             |> Seq.sortBy (fun x -> -x.Count)
+                             |> Seq.toList
+
+                { Facets        = facets
+                  QueryDuration = searchTimer.GetElapsedMilliseconds() 
+                  Total         = Seq.length facets}
 
         member me.GroupWith (field: LogField) = (me :> IStorageReader).GroupWith(field, 0)
         
@@ -162,6 +177,9 @@ type StorageReader (directoryProvider: IDirectoryProvider,
             (me :> IStorageReader).SearchByField query
 
         member me.CountAll() = 
-            use directory = directoryProvider.Provide()
-            use indexReader = IndexReader.Open(directory, true)
-            indexReader.NumDocs()
+            let directoryOpt = directoryProvider.TryProvide()
+            if directoryOpt.IsNone then 0
+            else
+                use directory = directoryOpt.Value
+                use indexReader = IndexReader.Open(directory, true)
+                indexReader.NumDocs()

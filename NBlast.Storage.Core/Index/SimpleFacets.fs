@@ -10,3 +10,5 @@ type SimpleFacets =
     { [<field: JsonProperty("facets")>]         Facets          : SimpleFacet seq
       [<field: JsonProperty("queryDuration")>]  QueryDuration   : int64 
       [<field: JsonProperty("total")>]          Total           : int }
+
+    static member GetEmpty() = {Facets = []; QueryDuration = 0L; Total = 0}

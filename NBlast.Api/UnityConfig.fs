@@ -42,7 +42,7 @@ module UnityConfig =
             ) |> ignore
         container
             .RegisterInstance<IStorageWriter>(
-                new StorageWriter(container.Resolve<IDirectoryProvider>("ReaderDirectoryProvider"))
+                new StorageWriter(container.Resolve<IDirectoryProvider>("WriterDirectoryProvider"))
             ) |> ignore
 
         container.RegisterInstance<IIndexingQueueKeeper>(new IndexingQueueKeeper()) |> ignore

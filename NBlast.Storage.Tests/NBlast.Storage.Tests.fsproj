@@ -48,6 +48,9 @@
       <Name>NBlast.Storage.Core</Name>
       <Project>{CCC4BAEC-229A-4676-A86A-DF7DA54ECFE7}</Project>
     </ProjectReference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />

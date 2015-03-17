@@ -12,6 +12,8 @@ open System.IO
 type WriterDirectoryProvider(path: string, ?reopenWhenLockedOp: bool) =
     
     interface IDirectoryProvider with
+        member me.TryProvide () = (me:>IDirectoryProvider).Provide() |> Some
+
         member me.Provide () = 
             let openIndex = fun x -> FSDirectory.Open(new DirectoryInfo(x))
             let result = openIndex path
@@ -31,4 +33,5 @@ type WriterDirectoryProvider(path: string, ?reopenWhenLockedOp: bool) =
             else if (isLocked) then
                 raise(new StorageLockedException(result.Directory.FullName))
             result :> Lucene.Net.Store.Directory
+
 

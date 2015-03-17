@@ -17,3 +17,5 @@ type LogDocumentHits =
     { [<field: JsonProperty("hits")>]          Hits          : List<LogDocumentHit>
       [<field: JsonProperty("total")>]         Total         : int32
       [<field: JsonProperty("queryDuration")>] QueryDuration : int64 }
+
+    static member GetEmpty() = {Hits = []; Total = 0; QueryDuration = 0L}
