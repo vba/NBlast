@@ -4,4 +4,7 @@ node_js:
 before_script:
   - npm install -g gulp
   - npm install -g coffee-script
+  - pwd
+  - ls -lah ./
+  - ls -lah ./NBlast.Client
 script:  gulp --gulpfile "./NBlast.Client/gulpfile.js" test
