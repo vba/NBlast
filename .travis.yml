@@ -1,9 +1,7 @@
 language: node_js
 node_js:
-  - "0.11"
   - "0.10"
 before_script:
-  - cd NBlast.Client
   - npm install -g gulp
   - npm install -g coffee-script
-script: gulp test
+script:  gulp --gulpfile "./NBlast.Client/gulpfile.js" test
