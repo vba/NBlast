@@ -41,7 +41,12 @@ CommonTasks =
 #			.pipe plumber()
 			.pipe mocha({silentMode: Boolean(silentMode)}).on('error', gutil.log)
 
-gulp.task 'test', ->
+
+gulp.task 'test', ['lint'], ->
+	gulp.src([config.paths.test.js], {read: false})
+		.pipe mocha()
+
+gulp.task 'test-cover', ->
 	gulp.src([config.paths.test.js], {read: false})
 		.pipe cover.instrument({
 			pattern: [ '**/app/**']
