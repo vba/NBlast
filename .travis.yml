@@ -5,4 +5,5 @@ node_js:
 before_script:
   - cd NBlast.Client
   - npm install -g gulp
+  - npm install -g coffee-script
 script: gulp test
