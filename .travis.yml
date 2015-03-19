@@ -8,9 +8,9 @@ before_script:
   - npm install
 script:  npm test
 
-language: csharp
-mono:
-  - latest
-script:
-   build.sh
+# language: csharp
+# mono:
+#   - latest
+# script:
+#   - build.sh
 
