@@ -6,6 +6,11 @@ before_script:
   - npm install -g gulp
   - npm install -g coffee-script
   - npm install
-  - pwd
-  - ls -lah ./
 script:  npm test
+
+language: csharp
+mono:
+  - latest
+script:
+   build.sh
+
