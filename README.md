@@ -8,6 +8,8 @@ It's totally open source. NBlast uses Apache 2.0 licence that gives you a lot of
 
 NBlast is quite simple, easy in configuration, deployment and usage. It's based on such well-recommended project as Owin, WebApi and Lucene.NET.
 
+NBlast was widely tested with NLog but it can easily work with large variety of log emitters.
+
 Installation
 -------
 *TODO*
