@@ -32,20 +32,41 @@ open System.Threading.Tasks
 type JsonpMediaTypeFormatter(request                : HttpRequestMessage, 
                              mediaTypeFormatter     : MediaTypeFormatter,
                              callback               : string,
-                             ?callbackQueryParameter: string) as me =
+                             ?queryParameter        : string) as me =
     inherit MediaTypeFormatter()
 
-    static let applicationJavaScript = new MediaTypeHeaderValue("application/javascript")
+    let callbackQueryParameter = defaultArg queryParameter "callback"
+
+    static let applicationJavascript = new MediaTypeHeaderValue("application/javascript")
     static let applicationJsonp      = new MediaTypeHeaderValue("application/json-p")
-    static let textJavaScript        = new MediaTypeHeaderValue("text/javascript")
+    static let textJavascript        = new MediaTypeHeaderValue("text/javascript")
 
     do
-        me.SupportedMediaTypes.Add(applicationJavaScript)
+        me.SupportedMediaTypes.Add(applicationJavascript)
         me.SupportedMediaTypes.Add(applicationJsonp)
-        me.SupportedMediaTypes.Add(textJavaScript)
+        me.SupportedMediaTypes.Add(textJavascript)
+
+        for encoding in mediaTypeFormatter.SupportedEncodings do
+            me.SupportedEncodings.Add(encoding)
+
+        me.MediaTypeMappings.Add(new JsonpQueryStringMapping(callbackQueryParameter, textJavascript))
     
     override me.CanReadType(tp) = false
     override me.CanWriteType(tp) = mediaTypeFormatter.CanWriteType(tp)
 
     override me.GetPerRequestFormatterInstance(tp, rq, mt) =
-        new JsonpMediaTypeFormatter(rq, mediaTypeFormatter, callback, defaultArg callbackQueryParameter "") :> MediaTypeFormatter
+        match me.GetJsonpCallback request callbackQueryParameter with
+        | Some(callback) -> new JsonpMediaTypeFormatter(rq, mediaTypeFormatter, callback, callbackQueryParameter) :> MediaTypeFormatter
+        | _ -> raise(new InvalidOperationException("No callback"))
+
+
+    member private me.GetJsonpCallback request queryParameter : string option = 
+        if request.Method = HttpMethod.Get 
+        then 
+            request.GetQueryNameValuePairs() 
+                |> Seq.filter (fun x -> x.Key.Equals(queryParameter, StringComparison.OrdinalIgnoreCase))
+                |> Seq.map (fun x -> x.Value)
+                |> Seq.tryPick (fun x -> Some x)
+        else 
+            None
+        
