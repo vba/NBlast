@@ -37,8 +37,9 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Async\IndexingQueueKeeperTest.fs" />
-    <Compile Include="Async\QueueProcessingTaskTests.fs" />
+    <Compile Include="Formatting.Jsonp\JsonpMediaFormatterSpecs.fs" />
+    <Compile Include="Async\IndexingQueueKeeperSpecs.fs" />
+    <Compile Include="Async\QueueProcessingTaskSpecs.fs" />
     <Compile Include="Controllers\SearcherControllerSpecs.fs" />
     <Compile Include="Controllers\IndexerControllerSpecs.fs" />
     <Compile Include="Controllers\DashboardControllerSpecs.fs" />
@@ -73,6 +74,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="FluentAssertions.Core">
       <HintPath>..\packages\FluentAssertions\lib\net45\FluentAssertions.Core.dll</HintPath>

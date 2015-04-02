@@ -12,7 +12,7 @@ open Ploeh.AutoFixture.Kernel
 open System.Threading.Tasks
 open FSharp.Collections.ParallelSeq
 
-type IndexingQueueKeeperTest() =
+type IndexingQueueKeeperSpecs() =
 
     [<Fact>]
     member me.``Keeper must enqueue models in the ordinary context``() =

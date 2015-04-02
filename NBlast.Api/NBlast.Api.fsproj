@@ -47,7 +47,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Formatting.Jsonp\HttpConfigurationExtensions.fs" />
     <Compile Include="Formatting.Jsonp\JsonpQueryStringMapping.fs" />
-    <Compile Include="Formatting.Jsonp\JsonMediaTypeFormatter.fs" />
+    <Compile Include="Formatting.Jsonp\JsonpMediaTypeFormatter.fs" />
     <Compile Include="Models\LogModel.fs" />
     <Compile Include="Models\QueueModel.fs" />
     <Compile Include="Async\IndexingQueueKeeper.fs" />

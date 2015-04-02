@@ -60,6 +60,19 @@ type JsonpMediaTypeFormatter(request                : HttpRequestMessage,
         | _ -> raise(new InvalidOperationException("No callback"))
 
 
+    override me.WriteToStreamAsync(tp, value, stream, content, transportContext) =
+        let headers = if content = null then content.Headers else null
+        let encoding = me.SelectCharacterEncoding(headers)
+        use writer = new StreamWriter(stream, encoding, 4096, true)
+        
+        writer.Write(callback + "(")
+        writer.Flush()
+        mediaTypeFormatter.WriteToStreamAsync(tp, value, stream, content, transportContext).RunSynchronously()
+        writer.Write(")")
+        writer.Flush()
+        new Task(fun x -> ignore())
+
+
     member private me.GetJsonpCallback request queryParameter : string option = 
         if request.Method = HttpMethod.Get 
         then 

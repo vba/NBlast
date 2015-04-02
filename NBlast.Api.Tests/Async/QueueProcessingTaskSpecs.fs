@@ -26,7 +26,7 @@ type FakeStorageWriter() =
             me.IndexedDocuments <- 
                 (docs |> Seq.map (fun x -> x :?> LogDocument) |> Seq.toList) @ me.IndexedDocuments
 
-type QueueProcessingTaskTests() =
+type QueueProcessingTaskSpecs() =
 
     [<Fact>]
     member me.``Task execution must do nothing when the queue is empty``() =
