@@ -9,8 +9,13 @@ open Ploeh.AutoFixture
 open Ploeh.AutoFixture.Kernel
 open System.Threading.Tasks
 open System.Net.Http
+open System.Net.Http.Formatting
 
 type JsonpMediaFormatterSpecs() =
 
-    member private me.MakeSut(formatter:JsonpMediaTypeFormatter) = 0
-        //new JsonpMediaTypeFormatter(formatter) :> JsonpMediaTypeFormatter
+
+    member private me.MakeSut(?formatter:MediaTypeFormatter) = 
+        new JsonpMediaTypeFormatter(defaultArg formatter (new JsonMediaTypeFormatter() :> MediaTypeFormatter))
+
+    member private me.MakeSut(formatter:JsonpMediaTypeFormatter, callback, callbackQueryParameter) = 
+        new JsonpMediaTypeFormatter(formatter, callback, callbackQueryParameter)

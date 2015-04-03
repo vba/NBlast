@@ -8,30 +8,10 @@ open System.Net.Http
 open System.Net.Http.Formatting
 open System.Net.Http.Headers
 open System.Threading.Tasks
-(*
-    internal class JsonpQueryStringMapping : QueryStringMapping
-    {
-        public JsonpQueryStringMapping(string queryStringParameterName, MediaTypeHeaderValue mediaType)
-            : base(queryStringParameterName, "*", mediaType)
-        {
-        }
 
-        public JsonpQueryStringMapping(string queryStringParameterName, string mediaType)
-            : base(queryStringParameterName, "*", mediaType)
-        {
-        }
 
-        public override double TryMatchMediaType(HttpRequestMessage request)
-        {
-            var queryString = request.RequestUri.ParseQueryString();
-            return queryString.Keys.Cast<string>().Any(p => p == QueryStringParameterName) ? 1.0 : 0.0;
-        }
-    }
-*)
-
-type JsonpMediaTypeFormatter(request                : HttpRequestMessage, 
-                             mediaTypeFormatter     : MediaTypeFormatter,
-                             callback               : string,
+type JsonpMediaTypeFormatter(mediaTypeFormatter     : MediaTypeFormatter,
+                             ?callback              : string,
                              ?queryParameter        : string) as me =
     inherit MediaTypeFormatter()
 
@@ -54,15 +34,19 @@ type JsonpMediaTypeFormatter(request                : HttpRequestMessage,
     override me.CanReadType(tp) = false
     override me.CanWriteType(tp) = mediaTypeFormatter.CanWriteType(tp)
 
-    override me.GetPerRequestFormatterInstance(tp, rq, mt) =
+    override me.GetPerRequestFormatterInstance(tp, request, mt) =
         match me.GetJsonpCallback request callbackQueryParameter with
-        | Some(callback) -> new JsonpMediaTypeFormatter(rq, mediaTypeFormatter, callback, callbackQueryParameter) :> MediaTypeFormatter
+        | Some(callback) -> new JsonpMediaTypeFormatter(mediaTypeFormatter, callback, callbackQueryParameter) :> MediaTypeFormatter
         | _ -> raise(new InvalidOperationException("No callback"))
 
 
     override me.WriteToStreamAsync(tp, value, stream, content, transportContext) =
-        let headers = if content = null then content.Headers else null
+        let headers  = if content = null then content.Headers else null
         let encoding = me.SelectCharacterEncoding(headers)
+        let callback = defaultArg callback ""
+
+        if String.IsNullOrEmpty(callback) then raise(new InvalidOperationException("No callback"))
+
         use writer = new StreamWriter(stream, encoding, 4096, true)
         
         writer.Write(callback + "(")
