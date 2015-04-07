@@ -6,5 +6,4 @@ NLog
 Moq
 xUnit
 FluentAssertions
-FluentAssertions.Core
 AutoFixture

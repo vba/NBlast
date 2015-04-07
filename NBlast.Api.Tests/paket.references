@@ -6,6 +6,6 @@ Microsoft.AspNet.WebApi.Cors
 Lucene.Net
 Lucene.Net.Contrib
 Moq
-xUnit
+NUnit
 FluentAssertions
 AutoFixture

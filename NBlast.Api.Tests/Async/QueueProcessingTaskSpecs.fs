@@ -9,7 +9,7 @@ open NBlast.Storage.Core.Extensions
 open System
 open System.Linq.Expressions
 open System.Runtime
-open Xunit
+open NUnit.Framework
 open FluentAssertions
 open Ploeh.AutoFixture
 open Ploeh.AutoFixture.Kernel
@@ -28,7 +28,7 @@ type FakeStorageWriter() =
 
 type QueueProcessingTaskSpecs() =
 
-    [<Fact>]
+    [<Test>]
     member me.``Task execution must do nothing when the queue is empty``() =
         // Given
         let storageWriter = new FakeStorageWriter()
@@ -44,7 +44,7 @@ type QueueProcessingTaskSpecs() =
         queueKeeper.VerifyAll()
 
 
-    [<Fact>]
+    [<Test>]
     member me.``Task execution must consume and convert model to appropriated entity without error``() =
         // Given
         let actualAmount = 20
@@ -85,7 +85,7 @@ type QueueProcessingTaskSpecs() =
         ) 
 
 
-    [<Fact>]
+    [<Test>]
     member me.``Task execution must consume and convert model to appropriated entity with current date``() =
         // Given
         let actualAmount = 20
@@ -128,7 +128,7 @@ type QueueProcessingTaskSpecs() =
             x.Content.Value.Should().Contain(x.Message.Value, "Content should contain message") |> ignore
         ) 
 
-    [<Fact>]
+    [<Test>]
     member me.``Task execution must consume and convert model to appropriated entity with all fields``() =
         // Given
         let actualAmount = 20

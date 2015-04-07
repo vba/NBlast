@@ -35,7 +35,7 @@ type JsonpMediaTypeFormatter(mediaTypeFormatter     : MediaTypeFormatter,
     override me.CanWriteType(tp) = mediaTypeFormatter.CanWriteType(tp)
 
     override me.GetPerRequestFormatterInstance(tp, request, mt) =
-        match me.GetJsonpCallback request callbackQueryParameter with
+        match JsonpMediaTypeFormatter.GetJsonpCallback request callbackQueryParameter with
         | Some(callback) -> new JsonpMediaTypeFormatter(mediaTypeFormatter, callback, callbackQueryParameter) :> MediaTypeFormatter
         | _ -> raise(new InvalidOperationException("No callback"))
 
@@ -57,7 +57,7 @@ type JsonpMediaTypeFormatter(mediaTypeFormatter     : MediaTypeFormatter,
         new Task(fun x -> ignore())
 
 
-    member private me.GetJsonpCallback request queryParameter : string option = 
+    static member GetJsonpCallback request queryParameter : string option = 
         if request.Method = HttpMethod.Get 
         then 
             request.GetQueryNameValuePairs() 

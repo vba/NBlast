@@ -2,7 +2,7 @@
 
 open System
 open System.Runtime
-open Xunit
+open NUnit.Framework
 open Moq
 open FluentAssertions
 open NBlast.Storage.Core.Index
@@ -13,7 +13,7 @@ open System.Web.Http.Results
 [<AllowNullLiteral>]
 type DashboardControllerSpecs() = 
 
-    [<Fact>]
+    [<Test>]
     member me.``Levels per month should use storage reader and call all expected search by term``() =
         // Given
         let from = new DateTime(DateTime.Today.AddMonths(0).Year, DateTime.Today.AddMonths(0).Month, 1)
@@ -39,7 +39,7 @@ type DashboardControllerSpecs() =
         actualResult.HasValues.Should().BeTrue("It must have values") |> ignore
         actualResult.Count.Should().Be(6, "6 keys are expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Levels per week should use storage reader and call all expected search by term``() =
         // Given
         let from = DateTime.Today.AddDays(-1.0 * float(DateTime.Today.DayOfWeek)).AddDays(-3.0 * 7.0)
@@ -65,7 +65,7 @@ type DashboardControllerSpecs() =
         actualResult.HasValues.Should().BeTrue("It must have values") |> ignore
         actualResult.Count.Should().Be(6, "6 keys are expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Levels per day should use storage reader and call all expected search by term``() =
         // Given
         let today = DateTime.Today.Date.AddDays(-2.0)
@@ -92,7 +92,7 @@ type DashboardControllerSpecs() =
         actualResult.Count.Should().Be(6, "6 keys are expected") |> ignore
         
 
-    [<Fact>]
+    [<Test>]
     member me.``Group by field should use storage reader and respect facet limit``() =
         // Given
         let limit = 1
@@ -118,7 +118,7 @@ type DashboardControllerSpecs() =
         content.Facets.Should().HaveCount(limit, "Limit must be respected") |> ignore
         content.Total.Should().Be(actualFacets.Total, "Total must remain the same") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Group by field should not work with wrong field``() =
         // Given
         let sut = me.MakeSut()

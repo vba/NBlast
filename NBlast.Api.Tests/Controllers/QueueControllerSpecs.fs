@@ -2,7 +2,7 @@
 
 open System
 open System.Runtime
-open Xunit
+open NUnit.Framework
 open Moq
 open FluentAssertions
 open NBlast.Storage.Core.Index
@@ -14,7 +14,7 @@ open System.Web.Http.Results
 [<AllowNullLiteral>]
 type QueueControllerSpecs() =
 
-    [<Fact>]
+    [<Test>]
     member me.``Queue requesting should always return a result``() =
         // Given
         let queueKeeper = new Mock<IIndexingQueueKeeper>(MockBehavior.Strict)

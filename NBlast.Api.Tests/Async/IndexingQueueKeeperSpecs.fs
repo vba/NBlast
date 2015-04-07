@@ -5,7 +5,7 @@ open NBlast.Api.Models
 open NBlast.Storage.Core.Extensions
 open System
 open System.Runtime
-open Xunit
+open NUnit.Framework
 open FluentAssertions
 open Ploeh.AutoFixture
 open Ploeh.AutoFixture.Kernel
@@ -14,7 +14,7 @@ open FSharp.Collections.ParallelSeq
 
 type IndexingQueueKeeperSpecs() =
 
-    [<Fact>]
+    [<Test>]
     member me.``Keeper must enqueue models in the ordinary context``() =
         // Given
         let sut = me.MakeSut()
@@ -26,7 +26,7 @@ type IndexingQueueKeeperSpecs() =
         // Then
         sut.Count().Should().Be(10, "Queue count must be 10")
 
-    [<Fact>]
+    [<Test>]
     member me.``Keeper must enqueue models in the parallel context``() =
         // Given
         let sut = me.MakeSut()
@@ -38,7 +38,7 @@ type IndexingQueueKeeperSpecs() =
         // Then
         sut.Count().Should().Be(10, "Queue count must be 10")
 
-    [<Fact>]
+    [<Test>]
     member me.``Keeper must peek top indicated model contained in the queue``() =
         // Given
         let sut = me.MakeSut()
@@ -53,7 +53,7 @@ type IndexingQueueKeeperSpecs() =
         (actuals |> Seq.length).Should().Be(5, "Actuals must count 5") |> ignore
         
 
-    [<Fact>]
+    [<Test>]
     member me.``Keeper must peek model and leave it in queue``() =
         // Given
         let sut = me.MakeSut()
@@ -68,7 +68,7 @@ type IndexingQueueKeeperSpecs() =
         actual.IsSome.Should().BeTrue("Actual cannot be None") |> ignore
         actual.Value.Should().Be(models.Head, "List head and peeken element is the same")
 
-    [<Fact>]
+    [<Test>]
     member me.``Keeper must consume models in the ordinary context``() =
         // Given
         let sut = me.MakeSut()
@@ -85,7 +85,7 @@ type IndexingQueueKeeperSpecs() =
         ((actuals |> List.toArray).[2] |> Option.isNone).Should().BeTrue("Third element of actuals must be None") |> ignore
 
 
-    [<Fact>]
+    [<Test>]
     member me.``Keeper must consume models in parallel context as well and without locking``() =
         // Given
         let sut = me.MakeSut()
@@ -100,7 +100,7 @@ type IndexingQueueKeeperSpecs() =
         // Then
         (actuals |> List.length).Should().Be(100, "Actual models count must be equal 100") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Keeper must consume many models in the ordinary context``() =
         // Given
         let sut = me.MakeSut()
@@ -115,7 +115,7 @@ type IndexingQueueKeeperSpecs() =
         sut.Count().Should().Be(1, "Queue count must be equal 1") |> ignore
         actuals |> List.iter (fun x -> (x).Should().NotBeNull("") |> ignore)
 
-    [<Fact>]
+    [<Test>]
     member me.``Keeper must try to consume many models and return nothing with an empty keeper``() =
         // Given
         let sut = me.MakeSut()

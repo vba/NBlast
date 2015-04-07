@@ -72,6 +72,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json\lib\netcore45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
@@ -92,9 +95,6 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="xunit">
-      <HintPath>..\packages\xunit\lib\net20\xunit.dll</HintPath>
-    </Reference>
     <ProjectReference Include="..\NBlast.Api\NBlast.Api.fsproj">
       <Project>{096351CE-7E17-4D2D-A758-378E354FE977}</Project>
       <Name>NBlast.Api</Name>

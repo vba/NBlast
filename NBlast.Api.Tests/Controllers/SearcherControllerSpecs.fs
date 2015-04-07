@@ -2,7 +2,7 @@ namespace NBlast.Api.Tests
 
 open System
 open System.Runtime
-open Xunit
+open NUnit.Framework
 open Moq
 open FluentAssertions
 open NBlast.Storage.Core.Index
@@ -12,7 +12,7 @@ open NBlast.Storage.Core
 [<AllowNullLiteral>]
 type SearcherControllerSpecs() = 
 
-    [<Fact>]
+    [<Test>]
     member me.``Count all must use storage reader in the right way``() =
         // Given
         let reader = new Mock<IStorageReader>(MockBehavior.Strict)
@@ -29,7 +29,7 @@ type SearcherControllerSpecs() =
         reader.VerifyAll() |> ignore
         result.Should().Be(0, "0 count is expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Search full of parameters must pass all of them to storage reader``() =
         // Given
         let query = "expression"
@@ -59,7 +59,7 @@ type SearcherControllerSpecs() =
         Mock.Get(fst deps).VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Search with unknown sort field must ignore sort at all``() =
         // Given
         let query = "expression"
@@ -88,7 +88,7 @@ type SearcherControllerSpecs() =
         Mock.Get(fst deps).VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Search without reverse parameter must ignore it``() =
         // Given
         let query = "expression"
@@ -117,7 +117,7 @@ type SearcherControllerSpecs() =
         Mock.Get(fst deps).VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Search with after parameter must pass it to search``() =
         // Given
         let query = "expression"
@@ -146,7 +146,7 @@ type SearcherControllerSpecs() =
         Mock.Get(fst deps).VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Search with before parameter must pass it to search``() =
         // Given
         let query = "expression"
@@ -175,7 +175,7 @@ type SearcherControllerSpecs() =
         Mock.Get(fst deps).VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Search without date parameters must pass all to search``() =
         // Given
         let query = "expression"
@@ -203,7 +203,7 @@ type SearcherControllerSpecs() =
         Mock.Get(fst deps).VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Search without date and with not reversed sort parameters must pass all to search``() =
         // Given
         let query = "expression"
@@ -231,7 +231,7 @@ type SearcherControllerSpecs() =
         Mock.Get(fst deps).VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Search action must work as expected``() =
         // Given
         let reader = new Mock<IStorageReader>(MockBehavior.Strict)
@@ -258,7 +258,7 @@ type SearcherControllerSpecs() =
         reader.VerifyAll() |> ignore
         actionResult.Should().BeSameAs(result, "Same result is expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Get by id action must return 0 elements``() =
         // Given
         let reader = new Mock<IStorageReader>(MockBehavior.Strict)

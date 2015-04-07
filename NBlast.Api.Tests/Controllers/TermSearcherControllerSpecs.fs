@@ -2,7 +2,7 @@
 
 open System
 open System.Runtime
-open Xunit
+open NUnit.Framework
 open Moq
 open FluentAssertions
 open NBlast.Storage.Core.Index
@@ -13,7 +13,7 @@ open System.Web.Http.Results
 [<AllowNullLiteral>]
 type TermSearcherControllerSpecs() =
 
-    [<Fact>]
+    [<Test>]
     member me.``Term search should not work with wrong field``() =
         // Given
         let sut = me.MakeSut()
@@ -24,7 +24,7 @@ type TermSearcherControllerSpecs() =
         // Then
         (actual).Should().BeOfType<BadRequestErrorMessageResult>("Bad request expected")
 
-    [<Fact>]
+    [<Test>]
     member me.``Search full of parameters must pass all of them to storage reader``() =
         // Given
         let query = "expression"
