@@ -1,0 +1,11 @@
+FSharp.Collections.ParallelSeq
+FSharp.Core.3
+Topshelf
+Microsoft.AspNet.WebApi.owinSelfHost
+Microsoft.AspNet.WebApi.Cors
+Lucene.Net
+Lucene.Net.Contrib
+Moq
+xUnit
+FluentAssertions
+AutoFixture

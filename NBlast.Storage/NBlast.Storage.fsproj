@@ -50,7 +50,6 @@
     <Reference Include="Lucene.Net.Contrib.SimpleFacetedSearch">
       <HintPath>..\packages\Lucene.Net.Contrib\lib\net40\Lucene.Net.Contrib.SimpleFacetedSearch.dll</HintPath>
     </Reference>
-    <Reference Include="Lucene.Net.Contrib.SimpleFacetedSearch" />
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />

@@ -1,0 +1,10 @@
+FSharp.Collections.ParallelSeq
+FSharp.Core.3
+Lucene.Net
+Lucene.Net.Contrib
+NLog
+Moq
+xUnit
+FluentAssertions
+FluentAssertions.Core
+AutoFixture
