@@ -37,7 +37,7 @@ type JsonpMediaTypeFormatter(mediaTypeFormatter     : MediaTypeFormatter,
     override me.GetPerRequestFormatterInstance(tp, request, mt) =
         match JsonpMediaTypeFormatter.GetJsonpCallback request callbackQueryParameter with
         | Some(callback) -> new JsonpMediaTypeFormatter(mediaTypeFormatter, callback, callbackQueryParameter) :> MediaTypeFormatter
-        | _ -> raise(new InvalidOperationException("No callback"))
+        | _ -> raise(new InvalidOperationException("A callback parameter was not provided in the request URI."))
 
 
     override me.WriteToStreamAsync(tp, value, stream, content, transportContext) =
@@ -49,12 +49,13 @@ type JsonpMediaTypeFormatter(mediaTypeFormatter     : MediaTypeFormatter,
 
         use writer = new StreamWriter(stream, encoding, 4096, true)
         
-        writer.Write(callback + "(")
-        writer.Flush()
-        mediaTypeFormatter.WriteToStreamAsync(tp, value, stream, content, transportContext).RunSynchronously()
-        writer.Write(")")
-        writer.Flush()
-        new Task(fun x -> ignore())
+        Task.Factory.StartNew(fun () ->         
+            writer.Write(callback + "(")
+            writer.Flush()
+            mediaTypeFormatter.WriteToStreamAsync(tp, value, stream, content, transportContext).ContinueWith(fun x -> true) |> Async.AwaitTask |> ignore
+            writer.Write(")")
+            writer.Flush()
+        )
 
 
     static member GetJsonpCallback request queryParameter : string option = 

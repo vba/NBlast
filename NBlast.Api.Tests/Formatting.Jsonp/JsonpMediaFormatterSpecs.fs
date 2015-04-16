@@ -14,6 +14,11 @@ open System.Net.Http.Handlers
 open System.Net.Http.Formatting
 open Newtonsoft.Json.Linq
 
+type ValueController() = 
+    inherit ApiController() 
+    member me.Get(id: int) = 
+        "value 1"
+
 type DefaultRoute = {id: RouteParameter}
 
 type JsonpMediaTypeFormatterSpecs() =
@@ -44,7 +49,7 @@ type JsonpMediaTypeFormatterSpecs() =
         callback.IsSome.Should().BeTrue("Must be some") |> ignore
         callback.Value.Should().Be("param", "Must be param") |> ignore
 
-    [<Ignore>]
+//    [<Ignore>]
     [<TestCase("/api/value/1", "", "application/json", "\"value 1\"")>]
     [<TestCase("/api/value/1", "application/json", "application/json", "\"value 1\"")>]
     [<TestCase("/api/value/1?callback=?", "", "text/javascript", "?(\"value 1\");")>]
@@ -72,8 +77,8 @@ type JsonpMediaTypeFormatterSpecs() =
         client.BaseAddress <- new Uri("http://test.org/")
         let request = new HttpRequestMessage(HttpMethod.Get, requestUri)
 
-//        if (not(String.IsNullOrEmpty(acceptMediaType))) then
-//            request.Headers.Accept.Add(new System.Net.Http.MediaTypeWithQualityHeaderValue(acceptMediaType))
+        if (not(String.IsNullOrEmpty(acceptMediaType))) then
+            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(acceptMediaType))
 
         try
             let response = client.SendAsync(request).Result
@@ -84,7 +89,7 @@ type JsonpMediaTypeFormatterSpecs() =
             expectedValue.Should().Be(text, "Text should be the same") |> ignore
 
         with 
-            | :? InvalidOperationException as ex -> expectedValue.Should().Be(ex.Message, "Must be the same") |> ignore
+            | :? AggregateException as ex -> expectedValue.Should().Be(ex.InnerException.Message, "Must be the same") |> ignore
 
 
     member private me.MakeSut(?formatter:MediaTypeFormatter) : JsonpMediaTypeFormatter = 
