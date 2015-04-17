@@ -6,6 +6,7 @@ open System.Linq
 open Microsoft.Practices.Unity
 open System.Web.Http.Dependencies
 open System.Web.Http.Cors
+open NBlast.Api.Formatting.Jsonp
 //open WebApiContrib.Formatting.Jsonp
 
 type RouteConfig = {
@@ -22,7 +23,8 @@ type WebApiStarter() =
 
         let config = new HttpConfiguration()
         config.MapHttpAttributeRoutes()
-//        config.AddJsonpFormatter()
+        
+        config.AddJsonpFormatter()
         config.EnableCors()
 
         config.Routes.MapHttpRoute("DefaultApi",

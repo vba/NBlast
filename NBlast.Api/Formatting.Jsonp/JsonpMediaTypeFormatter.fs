@@ -53,7 +53,7 @@ type JsonpMediaTypeFormatter(mediaTypeFormatter     : MediaTypeFormatter,
             writer.Write(callback + "(")
             writer.Flush()
             mediaTypeFormatter.WriteToStreamAsync(tp, value, stream, content, transportContext).ContinueWith(fun x -> true) |> Async.AwaitTask |> ignore
-            writer.Write(")")
+            writer.Write(");")
             writer.Flush()
         )
 

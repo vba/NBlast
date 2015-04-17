@@ -45,9 +45,9 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Formatting.Jsonp\HttpConfigurationExtensions.fs" />
     <Compile Include="Formatting.Jsonp\JsonpQueryStringMapping.fs" />
     <Compile Include="Formatting.Jsonp\JsonpMediaTypeFormatter.fs" />
+    <Compile Include="Formatting.Jsonp\HttpConfigurationExtensions.fs" />
     <Compile Include="Models\LogModel.fs" />
     <Compile Include="Models\QueueModel.fs" />
     <Compile Include="Async\IndexingQueueKeeper.fs" />

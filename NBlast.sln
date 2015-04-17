@@ -25,6 +25,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "NBlast.Fixtures.Console", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBlast.Client", "NBlast.Client\NBlast.Client.csproj", "{32CAA08A-7F49-46BE-A2C8-45B39A8F47BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBlast.Api.Fortmatting.Jsonp.Tests", "NBlast.Api.Fortmatting.Jsonp.Tests\NBlast.Api.Fortmatting.Jsonp.Tests.csproj", "{F735B1C0-FC53-4C80-9DE5-7041F16E3302}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,16 @@ Global
 		{32CAA08A-7F49-46BE-A2C8-45B39A8F47BE}.Release|ARM.ActiveCfg = Release|Any CPU
 		{32CAA08A-7F49-46BE-A2C8-45B39A8F47BE}.Release|x64.ActiveCfg = Release|Any CPU
 		{32CAA08A-7F49-46BE-A2C8-45B39A8F47BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Release|ARM.ActiveCfg = Release|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Release|x64.ActiveCfg = Release|Any CPU
+		{F735B1C0-FC53-4C80-9DE5-7041F16E3302}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
