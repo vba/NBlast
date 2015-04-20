@@ -29,13 +29,10 @@ Target "BuildTests" (fun _ ->
 Target "RunTests" (fun _ ->
     let testDlls = !! (buildDir + "/tests/*Tests.dll")
     testDlls
-        |> xUnit (fun p -> 
+        |> NUnit (fun p -> 
             {p with 
-                ToolPath = "./packages/xunit.runners/tools/xunit.console.clr4.exe";
-                ShadowCopy = false;
-                HtmlOutput = false;
-                XmlOutput = false;
-                OutputDir = buildDir })
+                DisableShadowCopy = true
+                OutputFile = buildDir + "/tests/" + "TestResults.xml" })
 )
 
 Target "Default" (fun _ ->

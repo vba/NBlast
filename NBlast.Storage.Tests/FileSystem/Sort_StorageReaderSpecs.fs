@@ -9,13 +9,13 @@ open NBlast.Storage.Core.Extensions
 open NBlast.Storage.Core.Index
 open NBlast.Storage.Core.Env
 open NBlast.Storage.FileSystem
-open Xunit
+open NUnit.Framework
 open FluentAssertions
 
 
 type Sort_StorageReaderSpecs() = 
 
-    [<Fact>]
+    [<Test>]
     member me.``Reader must realize a banal, not reversed sort by date column``() =
         // Given
         let path = me.GenerateTempPath()
@@ -41,7 +41,7 @@ type Sort_StorageReaderSpecs() =
             hits.Hits.[5].Sender.Should().Be("senderA1", "senderA1 expected")
         ] |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Reader must realize a banal, reversed sort by date column``() =
         // Given
         let path = me.GenerateTempPath()
@@ -67,7 +67,7 @@ type Sort_StorageReaderSpecs() =
             hits.Hits.[5].Sender.Should().Be("senderB3", "senderB3 expected")
         ] |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Reader must realize a banal, reversed sort by date column with search expression``() =
         // Given
         let path = me.GenerateTempPath()
@@ -91,7 +91,7 @@ type Sort_StorageReaderSpecs() =
         ] |> ignore
 
 
-    [<Fact>]
+    [<Test>]
     member me.``Reader must realize a banal, not reversed sort by sender column``() =
         // Given
         let path = me.GenerateTempPath()
@@ -117,7 +117,7 @@ type Sort_StorageReaderSpecs() =
             hits.Hits.[5].Sender.Should().Be("senderB3", "senderB3 expected")
         ] |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Reader must realize a banal, reversed sort by sender column``() =
         // Given
         let path = me.GenerateTempPath()

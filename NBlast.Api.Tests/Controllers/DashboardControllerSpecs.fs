@@ -127,7 +127,7 @@ type DashboardControllerSpecs() =
         let actual = sut.GroupByField("bullshit")
 
         // Then
-        (actual).Should().BeOfType<BadRequestErrorMessageResult>("Bad request expected")
+        (actual).Should().BeOfType<BadRequestErrorMessageResult>("Bad request expected") |> ignore
 
     member private me.MakeSut(?reader: IStorageReader,
                               ?configReader: IConfigReader): DashboardController =

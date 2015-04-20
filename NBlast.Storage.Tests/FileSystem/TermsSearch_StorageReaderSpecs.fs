@@ -9,12 +9,12 @@ open NBlast.Storage.Core.Extensions
 open NBlast.Storage.Core.Index
 open NBlast.Storage.Core.Env
 open NBlast.Storage.FileSystem
-open Xunit
+open NUnit.Framework
 open FluentAssertions
 
 
-type TermsSearch_StorageReader() =
-    [<Fact>]
+type TermsSearch_StorageReaderSpecs() =
+    [<Test>]
     member this.``Reader should get no results when term search conditions are not respected``() =
         // Given
         let path = this.GenerateTempPath()
@@ -29,7 +29,7 @@ type TermsSearch_StorageReader() =
         // Then
         (actuals |> List.length).Should().Be(0, "No document must be found") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader should accomplish a one-result banal search based on term query``() =
         // Given
         let path = this.GenerateTempPath()
@@ -43,9 +43,9 @@ type TermsSearch_StorageReader() =
         
         // Then
         (actuals |> List.length).Should().Be(1, "Only 1 document must be found") |> ignore
-        actuals.[0].Sender.Should().Be(query.Expression, "Term value must be equal to expression")
+        actuals.[0].Sender.Should().Be(query.Expression, "Term value must be equal to expression") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader should accomplish a multi-result banal search based on term query``() =
         // Given
         let path = this.GenerateTempPath()
@@ -64,7 +64,7 @@ type TermsSearch_StorageReader() =
             actuals.[1].Sender.Should().Be(query.Expression, "Term value must be equal to expression")
         ] |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader should accomplish terms search in the couple with filters/sort parts``() =
         // Given
         let path = this.GenerateTempPath()

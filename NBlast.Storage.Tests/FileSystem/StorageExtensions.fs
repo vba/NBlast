@@ -9,7 +9,7 @@ open NBlast.Storage.Core.Extensions
 open NBlast.Storage.Core.Index
 open NBlast.Storage.Core.Env
 open NBlast.Storage.FileSystem
-open Xunit
+open NUnit.Framework
 open Moq
 open FluentAssertions
 

@@ -2,7 +2,7 @@
 
 open System
 open System.Runtime
-open Xunit
+open NUnit.Framework
 open FluentAssertions
 open NBlast.Storage
 open NBlast.Storage.Core.Index
@@ -11,7 +11,7 @@ type PaginatorTest() =
 
     member private this.MakeSut() = new Paginator() :> IPaginator
 
-    [<Fact>]
+    [<Test>]
     member this.``Get pages sections returns truncated section``() = 
         // Given
         let sut = this.MakeSut()
@@ -23,7 +23,7 @@ type PaginatorTest() =
         (result |> List.head).Should().Be(16, "Second page section must start with 16") |> ignore
         (result |> List.rev  |> List.head).Should().Be(20, "Second page section must end with 20") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Get pages sections returns truncated section with only one element``() = 
         // Given
         let sut = this.MakeSut()
@@ -35,7 +35,7 @@ type PaginatorTest() =
         (result.Length).Should().Be(1, "Result must containt only one item") |> ignore
         (result |> List.head).Should().Be(20, "Second page section must start with 20") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Get pages sections returns empty sequence when skip equals limit``() = 
         // Given
         let sut = this.MakeSut()
@@ -46,7 +46,7 @@ type PaginatorTest() =
         //Then
         (result.Length).Should().Be(0, "Result must be empty") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Get pages sections returns empty sequence when skip bypass limit``() = 
         // Given
         let sut = this.MakeSut()
@@ -57,7 +57,7 @@ type PaginatorTest() =
         //Then
         (result.Length).Should().Be(0, "Result must be empty") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Get pages sections returns complete section``() = 
         // Given
         let sut = this.MakeSut()
@@ -70,7 +70,7 @@ type PaginatorTest() =
         (result |> List.head).Should().Be(1, "First page section must start with 1") |> ignore
         (result |> List.rev |> List.head).Should().Be(5, "Second page section must start with 6") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Get pages sections returns complete section respecting total limit``() = 
         // Given
         let sut = this.MakeSut()
@@ -83,7 +83,7 @@ type PaginatorTest() =
         (result |> List.head).Should().Be(16, "First page section must start with 16") |> ignore
         (result |> List.rev |> List.head).Should().Be(20, "Second page section must start with 20") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Get pages sections returns truncated section respecting total limit``() = 
         // Given
         let sut = this.MakeSut()

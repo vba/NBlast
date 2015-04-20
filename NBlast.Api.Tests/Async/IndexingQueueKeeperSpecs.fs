@@ -24,7 +24,7 @@ type IndexingQueueKeeperSpecs() =
         models |> Seq.iter (fun x -> sut.Enqueue(x))
          
         // Then
-        sut.Count().Should().Be(10, "Queue count must be 10")
+        sut.Count().Should().Be(10, "Queue count must be 10") |> ignore
 
     [<Test>]
     member me.``Keeper must enqueue models in the parallel context``() =
@@ -36,7 +36,7 @@ type IndexingQueueKeeperSpecs() =
         models |> PSeq.iter (fun x -> sut.Enqueue(x))
 
         // Then
-        sut.Count().Should().Be(10, "Queue count must be 10")
+        sut.Count().Should().Be(10, "Queue count must be 10") |> ignore
 
     [<Test>]
     member me.``Keeper must peek top indicated model contained in the queue``() =
@@ -66,7 +66,7 @@ type IndexingQueueKeeperSpecs() =
         // Then
         sut.Count().Should().Be(10, "Queue count must be 10") |> ignore
         actual.IsSome.Should().BeTrue("Actual cannot be None") |> ignore
-        actual.Value.Should().Be(models.Head, "List head and peeken element is the same")
+        actual.Value.Should().Be(models.Head, "List head and peeken element is the same") |> ignore
 
     [<Test>]
     member me.``Keeper must consume models in the ordinary context``() =

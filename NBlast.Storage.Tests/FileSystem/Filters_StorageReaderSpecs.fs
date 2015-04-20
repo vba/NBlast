@@ -9,13 +9,13 @@ open NBlast.Storage.Core.Extensions
 open NBlast.Storage.Core.Index
 open NBlast.Storage.Core.Env
 open NBlast.Storage.FileSystem
-open Xunit
+open NUnit.Framework
 open FluentAssertions
 //open NBlast.Storage.Tests.FileSystem
 
 type Filters_StorageReaderSpecs() = 
 
-    [<Fact>]
+    [<Test>]
     member me.``After date filter should find nothing when it's out of scope``() =
         // Given
         let path = me.GenerateTempPath()
@@ -34,7 +34,7 @@ type Filters_StorageReaderSpecs() =
         // Then
         hits.Total.Should().Be(0, "Should return 0 hits") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``After date filter should find only expected values``() =
         // Given
         let path = me.GenerateTempPath()
@@ -59,7 +59,7 @@ type Filters_StorageReaderSpecs() =
         hits.Hits.[2].CreatedAt.DayOfYear.Should()
             .Be(date.AddDays(-3.0).DayOfYear, "Days must be equal") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Before date filter should find nothing when it's out of scope``() =
         // Given
         let path = me.GenerateTempPath()
@@ -78,7 +78,7 @@ type Filters_StorageReaderSpecs() =
         // Then
         hits.Total.Should().Be(0, "Should return 0 hits") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Before date filter should find only expected values``() =
         // Given
         let path = me.GenerateTempPath()
@@ -101,7 +101,7 @@ type Filters_StorageReaderSpecs() =
         hits.Hits.[1].CreatedAt.DayOfYear.Should()
             .Be(date.AddDays(-6.0).DayOfYear, "Days must be equal") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Between date filter should find nothing when it's out of scope``() =
         // Given
         let path = me.GenerateTempPath()
@@ -120,7 +120,7 @@ type Filters_StorageReaderSpecs() =
         // Then
         hits.Total.Should().Be(0, "Should return 0 hits") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Between date filter should find only expected values``() =
         // Given
         let path = me.GenerateTempPath()
@@ -143,7 +143,7 @@ type Filters_StorageReaderSpecs() =
         hits.Hits.[1].CreatedAt.DayOfYear.Should()
             .Be(date.AddDays(-4.0).DayOfYear, "Days must be equal") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member me.``Combining an ordinary search query and between date filter should find only expected values``() =
         // Given
         let path = me.GenerateTempPath()

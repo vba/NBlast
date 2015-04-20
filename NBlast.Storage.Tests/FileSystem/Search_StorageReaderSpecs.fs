@@ -9,13 +9,13 @@ open NBlast.Storage.Core.Extensions
 open NBlast.Storage.Core.Index
 open NBlast.Storage.Core.Env
 open NBlast.Storage.FileSystem
-open Xunit
+open NUnit.Framework
 open FluentAssertions
 
 
 type Search_StorageReaderSpecs() = 
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader must work as expected in the case of a banal search by field``() =
         // Given
         let path = this.GenerateTempPath()
@@ -40,7 +40,7 @@ type Search_StorageReaderSpecs() =
             actual.Score.Should().BeGreaterThan(0.0f, "Score must be present") |> ignore
         )
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader must search and collect expected amount of total documents``() =
         // Given
         let path = this.GenerateTempPath()
@@ -59,7 +59,7 @@ type Search_StorageReaderSpecs() =
         (actuals.Hits |> List.length).Should().Be(1, "Only 1 documents must be returned") |> ignore
         actuals.Total.Should().Be(14, "Total must be equal to 7*2") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader must count all documents as expected``() =
         // Given
         let path = this.GenerateTempPath()
@@ -74,7 +74,7 @@ type Search_StorageReaderSpecs() =
         // Then
         actualTotal.Should().Be(30, "Total must be equal to 30") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader must find and paginate results in the case of a banal search``() =
         // Given
         let path = this.GenerateTempPath()
@@ -90,7 +90,7 @@ type Search_StorageReaderSpecs() =
         (actuals |> List.length).Should().Be(5, "Only 5 documents must be found") |> ignore
         actuals.Head.Message.Should().Be("3 C", "First element must be skiped") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader must find and paginate in the end of found result slot``() =
         // Given
         let path = this.GenerateTempPath()
@@ -106,7 +106,7 @@ type Search_StorageReaderSpecs() =
         (actuals |> List.length).Should().Be(2, "Only 2 documents must be found") |> ignore
         actuals.Head.Message.Should().Be("14 B", "First elements must be skiped") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader must find and paginate in the middle of found result slot``() =
         // Given
         let path = this.GenerateTempPath()
@@ -123,7 +123,7 @@ type Search_StorageReaderSpecs() =
         actuals.Head.Message.Should().Be("11 C", "First element must be as expected") |> ignore
         (actuals |> List.rev).Head.Message.Should().Be("15 C", "Last element must be as expected") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader must find all when it's requested``() =
         // Given
         let path = this.GenerateTempPath()
@@ -137,7 +137,7 @@ type Search_StorageReaderSpecs() =
         // Then
         (actuals |> List.length).Should().Be(15, "15 documents must be found") |> ignore
 
-    [<Fact>]
+    [<Test>]
     member this.``Reader must group index results by requested field as expected``() =
         // Given
         let path = this.GenerateTempPath()

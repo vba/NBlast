@@ -2,7 +2,7 @@
 
 open System
 open System.Runtime
-open Xunit
+open NUnit.Framework
 open FluentAssertions
 open NBlast.Storage
 open NBlast.Storage.FileSystem
@@ -24,9 +24,9 @@ type FakeDocument() =
             document.Add(new Field("Id", System.Guid.NewGuid().ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED))
             document
 
-type StorageWriterTest() = 
+type StorageWriterSpecs() = 
 
-    [<Fact>]
+    [<Test>]
     member this.``Writer directory must be created as expected``() =
         // Given
         let path = this.GenerateTempPath()
@@ -36,9 +36,9 @@ type StorageWriterTest() =
         sut.InsertOne(FakeDocument())
 
         // Then
-        (Directory.Exists(path)).Should().Be(true, sprintf "Storage has to create its directory in %s" path)
+        (Directory.Exists(path)).Should().Be(true, sprintf "Storage has to create its directory in %s" path) |> ignore
     (*
-    [<Fact>]
+    [<Test>]
     member this.``Writer directory creation must fail trying unlock locked directory``() =
         // Given
         let path = this.GenerateTempPath()
@@ -52,7 +52,7 @@ type StorageWriterTest() =
 
         Assert.Throws<StorageUnlockFailedException>(fun () -> sut.InsertOne(FakeDocument())) 
     *)
-    [<Fact>]
+    [<Test>]
     member this.``Writer directory creation must fail when it's already locked``() =
         // Given
         let path = this.GenerateTempPath()
@@ -64,4 +64,4 @@ type StorageWriterTest() =
         directory.MakeLock(IndexWriter.WRITE_LOCK_NAME).Obtain(0L) |> ignore
         directory.Dispose()
 
-        Assert.Throws<StorageLockedException>(fun () -> sut.InsertOne(FakeDocument())) //|> ignore
+        Assert.Throws<StorageLockedException>(fun () -> sut.InsertOne(FakeDocument())) |> ignore

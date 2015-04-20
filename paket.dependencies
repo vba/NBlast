@@ -5,8 +5,6 @@ nuget NLog ~> 3.2.0
 nuget NLog.Contrib ~> 1.0.0.2
 nuget FAKE ~> 3.4
 nuget FSharp.Core.3 ~> 0.0.2
-nuget xUnit ~> 1.9.2
-nuget xUnit.Runners ~> 1.9.2
 nuget NUnit ~> 2.6.4
 nuget NUnit.Runners ~> 2.6.4
 nuget FluentAssertions ~> 3.3.0

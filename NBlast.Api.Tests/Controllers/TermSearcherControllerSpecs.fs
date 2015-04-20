@@ -22,7 +22,7 @@ type TermSearcherControllerSpecs() =
         let actual = sut.Search("bullshit", "go")
 
         // Then
-        (actual).Should().BeOfType<BadRequestErrorMessageResult>("Bad request expected")
+        (actual).Should().BeOfType<BadRequestErrorMessageResult>("Bad request expected") |> ignore
 
     [<Test>]
     member me.``Search full of parameters must pass all of them to storage reader``() =

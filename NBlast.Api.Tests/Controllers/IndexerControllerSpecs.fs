@@ -12,4 +12,4 @@ type IndexerControllerSpecs() =
 
     [<Test>]
     member me.``Check few facts``() =
-        (true).Should().Be(true, "True should be true, isn't")
+        (true).Should().Be(true, "True should be true, isn't") |> ignore
