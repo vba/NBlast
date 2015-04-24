@@ -6,6 +6,7 @@ sourcemaps  = require 'gulp-sourcemaps'
 clean       = require 'gulp-clean'
 watch       = require 'gulp-watch'
 less        = require 'gulp-less'
+cssmin      = require 'gulp-minify-css'
 jscs        = require 'gulp-jscs'
 jshint      = require 'gulp-jshint'
 uglify      = require 'gulp-uglify'
@@ -14,33 +15,29 @@ cover       = require 'gulp-coverage'
 browserify  = require 'gulp-browserify'
 stringify   = require 'stringify'
 debug       = require 'gulp-debug'
+zip         = require 'gulp-zip'
+sequence    = require 'gulp-run-sequence'
 
 config =
 	paths :
 		app :
 			views: './app/views/**/*.html'
 			js : './app/js/**/*.js'
-			less : './app/css/*.less'
+			less : './app/styles/*.less'
 			main : './app/js/main.js'
+			fonts: [
+				'./bower_components/font-awesome/fonts/*'
+				'./bower_components/bootstrap/fonts/*'
+			]
 		test :
 			coffee: './tests/**/*.coffee'
 			js: './test/**/*Spec.js'
 			runner: './test.html'
 		out :
-			bundle: './out/bundle'
-
-CommonTasks =
-	compileSpecs: () ->
-		gulp.src(config.paths.test.coffee)
-			.pipe sourcemaps.init()
-			.pipe coffee({bare: true}).on('error', gutil.log)
-			.pipe sourcemaps.write()
-			.pipe gulp.dest('./tests')
-	runSpecs: (silentMode) ->
-		gulp.src(config.paths.test.runner)
-#			.pipe plumber()
-			.pipe mocha({silentMode: Boolean(silentMode)}).on('error', gutil.log)
-
+			js: './out/bundle/js'
+			fonts: './out/bundle/fonts'
+			css: './out/bundle/css'
+			package: './out/package/out/bundle'
 
 gulp.task 'test', ['lint'], ->
 	gulp.src([config.paths.test.js], {read: false})
@@ -62,8 +59,16 @@ gulp.task 'lint',  ->
 		.pipe(jshint.reporter('jshint-stylish'))
 		.pipe(jscs({configPath: '.jscsrc'}))
 
-gulp.task 'bundle', ->
-	gutil.log(gutil.colors.bgGreen('Start bundling...'))
+
+gulp.task 'bundle:styles', ->
+	gulp.src config.paths.app.less
+		.pipe sourcemaps.init()
+		.pipe less()
+		.pipe cssmin()
+		.pipe sourcemaps.write()
+		.pipe gulp.dest config.paths.out.css
+
+gulp.task 'bundle:js', ->
 	gulp.src(config.paths.app.main, {read:false})
 		.pipe browserify {
 			debug: true
@@ -71,11 +76,40 @@ gulp.task 'bundle', ->
 				extensions: ['.html'], minify: false
 			}
 		}
-#		.pipe uglify {preserveComments: 'all'}
-		.pipe gulp.dest config.paths.out.bundle
+		.pipe sourcemaps.init()
+		.pipe uglify {preserveComments: 'all'}
+		.pipe sourcemaps.write()
+		.pipe gulp.dest config.paths.out.js
+
+gulp.task 'bundle:fonts', ->
+	gulp.src(config.paths.app.fonts)
+		.pipe gulp.dest config.paths.out.fonts
+
+gulp.task 'bundle', ['test', 'bundle:js', 'bundle:styles', 'bundle:fonts']
+
+gulp.task 'package:resources', ->
+	gulp.src('./out/bundle/**').pipe gulp.dest(config.paths.out.package)
+
+gulp.task 'package:entry', ->
+	gulp.src('./index.html').pipe gulp.dest('./out/package')
+
+gulp.task 'package:zip', ->
+	gulp.src './out/package/**'
+		.pipe zip('nblast.client.zip')
+		.pipe gulp.dest('./out')
+
+gulp.task 'package', ->
+	sequence('clean'
+			 ['bundle']
+			 ['package:resources', 'package:entry']
+			'package:zip')
+
+gulp.task 'clean', ->
+	gulp.src('./out', {read: false}).pipe(clean())
 
 gulp.task 'watch', ->
 	app = config.paths.app
-	gulp.watch([app.js, app.views], ['bundle'])
+	gulp.watch([app.js, app.views], ['bundle:js'])
+	gulp.watch(app.less, ['bundle:styles', 'bundle:fonts'])
 
 gulp.task('default', ['bundle', 'watch'])
