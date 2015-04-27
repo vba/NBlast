@@ -10,11 +10,25 @@ NBlast is quite simple, easy in configuration, deployment and usage. It's based 
 
 NBlast was widely tested with NLog but it can easily work with large variety of log emitters.
 
-Installation
+Requirements
 -------
-*TODO*
+* .NET Framework v4.5 or above
+* F# v3.1 or above (Build only)
+* npm v1.4.21 or above (Build only)
 
-Configuration
+Build
+-------
+*Server side*
+git clone <NBLAST.git>
+cd NBlast
+build.cmd
+
+*Client side*
+git clone <NBLAST.git>
+cd NBlast/NBlast.Client
+npm 
+
+Install
 --------
 *TODO*
 
