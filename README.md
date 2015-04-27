@@ -12,21 +12,34 @@ NBlast was widely tested with NLog but it can easily work with large variety of 
 
 Requirements
 -------
+##### Runtime
 * .NET Framework v4.5 or above
-* F# v3.1 or above (Build only)
-* npm v1.4.21 or above (Build only)
+
+##### Build
+* F# v3.1 or above
+* npm v1.4.21 or above
+  * gulp v3.8.11 or above
+  * bower v1.3.12 or above
+  * coffee v1.8.0 or above
 
 Build
 -------
-*Server side*
+##### Server side
+```bash
 git clone <NBLAST.git>
 cd NBlast
-build.cmd
+build.cmd # or build.sh
+```
 
-*Client side*
+##### Client side
+```bash
 git clone <NBLAST.git>
 cd NBlast/NBlast.Client
-npm 
+npm install
+bower install
+gulp package
+ mv .\out\nblast.client.zip <DESTINATION>
+```
 
 Install
 --------
