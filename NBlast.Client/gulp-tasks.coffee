@@ -112,4 +112,4 @@ gulp.task 'watch', ->
 	gulp.watch([app.js, app.views], ['bundle:js'])
 	gulp.watch(app.less, ['bundle:styles', 'bundle:fonts'])
 
-gulp.task('default', ['bundle', 'watch'])
+gulp.task('default', ['watch'])
