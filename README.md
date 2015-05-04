@@ -47,8 +47,37 @@ Install
 
 Usage
 --------
-
 *TODO*
+##### Populate NBlast with event logs
+```powershell
+$restUri="http://<ADDRESS>:<PORT>/api/indexer/index"
+$computer = Get-WmiObject -Class Win32_ComputerSystem 
+
+Get-EventLog -List | %{ 
+    $loggerStart = $_.LogDisplayName 
+    Get-EventLog -LogName $_.Log -ErrorAction SilentlyContinue  | %{
+        $level = switch ($_.EntryType.ToString().ToUpperInvariant()) {
+            "WARNING" {"warn"}
+            "ERROR" {"error"}
+            "FAILUREAUDIT" {"error"}
+            "FATAL" {"fatal"}
+            "DEBUG" {"debug"}
+            "INFORMATION" {"info"}
+            default {"trace"}
+        }
+        $logModel = @{
+            'sender' = $computer.Name
+            'level' = $level
+            'message' = $_.Message
+            'logger' = $loggerStart + ' / ' + $_.Source
+            'createdAt' = $_.TimeGenerated.ToString("s", [System.Globalization.CultureInfo]::InvariantCulture )
+        } 
+        $logModel | ConvertTo-Json
+    } | %{
+        Invoke-RestMethod -Uri $restUri -Method Post -ContentType 'application/json' -Body $_
+    }
+}
+```
 
 Licence
 ------
