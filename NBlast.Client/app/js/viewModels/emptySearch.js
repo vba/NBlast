@@ -3,6 +3,7 @@
 	var views               = require('../views'),
 		object              = require('../tools/object'),
 		markupService       = require('../services/markup'),
+		searchService       = require('../services/search'),
 		BaseSearchViewModel = require('./baseSearch'),
 		EmptySearchViewModel;
 
@@ -17,7 +18,7 @@
 
 		EmptySearchViewModel.prototype.makeSearch = function () {
 			var query = this.expression() || '*:*',
-				path = ['/#/search/', encodeURIComponent(query)].join('');
+				path = [searchService.getPathName(), '#/search/', encodeURIComponent(query)].join('');
 			this.storeAdvancedDetails();
 			this.sammy().setLocation(path);
 			return false;

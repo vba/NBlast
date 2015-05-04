@@ -75,7 +75,7 @@
 		};
 		SearchViewModel.prototype.makeSearch  = function () {
 			var query = this.expression() || '*:*',
-				path = ['/#/search/', encodeURIComponent(query)].join('');
+				path  = [searchService.getPathName(), '#/search/', encodeURIComponent(query)].join('');
 			this.storeAdvancedDetails();
 			if (this.sammy().getLocation() === path) {
 				this.sammy().runRoute('get', path);

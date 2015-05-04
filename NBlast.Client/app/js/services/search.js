@@ -43,6 +43,10 @@
 			return settings.makeRequest(url);
 		};
 
+		SearchService.prototype.getPathName = function () {
+			return (location && location.pathname) || '/';
+		};
+
 		return SearchService;
 	})();
 

@@ -282,17 +282,18 @@
 		describe('When view model needs to interact with server', function () {
 			it('Should run route during search request when location remains equal to requested path', function () {
 				// Given
-				var actual, getLocationStub, path, runRouteStub, storeStub, sut;
+				var actual, getLocationStub, path, runRouteStub, storeStub, sut, mocker = fakes.mocker();
 
 				sut = new SearchViewModel(1, '*');
 				path = '/#/search/' + encodeURIComponent('*');
-				storeStub = fakes.mocker().stub(sut, 'storeAdvancedDetails', function () {
+                storeStub = mocker.stub(sut, 'storeAdvancedDetails', function () {
 					return true;
 				});
-				getLocationStub = fakes.mocker().stub(sut.sammy(), 'getLocation');
-				runRouteStub = fakes.mocker().stub(sut.sammy(), 'runRoute');
+				getLocationStub = mocker.stub(sut.sammy(), 'getLocation');
+				runRouteStub = mocker.stub(sut.sammy(), 'runRoute');
 				getLocationStub.returns(path);
 				runRouteStub.withArgs('get', path).returns(true);
+				mocker.stub(searchService, 'getPathName').returns('/');
 
 				// When
 				actual = sut.enterSearch(null, { keyCode: 13});
@@ -304,16 +305,17 @@
 			});
 			it('Should set location during search request when location does not remain equal to requested path', function () {
 				// Given
-				var actual, path, setLocationStub, storeStub, sut;
+				var actual, path, setLocationStub, storeStub, sut, mocker = fakes.mocker();
 
 				sut = new SearchViewModel(1, '*');
 				path = '/#/search/' + encodeURIComponent('*');
-				storeStub = fakes.mocker().stub(sut, 'storeAdvancedDetails', function () {
+                storeStub = mocker.stub(sut, 'storeAdvancedDetails', function () {
 					return true;
 				});
-				setLocationStub = fakes.mocker().stub(sut.sammy(), 'setLocation', function () {
+				setLocationStub = mocker.stub(sut.sammy(), 'setLocation', function () {
 					return true;
 				});
+				mocker.stub(searchService, 'getPathName').returns('/');
 
 				// When
 				actual = sut.enterSearch(null, { keyCode: 13});
