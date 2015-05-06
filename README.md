@@ -57,7 +57,7 @@ NBlast.Api is built on [Topshelf](http://topshelf-project.com), so it can be dep
 
 First you need to review the configuration file *NBlast.Api.exe.config* and specify an appropriated index location.
 ```xml
-<add key="NBlast.directoryPath" value="C:/Data/Logs/NBlast/index"/>
+<add key="NBlast.index.directory_path" value="C:/Data/Logs/NBlast/index"/>
 ```
 
 Then you need to authorize NBlast.Api to use its ports on localhost, for do that, you'll need to open a command prompt with administrator privileges and type following instruction:
@@ -80,12 +80,31 @@ You can get more available options with:
 If everything is correct, your service will start immediately. 
 
 ##### NBlast.Client
-*TODO*
+Installation of the client is quite simple because it represents a simple single page application entirely based on modern Web browsers. You can install it inside a IIS/apache application, run it as standalone application with an embedded http server such [http-server](https://www.npmjs.com/package/http-server) or embed it into [nw.js](http://nwjs.io) application.
 
 Usage
 --------
-##### Use with NLog target
-*TODO*
+##### Use NBlast as NLog endpoint
+To use NBlast.Api as potential NLog endpoint you'll need to use NLog's [WebService](https://github.com/nlog/nlog/wiki/WebService-target) target. To reach that you'll need to add following specific section to your NLog configuration:
+```xml
+<nlog>
+<!-- .... -->
+  <targets>
+   <!-- .... -->
+   <target name="nblast" type="WebService" protocol="HttpPost" url="http://localhost:9090/api/indexer/index">
+       <parameter name="message" type="System.String" layout="${message}"/>
+       <parameter name="logger" type="System.String" layout="${logger}"/>
+       <parameter name="level" type="System.String" layout="${level}"/>
+       <parameter name="error" type="System.String" layout="${onexception: ${exception:format=tostring}}"/>
+       <parameter name="sender" type="System.String" layout="MyApplication-Production"/>
+   </target>
+  </targets>
+  <rules>
+    <!-- .... -->
+    <logger name="*" minLevel="Trace" appendTo="nblast" />
+  </rules>
+</nlog>
+```
 
 ##### Populate NBlast with event logs
 ```powershell
