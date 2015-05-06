@@ -3,12 +3,14 @@ module NBlast.Api.Console
 
 open System
 open Microsoft.Owin.Hosting
+open NBlast.Storage.Core
 open Topshelf
 open Topshelf.HostConfigurators
 open Topshelf.ServiceConfigurators
 
 type BackgroundJob() =
-    let _url = "http://+:9090"
+    static let configReader = new ConfigReader() :> IConfigReader
+    let _url = "NBlast.api.url" |> configReader.Read
     let _context = lazy(WebApp.Start<WebApiStarter>(_url))
     static let logger = NLog.LogManager.GetCurrentClassLogger()
 
