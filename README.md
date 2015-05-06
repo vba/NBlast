@@ -41,6 +41,15 @@ gulp package
  mv .\out\nblast.client.zip <DESTINATION>
 ```
 
+
+Configuration
+--------
+##### NBlast.Api
+*TODO*
+
+##### NBlast.Client
+*TODO*
+
 Install
 --------
 ##### NBlast.Api
@@ -75,7 +84,9 @@ If everything is correct, your service will start immediately.
 
 Usage
 --------
+##### Use with NLog target
 *TODO*
+
 ##### Populate NBlast with event logs
 ```powershell
 $restUri="http://<ADDRESS>:<PORT>/api/indexer/index"
