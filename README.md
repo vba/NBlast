@@ -43,6 +43,34 @@ gulp package
 
 Install
 --------
+##### NBlast.Api
+NBlast.Api is built on [Topshelf](http://topshelf-project.com), so it can be deployed as windows service with ease. Topshelf is a cross-platform solution you can read more about its configuration in official [documentation](http://docs.topshelf-project.com/en/latest/).
+
+First you need to review the configuration file *NBlast.Api.exe.config* and specify an appropriated index location.
+```xml
+<add key="NBlast.directoryPath" value="C:/Data/Logs/NBlast/index"/>
+```
+
+Then you need to authorize NBlast.Api to use its ports on localhost, for do that, you'll need to open a command prompt with administrator privileges and type following instruction:
+```bash
+netsh http add urlacl url=http://+:<PORT>/ user=<domain\username>
+``` 
+Where <domain\username> is your user account and <PORT> desired port. 
+
+In the next step you need to install NBLast.Api as service, you could do so with following instruction:
+```bash
+.\NBlast.Api.exe service install -username:<domain\username> -password:**** --autostart
+```
+Where <domain\username> is an account to run your windows service with.
+
+You can get more available options with:
+```bash
+.\NBlast.Api.exe help
+```
+
+If everything is correct, your service will start immediately. 
+
+##### NBlast.Client
 *TODO*
 
 Usage
