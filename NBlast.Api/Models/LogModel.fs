@@ -2,9 +2,12 @@ namespace NBlast.Api.Models
 
 open Newtonsoft.Json
 open System
+open System.Web.Http.ModelBinding
 open System.ComponentModel.DataAnnotations
+open System.ComponentModel
 
 
+//[<ModelBinder(typeof<LogModelBinder>)>]
 type LogModel () =
 
     [<Required>]
@@ -42,3 +45,12 @@ type LogModel () =
                     me.Level
                     me.Message
                     (if me.CreatedAt.HasValue then me.CreatedAt.Value.ToString() else "<NULL>")
+
+and LogModelBinder() =
+    interface IModelBinder with
+        member me.BindModel(actionContext, bindingContext) = 
+            if (not(bindingContext.ModelType = typeof<LogModel>)) 
+            then false
+            else
+                false
+            // TODO follow implementation with http://www.asp.net/web-api/overview/formats-and-model-binding/parameter-binding-in-aspnet-web-api
