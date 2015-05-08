@@ -2,9 +2,11 @@ namespace NBlast.Api.Models
 
 open Newtonsoft.Json
 open System
+open System.Net
 open System.Web.Http.ModelBinding
 open System.ComponentModel.DataAnnotations
 open System.ComponentModel
+open System.Collections.Specialized
 
 
 //[<ModelBinder(typeof<LogModelBinder>)>]
@@ -47,10 +49,38 @@ type LogModel () =
                     (if me.CreatedAt.HasValue then me.CreatedAt.Value.ToString() else "<NULL>")
 
 and LogModelBinder() =
+    member private me.TryParseAsBody(value:string) = 
+        value.Split('&') |> Seq.map (fun x -> 
+            match x.Split('=') |> Seq.toList with
+            | (key :: value :: _) -> (key.Trim([|'?'; ' '|]), WebUtility.UrlDecode(value.Trim())) |> Some
+            | _ -> None
+        ) |> Seq.fold (fun (acc:NameValueCollection) elem -> 
+            match elem with
+            | Some(kv) -> acc.Add(fst kv, snd kv); acc
+            | _ -> acc
+        ) (new NameValueCollection())
+
+    member private me.TryParseAsJson(value:string) = ""
+    
+    member private me.BindFromStringValue value (context: ModelBindingContext) = 
+        true
+
+    member private me.BindFromRawValue (value:obj) (context: ModelBindingContext) = 
+        match value with
+        | :? String -> me.BindFromStringValue (value |> string) context
+        | _ -> 
+            context.ModelState.AddModelError(context.ModelName, "Wrong value type")
+            false
+
+    member private me.BindFromContext(context: ModelBindingContext) =
+        let value = context.ValueProvider.GetValue(context.ModelName)
+        
+        if (value = null) then false
+        else me.BindFromRawValue value.RawValue context
+
     interface IModelBinder with
         member me.BindModel(actionContext, bindingContext) = 
-            if (not(bindingContext.ModelType = typeof<LogModel>)) 
-            then false
-            else
-                false
+            match bindingContext.ModelType = typeof<LogModel> with 
+            | true -> me.BindFromContext(bindingContext)
+            | _ -> false
             // TODO follow implementation with http://www.asp.net/web-api/overview/formats-and-model-binding/parameter-binding-in-aspnet-web-api
