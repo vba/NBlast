@@ -1,4 +1,4 @@
-namespace NBlast.Api.Models
+﻿namespace NBlast.Api.Models
 
 open Newtonsoft.Json
 open System
@@ -8,8 +8,7 @@ open System.ComponentModel.DataAnnotations
 open System.ComponentModel
 open System.Collections.Specialized
 
-
-//[<ModelBinder(typeof<LogModelBinder>)>]
+[<ModelBinder(typeof<LogModel>)>]
 type LogModel () =
 
     [<Required>]
@@ -40,6 +39,20 @@ type LogModel () =
     [<JsonIgnore>]
     member me.CreatedAtOp with get() = if (me.CreatedAt.HasValue) then Some me.CreatedAt.Value else None
 
+    static member BuildFromParams(collection: NameValueCollection) = 
+        let createdAt = 
+            match DateTime.TryParse(collection.["createdAt"]) with
+                | (true, dateTime) -> new Nullable<DateTime>(dateTime)
+                | _ -> Unchecked.defaultof<_>
+
+        new LogModel(
+            Sender  = collection.["sender"],
+            Logger  = collection.["logger"],
+            Level   = collection.["level"],
+            Error   = collection.["error"],
+            Message = collection.["message"]
+        )
+
     override me.ToString() = 
         sprintf "{sender=%s, logger=%s, level=%s, message=%s, createdAt=%s}" 
                     me.Sender 
@@ -50,24 +63,38 @@ type LogModel () =
 
 and LogModelBinder() =
     member private me.TryParseAsBody(value:string) = 
-        value.Split('&') |> Seq.map (fun x -> 
+        match (value.Split('&') |> Seq.map (fun x -> 
             match x.Split('=') |> Seq.toList with
             | (key :: value :: _) -> (key.Trim([|'?'; ' '|]), WebUtility.UrlDecode(value.Trim())) |> Some
             | _ -> None
-        ) |> Seq.fold (fun (acc:NameValueCollection) elem -> 
-            match elem with
-            | Some(kv) -> acc.Add(fst kv, snd kv); acc
-            | _ -> acc
-        ) (new NameValueCollection())
+        ) |> Seq.toList) with
+            | [] -> None
+            | _ as list ->
+                list |> Seq.fold (fun (acc:NameValueCollection) elem -> 
+                    match elem with
+                    | Some(kv) -> acc.Add(fst kv, snd kv); acc
+                    | _ -> acc
+                ) (new NameValueCollection()) |> Some
 
-    member private me.TryParseAsJson(value:string) = ""
+    member private me.TryParseAsJson (value: string) =
+        try 
+            let json = JsonConvert.DeserializeObject<LogModel>(value)
+            if (json = Unchecked.defaultof<_>) then new LogModel()
+            else json
+        with
+            | :? JsonReaderException | :? JsonSerializationException -> new LogModel()
+            | _ as ex -> raise(ex)
     
-    member private me.BindFromStringValue value (context: ModelBindingContext) = 
-        true
+    member me.BindFromStringValue (value:string) (bind: (LogModel -> Boolean)) = 
+        if (value.Contains("&")) then 
+            match me.TryParseAsBody(value) with
+            | Some(collection) -> LogModel.BuildFromParams(collection) |> bind
+            | _ -> false
+        else me.TryParseAsJson(value) |> bind
 
     member private me.BindFromRawValue (value:obj) (context: ModelBindingContext) = 
         match value with
-        | :? String -> me.BindFromStringValue (value |> string) context
+        | :? String -> (fun x -> context.Model <- x; true) |> me.BindFromStringValue (value |> string)
         | _ -> 
             context.ModelState.AddModelError(context.ModelName, "Wrong value type")
             false
