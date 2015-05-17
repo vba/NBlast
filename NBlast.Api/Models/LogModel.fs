@@ -77,21 +77,23 @@ and LogModelBinder() =
                 ) (new NameValueCollection()) |> Some
 
     member private me.TryParseAsJson (value: string) =
+        let broken = (new LogModel(), false)
         try 
             let json = JsonConvert.DeserializeObject<LogModel>(value)
-            if (json = Unchecked.defaultof<_>) then new LogModel()
-            else json
+            if (json = Unchecked.defaultof<_>) then broken
+            else (json, true)
         with
-            | :? JsonReaderException | :? JsonSerializationException -> new LogModel()
+            | :? JsonReaderException| :? JsonSerializationException -> broken
             | _ as ex -> raise(ex)
     
     member me.BindFromStringValue (value:string) (bind: (LogModel -> Boolean)) = 
-        if (value.Contains("&")) then 
-            match me.TryParseAsBody(value) with
-            | Some(collection) -> LogModel.BuildFromParams(collection) |> bind
-            | _ -> false
-        else me.TryParseAsJson(value) |> bind
-
+        match me.TryParseAsJson(value) with 
+            | (log, true) -> log |> bind
+            | (_, false) -> 
+                match me.TryParseAsBody(value) with
+                    | Some(collection) -> LogModel.BuildFromParams(collection) |> bind
+                    | _ -> false
+        
     member private me.BindFromRawValue (value:obj) (context: ModelBindingContext) = 
         match value with
         | :? String -> (fun x -> context.Model <- x; true) |> me.BindFromStringValue (value |> string)
