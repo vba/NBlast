@@ -63,9 +63,7 @@
     <Compile Include="SchedulerConfig.fs" />
     <Compile Include="WebApiStarter.fs" />
     <Compile Include="Program.fs" />
-    <Content Include="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FluentScheduler">

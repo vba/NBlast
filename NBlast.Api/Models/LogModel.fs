@@ -8,9 +8,7 @@ open System.ComponentModel.DataAnnotations
 open System.ComponentModel
 open System.Collections.Specialized
 
-[<ModelBinder(typeof<LogModel>)>]
 type LogModel () =
-
     [<Required>]
     [<field: JsonProperty("sender")>]
     member val Sender: string = null with get, set
@@ -61,7 +59,7 @@ type LogModel () =
                     me.Message
                     (if me.CreatedAt.HasValue then me.CreatedAt.Value.ToString() else "<NULL>")
 
-and LogModelBinder() =
+type LogModelBinder() =
     member private me.TryParseAsBody(value:string) = 
         match (value.Split('&') |> Seq.map (fun x -> 
             match x.Split('=') |> Seq.toList with

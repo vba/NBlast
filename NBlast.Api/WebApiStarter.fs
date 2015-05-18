@@ -7,6 +7,9 @@ open Microsoft.Practices.Unity
 open System.Web.Http.Dependencies
 open System.Web.Http.Cors
 open NBlast.Api.Formatting.Jsonp
+open NBlast.Api.Models
+open System.Web.Http.ModelBinding
+open System.Web.Http.ModelBinding.Binders
 //open WebApiContrib.Formatting.Jsonp
 
 type RouteConfig = {
@@ -21,11 +24,14 @@ type WebApiStarter() =
 
         logger.Debug("Start self contained WebApi configuration")
 
-        let config = new HttpConfiguration()
+        let config   = new HttpConfiguration()
+        let provider = new SimpleModelBinderProvider(typeof<LogModel>, new LogModelBinder())
+
         config.MapHttpAttributeRoutes()
         
         config.AddJsonpFormatter()
         config.EnableCors()
+        config.Services.Insert(typeof<ModelBinderProvider>, 0, provider)
 
         config.Routes.MapHttpRoute("DefaultApi",
                                    "api/{controller}/{id}",
