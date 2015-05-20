@@ -15,6 +15,7 @@ type Capture = {
     mutable model: LogModel
 }
 
+[<Ignore>]
 type LogModelBinderSpecs() =
 
     [<Test>]

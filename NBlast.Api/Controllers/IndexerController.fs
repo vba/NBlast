@@ -5,10 +5,9 @@ open NBlast.Api.Async
 open NBlast.Storage
 open NBlast.Storage.Core.Index
 open System.Web.Http
-
+open System
 open System.Net.Http.Formatting
 open System.Web.Http.Cors
-
 
 
 [<RoutePrefix("api/indexer")>]
@@ -18,8 +17,16 @@ type IndexerController(queueKeeper: IIndexingQueueKeeper) =
 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
 
+
+    [<HttpPost>]
+    [<Route("index1")>]
+    member me.Index (model: FormDataCollection) = 
+        1
+
+
     [<HttpPost>]
     [<Route("index")>]
+    [<LogModelBinder(Source="form", Target="model")>]
     member me.Index (model: LogModel) =
         if (me.ModelState.IsValid) then
             queueKeeper.Enqueue(model)

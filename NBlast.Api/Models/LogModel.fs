@@ -84,6 +84,14 @@ type LogModelBinder() =
             | :? JsonReaderException| :? JsonSerializationException -> broken
             | _ as ex -> raise(ex)
     
+    member me.Bind (value:string) = 
+        match me.TryParseAsJson(value) with 
+        | (log, true) -> log
+        | (_, false) -> 
+            match me.TryParseAsBody(value) with
+                | Some(collection) -> LogModel.BuildFromParams(collection) 
+                | _ -> new LogModel()
+
     member me.BindFromStringValue (value:string) (bind: (LogModel -> Boolean)) = 
         match me.TryParseAsJson(value) with 
             | (log, true) -> log |> bind
@@ -110,4 +118,4 @@ type LogModelBinder() =
             match bindingContext.ModelType = typeof<LogModel> with 
             | true -> me.BindFromContext(bindingContext)
             | _ -> false
-            // TODO follow implementation with http://www.asp.net/web-api/overview/formats-and-model-binding/parameter-binding-in-aspnet-web-api
+            // TODO follow implementation with https://stackoverflow.com/questions/10941669/convert-custom-action-filter-for-web-api-use
