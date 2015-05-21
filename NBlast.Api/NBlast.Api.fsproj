@@ -52,7 +52,6 @@
     <Compile Include="Models\QueueModel.fs" />
     <Compile Include="Async\IndexingQueueKeeper.fs" />
     <Compile Include="Async\QueueProcessingTask.fs" />
-    <Compile Include="Controllers\LogModelBinderAttribute.fs" />
     <Compile Include="Controllers\ControllerExtensions.fs" />
     <Compile Include="Controllers\SearcherController.fs" />
     <Compile Include="Controllers\IndexerController.fs" />

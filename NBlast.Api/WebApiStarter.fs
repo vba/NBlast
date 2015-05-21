@@ -25,13 +25,11 @@ type WebApiStarter() =
         logger.Debug("Start self contained WebApi configuration")
 
         let config   = new HttpConfiguration()
-        let provider = new SimpleModelBinderProvider(typeof<LogModel>, new LogModelBinder())
 
         config.MapHttpAttributeRoutes()
         
         config.AddJsonpFormatter()
         config.EnableCors()
-        config.Services.Insert(typeof<ModelBinderProvider>, 0, provider)
 
         config.Routes.MapHttpRoute("DefaultApi",
                                    "api/{controller}/{id}",

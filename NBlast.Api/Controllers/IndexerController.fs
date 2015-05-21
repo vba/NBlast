@@ -17,16 +17,8 @@ type IndexerController(queueKeeper: IIndexingQueueKeeper) =
 
     static let logger = NLog.LogManager.GetCurrentClassLogger()
 
-
-    [<HttpPost>]
-    [<Route("index1")>]
-    member me.Index (model: FormDataCollection) = 
-        1
-
-
     [<HttpPost>]
     [<Route("index")>]
-    [<LogModelBinder(Source="form", Target="model")>]
     member me.Index (model: LogModel) =
         if (me.ModelState.IsValid) then
             queueKeeper.Enqueue(model)
