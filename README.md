@@ -92,6 +92,7 @@ To use NBlast.Api as potential NLog endpoint you'll need to use NLog's [WebServi
   <targets>
    <!-- .... -->
    <target name="nblast" type="WebService" protocol="HttpPost" url="http://localhost:9090/api/indexer/index">
+       <parameter name="bom" type="System.String" layout="1"/>
        <parameter name="message" type="System.String" layout="${message}"/>
        <parameter name="logger" type="System.String" layout="${logger}"/>
        <parameter name="level" type="System.String" layout="${level}"/>
@@ -105,6 +106,8 @@ To use NBlast.Api as potential NLog endpoint you'll need to use NLog's [WebServi
   </rules>
 </nlog>
 ```
+**IMPORTANT!**
+In above configuration parameter "BOM" in the beginning is mandatory and absolutely pointless because of manner of how WebService target encodes its request's body. It appends a BOM to each request's body. That's a workaround to avoid any "lost" of useful information during WebApi data binding. 
 
 ##### Populate NBlast with event logs
 ```powershell
