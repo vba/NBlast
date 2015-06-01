@@ -45,7 +45,12 @@ gulp package
 Configuration
 --------
 ##### NBlast.Api
-*TODO*
+NBlast.Api has following specific settings:
+* **NBlast.api.url** indicates what url must be used for application, default value (*http://+:9090*)
+* **NBlast.search.hits_per_page** indicates an amount of items to return per page in search result, default value (*10 items per page*)
+* **NBlast.indexing.scheduler.run_every_minutes** indicates a period in which the indexing scheduler will be run, default value (*1 minute*)
+* **NBlast.indexing.directory_path** a path to the folder which contains a logs index, default value (*./index*)
+* **NBlast.indexing.documents_per_task** specifies an amount of documents to be indexed in a single step, run by scheduled task, default value (*100000*)
 
 ##### NBlast.Client
 *TODO*
@@ -85,7 +90,7 @@ Installation of the client is quite simple because it represents a simple single
 Usage
 --------
 ##### Use NBlast as NLog endpoint
-To use NBlast.Api as potential NLog endpoint you'll need to use NLog's [WebService](https://github.com/nlog/nlog/wiki/WebService-target) target. To reach that you'll need to add following specific section to your NLog configuration:
+To use NBlast.Api as a potential NLog endpoint you'll need to use NLog's [WebService](https://github.com/nlog/nlog/wiki/WebService-target) target. To reach that you'll need to add following specific section to your NLog configuration:
 ```xml
 <nlog>
 <!-- .... -->

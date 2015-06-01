@@ -24,8 +24,8 @@ module UnityConfig =
         container.RegisterInstance<IConfigReader>(new ConfigReader()) |> ignore
 
         let configReader = container.Resolve<IConfigReader>()
-        let directoryPath = "NBlast.index.directory_path" |> configReader.Read |> Path.GetFullPath
-        let indexDocumentPerTask = "NBlast.index.documents_per_task" |> configReader.ReadAsInt
+        let directoryPath = "NBlast.indexing.directory_path" |> configReader.Read |> Path.GetFullPath
+        let indexDocumentPerTask = "NBlast.indexing.documents_per_task" |> configReader.ReadAsInt
         
         container.RegisterInstance<IPaginator>(new Paginator()) |> ignore
 
