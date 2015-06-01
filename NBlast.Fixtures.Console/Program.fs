@@ -1,13 +1,13 @@
 ﻿namespace NBlast.Fixtures.Console
 
 open System.Diagnostics.CodeAnalysis
-open FSharp.Collections.ParallelSeq
 open Ploeh.AutoFixture
 open System.Net
 open Microsoft.FSharp.Control.WebExtensions
 open RestSharp
 open NBlast.Storage.Core
 open NBlast.Api.Models
+open System.Linq 
 open Faker
 open System
 
@@ -58,10 +58,11 @@ module App =
         fixturesLimit |> printfn "Sending %d fake log(s) to the server"
 
         let result = 
-            generate() 
-                |> PSeq.map (fun log -> log |> index)
-                |> PSeq.filter (fun x -> x.StatusCode <> HttpStatusCode.OK) 
-                |> PSeq.toList
+            generate()
+                .AsParallel()
+                .Select(fun log -> log |> index) 
+                .Where(fun x -> x.StatusCode <> HttpStatusCode.OK) |> Seq.toList
+
         (fixturesLimit - result.Length) |> printfn "%d records were indexed successfully, Press any key for exit"
         (for ko in result do
             (ko.StatusCode, ko.Content) |> printfn "Unprocessed tuple (status, content): %A"

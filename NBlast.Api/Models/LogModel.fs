@@ -37,18 +37,14 @@ type LogModel () =
     [<JsonIgnore>]
     member me.CreatedAtOp with get() = if (me.CreatedAt.HasValue) then Some me.CreatedAt.Value else None
 
-    static member BuildFromParams(collection: NameValueCollection) = 
-        let createdAt = 
-            match DateTime.TryParse(collection.["createdAt"]) with
-                | (true, dateTime) -> new Nullable<DateTime>(dateTime)
-                | _ -> Unchecked.defaultof<_>
-
+    member me.CloneAndAdjust(model: LogModel) = 
         new LogModel(
-            Sender  = collection.["sender"],
-            Logger  = collection.["logger"],
-            Level   = collection.["level"],
-            Error   = collection.["error"],
-            Message = collection.["message"]
+            Sender    = model.Sender.Trim(),
+            Logger    = model.Logger.Trim(),
+            Level     = model.Level.ToLowerInvariant().Trim(),
+            Message   = model.Message.Trim(),
+            Error     = model.Error,
+            CreatedAt = model.CreatedAt
         )
 
     override me.ToString() = 

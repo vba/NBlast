@@ -4,7 +4,7 @@ source https://nuget.org/api/v2
 nuget NLog ~> 3.2.0
 nuget NLog.Contrib ~> 1.0.0.2
 nuget FAKE ~> 3.4
-nuget FSharp.Core.3 ~> 0.0.2
+nuget FSharp.Core ~> 3.1.2.1
 nuget NUnit ~> 2.6.4
 nuget NUnit.Runners ~> 2.6.4
 nuget FluentAssertions ~> 3.3.0
@@ -14,7 +14,6 @@ nuget Microsoft.AspNet.WebApi.owinSelfHost ~> 5.2.2
 nuget Microsoft.AspNet.WebApi.Cors ~> 5.2.2
 nuget Lucene.Net ~> 3.0.3
 nuget Lucene.Net.Contrib ~> 3.0.3
-nuget FSharp.Collections.ParallelSeq ~> 1.0.2
 nuget Unity ~> 3.5.1404.0
 nuget FluentScheduler ~> 3.1.45
 nuget Moq ~> 4.2.1409.1722

@@ -57,8 +57,8 @@
     <Reference Include="FluentScheduler">
       <HintPath>..\packages\FluentScheduler\lib\net40\FluentScheduler.dll</HintPath>
     </Reference>
-    <Reference Include="FSharp.Collections.ParallelSeq">
-      <HintPath>..\packages\FSharp.Collections.ParallelSeq\lib\net40\FSharp.Collections.ParallelSeq.dll</HintPath>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\packages\FSharp.Core\lib\net40\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net\lib\NET40\Lucene.Net.dll</HintPath>
@@ -67,7 +67,6 @@
       <HintPath>..\packages\Moq\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json\lib\netcore45\Newtonsoft.Json.dll</HintPath>
     </Reference>

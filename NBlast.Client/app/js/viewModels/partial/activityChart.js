@@ -1,6 +1,6 @@
 (function () {
 	'use strict';
-
+	// TODO try to replace buggy chartist by responsive chart.js - http://www.sitepoint.com/fancy-responsive-charts-with-chart-js/
 	var config            = require('../../config'),
 	    dashboardService  = require('../../services/dashboard'),
 	    Chartist          = config.chartist(),

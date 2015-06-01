@@ -21,7 +21,7 @@ type IndexerController(queueKeeper: IIndexingQueueKeeper) =
     [<Route("index")>]
     member me.Index (model: LogModel) =
         if (me.ModelState.IsValid) then
-            queueKeeper.Enqueue(model)
+            model |> (model.CloneAndAdjust >> queueKeeper.Enqueue)
             me.Ok(model) :> IHttpActionResult
         else
             model |> sprintf "Log model %O is INVALID" |> logger.Debug

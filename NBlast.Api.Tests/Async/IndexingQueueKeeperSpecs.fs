@@ -10,7 +10,7 @@ open FluentAssertions
 open Ploeh.AutoFixture
 open Ploeh.AutoFixture.Kernel
 open System.Threading.Tasks
-open FSharp.Collections.ParallelSeq
+open System.Linq
 
 type IndexingQueueKeeperSpecs() =
 
@@ -33,7 +33,7 @@ type IndexingQueueKeeperSpecs() =
         let models = me.``Gimme N log models``()
         
         // When
-        models |> PSeq.iter (fun x -> sut.Enqueue(x))
+        models |> Seq.iter (fun x -> sut.Enqueue(x))
 
         // Then
         sut.Count().Should().Be(10, "Queue count must be 10") |> ignore
@@ -92,8 +92,7 @@ type IndexingQueueKeeperSpecs() =
         let models = me.``Gimme N log models``(100)
         
         // When
-        let actuals = models 
-                    |> PSeq.map (fun x -> sut.Enqueue(x) ; sut.Consume()) 
+        let actuals = models.AsParallel().Select(fun x -> sut.Enqueue(x) ; sut.Consume()) 
                     |> Seq.toList 
                     |> List.filter (fun x -> x.IsSome && x.Value |> ``is ∅`` |> not)
         
