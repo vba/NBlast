@@ -25,9 +25,10 @@
 				this.searchType = ko.observable(termKey);
 			}
 
-			this.searchResult = ko.observable({});
-			this.expression   = ko.observable(expression);
-			this.page         = ko.observable(page);
+			this.searchRssLink  = ko.observable({});
+			this.searchResult   = ko.observable({});
+			this.expression     = ko.observable(expression);
+			this.page           = ko.observable(page);
 		}
 
 		var indicator = new Indicator();
@@ -112,9 +113,10 @@
 		SearchViewModel.prototype.onSearchError = function () {
 			indicator.close();
 		};
-		SearchViewModel.prototype.onSearchDone = function (data) {
-			indicator.close();
+		SearchViewModel.prototype.onSearchDone = function (data, url) {
 			var result = data || {total: 0};
+			indicator.close();
+			this.searchRssLink(url);
 			this.searchResult(result);
 			this.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
 		};
@@ -125,11 +127,16 @@
 				: searchService.search(this.getSearchParams());
 		};
 		SearchViewModel.prototype.bind = function () {
-			var searchView = views.getSearch();
+			var me         = this,
+				searchView = views.getSearch();
+
 			markupService.applyBindings(this, searchView);
+
 			this.initExternals();
 			this.requestSearch()
-				.done(this.onSearchDone.bind(this))
+				.done(function (data) {
+					me.onSearchDone.call(me, data, this.url);
+				})
 				.error(this.onSearchError.bind(this));
 		};
 

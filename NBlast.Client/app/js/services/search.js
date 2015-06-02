@@ -4,7 +4,6 @@
 		settings        = require('./settings'),
 		SearchService;
 
-
 	SearchService = (function () {
 
 		function SearchService() { }

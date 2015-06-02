@@ -1,7 +1,12 @@
 <!--<h1 ng-controller="searchController">TO IMPLEMENT</h1>-->
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Search</h1>
+		<h1 class="page-header">
+			Search
+			<a class="search-rss-link" target="_blank" data-bind="visible: totalPages() > 1, attr: {href: searchRssLink}">
+				<i class="fa fa-rss"></i>
+			</a>
+		</h1>
 	</div>
 </div>
 <div class="row">
