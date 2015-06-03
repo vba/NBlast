@@ -18,6 +18,7 @@
 			this.totalPages     = ko.observable(0);
 			this.page           = ko.observable();
 			this.expression     = ko.observable();
+			this.searchRssLink  = ko.observable({});
 			this.searchResult   = false;
 			this.sammy          = config.sammy();
 			this.initAdvancedDetails();

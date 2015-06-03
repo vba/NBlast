@@ -25,7 +25,6 @@
 				this.searchType = ko.observable(termKey);
 			}
 
-			this.searchRssLink  = ko.observable({});
 			this.searchResult   = ko.observable({});
 			this.expression     = ko.observable(expression);
 			this.page           = ko.observable(page);
