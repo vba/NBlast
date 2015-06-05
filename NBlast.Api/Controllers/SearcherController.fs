@@ -50,6 +50,18 @@ type SearcherController(storageReader: IStorageReader,
         result
 
     [<HttpGet>]
+    [<Route("search-atom")>]
+    member me.SearchAtom(q    : string,
+                         p    : int,
+                         sf   : string,
+                         sr   : Nullable<Boolean>,
+                         from : Nullable<DateTime>,
+                         till : Nullable<DateTime>) =
+
+        let result = me.Search(q, p, sf, sr ,from, till)
+        (me.Request.CreateResponse(HttpStatusCode.OK, result, "application/atom+xml"))
+
+    [<HttpGet>]
     [<Route("{id}/get")>]
     member me.GetById (id: Guid) = 
         storageReader.SearchByField(

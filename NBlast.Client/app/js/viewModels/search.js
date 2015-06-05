@@ -115,7 +115,7 @@
 		SearchViewModel.prototype.onSearchDone = function (data, url) {
 			var result = data || {total: 0};
 			indicator.close();
-			this.searchRssLink(url);
+			this.searchRssLink(url.replace('search?', 'search-atom?'));
 			this.searchResult(result);
 			this.totalPages(Math.ceil(result.total / settings.getItemsPerPage()));
 		};

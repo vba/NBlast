@@ -71,14 +71,14 @@ gulp.task 'bundle:styles', ->
 gulp.task 'bundle:js', ->
 	gulp.src(config.paths.app.main, {read:false})
 		.pipe browserify {
-			debug: true
+#			debug: true
 			transform: stringify {
 				extensions: ['.html'], minify: false
 			}
 		}
-		.pipe sourcemaps.init()
-		.pipe uglify {preserveComments: 'all'}
-		.pipe sourcemaps.write()
+#		.pipe sourcemaps.init()
+#		.pipe uglify {preserveComments: 'all'}
+#		.pipe sourcemaps.write()
 		.pipe gulp.dest config.paths.out.js
 
 gulp.task 'bundle:fonts', ->

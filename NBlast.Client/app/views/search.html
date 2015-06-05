@@ -122,8 +122,7 @@
 				</span>
 				<a class="list-group-item-heading sender"
 				   data-bind="attr: {href: '#/details/'+$data.id}, text: $data.sender"></a>
-				<!--<h4 class="list-group-item-heading" data-bind="text: $data.sender"></h4>-->
-				<p class="list-group-item-text message" data-bind="text: $data.message"></p>
+				<p class="list-group-item-text message" data-bind="truncatedText: $data.message"></p>
 				<p class="list-group-item-text date"
 				   data-bind="text: 'Created on '+ $root.moment($data.createdAt).format('MMM d, YYYY [at] hh:mm:ss')"></p>
 			</article>
