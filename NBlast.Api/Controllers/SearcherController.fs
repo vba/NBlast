@@ -1,12 +1,17 @@
 ﻿namespace NBlast.Api.Controllers
 
 open System
+open System.Net
 open System.Web.Http
+open System.Net.Http
 open System.Net.Http.Formatting
 open NBlast.Storage.Core.Index
 open NBlast.Storage.Core
 open NBlast.Storage.Core.Extensions
 open System.Web.Http.Cors
+open System.ServiceModel.Syndication
+open System.Threading.Tasks
+open System.Xml
 
 
 [<RoutePrefix("api/searcher")>]
@@ -59,4 +64,25 @@ type SearcherController(storageReader: IStorageReader,
     [<Route("count-all")>]
     member me.CountAll () = storageReader.CountAll()
 
+    member me.AtomSearch (q    : string,
+                          sf   : string,
+                          sr   : Nullable<Boolean>,
+                          from : Nullable<DateTime>,
+                          till : Nullable<DateTime>) =
 
+        let items = 
+            me.Search(q, 1, sf, sr, from, till).Hits 
+                |> Seq.toList
+                |> List.map (fun x ->
+                    new SyndicationItem(x.Sender, x.Message, new Uri(""), x.Id, new DateTimeOffset(x.CreatedAt))
+                )
+        let feed = new SyndicationFeed(items)
+        let atomFormatter = new Atom10FeedFormatter(feed)
+        let response = me.Request.CreateResponse()
+        //response.Content <- new PushStreamContent(pusher, "") :> HttpContent
+        // https://stackoverflow.com/questions/12437731/create-rss-feed-in-mvc4-webapi
+        response
+        
+    member private me.OnAtomStreamAvailable (s: System.IO.Stream, c: HttpContent, context: TransportContext): Task = 
+        
+        Task.FromResult(0) :> Task
