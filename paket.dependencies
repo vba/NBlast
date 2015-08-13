@@ -19,3 +19,5 @@ nuget FluentScheduler ~> 3.1.45
 nuget Moq ~> 4.2.1409.1722
 nuget RestSharp ~> 105.0.1
 nuget Faker.Net ~> 1.0.3
+nuget WebApiContrib.Formatting.Jsonp ~> 3.0.1
+nuget Newtonsoft.Json ~> 7.0.1

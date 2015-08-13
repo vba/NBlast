@@ -47,9 +47,6 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Models\LogModel.fs" />
     <Compile Include="Models\QueueModel.fs" />
-    <Compile Include="Formatting\Jsonp\JsonpQueryStringMapping.fs" />
-    <Compile Include="Formatting\Jsonp\JsonpMediaTypeFormatter.fs" />
-    <Compile Include="Formatting\Jsonp\HttpConfigurationExtensions.fs" />
     <Compile Include="Formatting\Rss\SyndicationLogFeedFormatter.fs" />
     <Compile Include="Async\IndexingQueueKeeper.fs" />
     <Compile Include="Async\QueueProcessingTask.fs" />
@@ -131,6 +128,9 @@
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="WebApiContrib.Formatting.Jsonp">
+      <HintPath>..\packages\WebApiContrib.Formatting.Jsonp\lib\WebApiContrib.Formatting.Jsonp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

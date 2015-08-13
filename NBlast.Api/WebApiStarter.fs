@@ -6,7 +6,7 @@ open System.Linq
 open Microsoft.Practices.Unity
 open System.Web.Http.Dependencies
 open System.Web.Http.Cors
-open NBlast.Api.Formatting.Jsonp
+open WebApiContrib.Formatting.Jsonp
 open NBlast.Api.Models
 open System.Web.Http.ModelBinding
 open System.Web.Http.ModelBinding.Binders
