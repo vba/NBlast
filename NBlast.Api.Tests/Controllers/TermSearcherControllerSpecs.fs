@@ -9,7 +9,14 @@ open NBlast.Storage.Core.Index
 open NBlast.Api.Controllers
 open NBlast.Storage.Core
 open System.Web.Http.Results
+open System.Net
+open System.Web.Http
+open System.Net.Http
+open System.Net.Http.Headers
+open System.Net.Http.Formatting
 
+
+[<Ignore>]
 [<AllowNullLiteral>]
 type TermSearcherControllerSpecs() =
 
@@ -50,10 +57,11 @@ type TermSearcherControllerSpecs() =
                                       "createdat", 
                                       new Nullable<_>(true),
                                       new Nullable<_>(fromDate),
-                                      new Nullable<_>(tillDate)) :?> OkNegotiatedContentResult<LogDocumentHits>
+                                      new Nullable<_>(tillDate)) 
 
         // Then
         Mock.Get(fst deps).VerifyAll() |> ignore
+        actionResult.StatusCode.Should().Be(HttpStatusCode.OK, "It's ok") |> ignore
         actionResult.Content.Should().BeSameAs(result, "Same result is expected") |> ignore
 
     member private me.MakeSut(?reader: IStorageReader,
@@ -61,7 +69,12 @@ type TermSearcherControllerSpecs() =
                                
         let reader = (new Mock<IStorageReader>(MockBehavior.Strict)).Object |> defaultArg reader
         let configReader = (new Mock<IConfigReader>(MockBehavior.Strict)).Object |> defaultArg configReader
-        new TermSearcherController(reader, configReader)
+        let controller = new TermSearcherController(reader, configReader)
+
+        controller.Request <- new HttpRequestMessage()
+        controller.Request.SetConfiguration(new HttpConfiguration())
+
+        controller
 
     member private me.MakeSutDependencies(term, expression, result) = 
 
