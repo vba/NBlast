@@ -25,6 +25,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "NBlast.Fixtures.Console", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBlast.Client", "NBlast.Client\NBlast.Client.csproj", "{32CAA08A-7F49-46BE-A2C8-45B39A8F47BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBlast.Rest", "NBlast.Rest\NBlast.Rest.csproj", "{0C57D329-3836-43FA-9D06-E16CB88E4A88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,22 @@ Global
 		{32CAA08A-7F49-46BE-A2C8-45B39A8F47BE}.Release|ARM.ActiveCfg = Release|Any CPU
 		{32CAA08A-7F49-46BE-A2C8-45B39A8F47BE}.Release|x64.ActiveCfg = Release|Any CPU
 		{32CAA08A-7F49-46BE-A2C8-45B39A8F47BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Debug|ARM.Build.0 = Debug|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Debug|x64.Build.0 = Debug|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Debug|x86.Build.0 = Debug|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Release|ARM.ActiveCfg = Release|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Release|ARM.Build.0 = Release|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Release|x64.ActiveCfg = Release|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Release|x64.Build.0 = Release|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Release|x86.ActiveCfg = Release|Any CPU
+		{0C57D329-3836-43FA-9D06-E16CB88E4A88}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
