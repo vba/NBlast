@@ -13,14 +13,14 @@ namespace NBlast.Rest
 
         public void Start()
         {
-            var baseAddress = "http://localhost:9000/";
+            var baseAddress = "http://+:9090";
             appsQueue.Enqueue(WebApp.Start<Startup>(baseAddress));
             Logger.Information("Started");
         }
 
         public void Stop()
         {
-            IDisposable extracted = null;
+            IDisposable extracted;
             appsQueue.TryDequeue(out extracted);
             extracted?.Dispose();
             Logger.Information("Stopped");

@@ -1,5 +1,7 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
 using Owin;
+using WebApiContrib.Formatting.Jsonp;
 
 namespace NBlast.Rest
 {
@@ -9,11 +11,18 @@ namespace NBlast.Rest
         {
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
+            config.MapHttpAttributeRoutes();
+            config.AddJsonpFormatter();
+            config.EnableCors();
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
+            config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
 
             appBuilder.UseWebApi(config);
         }

@@ -2,8 +2,9 @@
 using System.Web.Http;
 using Ninject.Infrastructure.Language;
 
-namespace NBlast.Rest.Controllers
+namespace NBlast.Rest.Controllers.Api
 {
+    [RoutePrefix("api/values")]
     public class ValuesController: ApiController
     {
         // GET api/values 
