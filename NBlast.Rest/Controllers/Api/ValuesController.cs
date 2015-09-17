@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
+using NBlast.Rest.Configuration;
 using Ninject.Infrastructure.Language;
 
 namespace NBlast.Rest.Controllers.Api
@@ -7,6 +8,7 @@ namespace NBlast.Rest.Controllers.Api
     [RoutePrefix("api/values")]
     public class ValuesController: ApiController
     {
+
         // GET api/values 
         public IEnumerable<string> Get()
         {
