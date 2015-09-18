@@ -146,12 +146,17 @@
     <Compile Include="Configuration\IConfigReader.cs" />
     <Compile Include="Configuration\NinjectKernelSupplier.cs" />
     <Compile Include="Controllers\Api\ValuesController.cs" />
+    <Compile Include="Index\IDocumentMapperProvider.cs" />
     <Compile Include="Index\Read\FileSystemDirectoryProvider.cs" />
     <Compile Include="Index\IDirectoryProvider.cs" />
     <Compile Include="Index\StorageLockedException.cs" />
     <Compile Include="Index\StorageUnlockFailedException.cs" />
     <Compile Include="Index\Write\FileSystemDirectoryProvider.cs" />
+    <Compile Include="Model\Read\ILogHitMapperProvider.cs" />
     <Compile Include="Model\Read\LogHit.cs" />
+    <Compile Include="Model\Read\LogHitMapperProvider.cs" />
+    <Compile Include="Model\Read\LogHits.cs" />
+    <Compile Include="Model\Write\ILogEntryMapperProvider.cs" />
     <Compile Include="Model\Write\LogEntry.cs" />
     <Compile Include="Model\Write\LogEntryMapping.cs" />
     <Compile Include="RestHoster.cs" />
@@ -166,9 +171,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_Readme\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
