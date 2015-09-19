@@ -11,6 +11,8 @@ namespace NBlast.Rest.Model.Read
         public string Data { get; set; }
         [JsonProperty("level")]
         public string Level { get; set; }
+        [JsonIgnore]
+        public string Content { get; set; }
         [JsonProperty("boost")]
         public float Boost { get; set; }
         [JsonProperty("score")]

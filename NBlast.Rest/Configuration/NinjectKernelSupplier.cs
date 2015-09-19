@@ -1,6 +1,7 @@
 ﻿using NBlast.Rest.Index;
 using NBlast.Rest.Model.Read;
 using NBlast.Rest.Model.Write;
+using NBlast.Rest.Services.Read;
 using Read = NBlast.Rest.Index.Read;
 using Write = NBlast.Rest.Index.Write;
 using Ninject;
@@ -9,8 +10,8 @@ namespace NBlast.Rest.Configuration
 {
     public class NinjectKernelSupplier
     {
-        private const string ReadDirectoryProviderName   = "Read.DirectoryProvider";
-        private const string WriteDirectoryProviderName  = "Write.DirectoryProvider";
+        public const string ReadDirectoryProviderName   = "Read.DirectoryProvider";
+        public const string WriteDirectoryProviderName  = "Write.DirectoryProvider";
         private const string NblastIndexingDirectoryPath = "NBlast.indexing.directory_path";
 
         public static IKernel Supply()
@@ -23,6 +24,8 @@ namespace NBlast.Rest.Configuration
             ConfigureDirectoryProviders(kernel, configReader);
             kernel.Bind<ILogHitMapperProvider>().ToConstant(new LogHitMapperProvider());
             kernel.Bind<ILogEntryMapperProvider>().ToConstant(new LogEntryMapperProvider());
+
+            kernel.Bind<IStandardSearchService>().To<StandardSearchService>();
 
             return kernel;
         }

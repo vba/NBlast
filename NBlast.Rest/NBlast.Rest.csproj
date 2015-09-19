@@ -162,6 +162,7 @@
     <Compile Include="RestHoster.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Read\IStandardSearchService.cs" />
     <Compile Include="Services\Read\StandardSearchService.cs" />
     <Compile Include="Services\Write\IndexationService.cs" />
     <Compile Include="Startup.cs" />
