@@ -5,13 +5,14 @@ using NBlast.Rest.Services.Read;
 using Read = NBlast.Rest.Index.Read;
 using Write = NBlast.Rest.Index.Write;
 using Ninject;
+using Ninject.Syntax;
 
 namespace NBlast.Rest.Configuration
 {
     public class NinjectKernelSupplier
     {
-        public const string ReadDirectoryProviderName   = "Read.DirectoryProvider";
-        public const string WriteDirectoryProviderName  = "Write.DirectoryProvider";
+        private const string ReadConfigName              = "Read.Config";
+        private const string WriteConfigName             = "Write.Config";
         private const string NblastIndexingDirectoryPath = "NBlast.indexing.directory_path";
 
         public static IKernel Supply()
@@ -25,21 +26,36 @@ namespace NBlast.Rest.Configuration
             kernel.Bind<ILogHitMapperProvider>().ToConstant(new LogHitMapperProvider());
             kernel.Bind<ILogEntryMapperProvider>().ToConstant(new LogEntryMapperProvider());
 
-            kernel.Bind<IStandardSearchService>().To<StandardSearchService>();
+            ConfigureSearchServices(kernel);
+            ConfigureLuceneDataProviders(kernel);
 
             return kernel;
         }
 
-        private static void ConfigureDirectoryProviders(StandardKernel kernel, IConfigReader configReader)
+        private static void ConfigureSearchServices(IBindingRoot kernel)
+        {
+            kernel.Bind<IStandardSearchService>()
+                .ToMethod(x => new StandardSearchService(x.Kernel.Get<ILogHitMapperProvider>(),
+                                                         x.Kernel.Get<ILuceneDataProvider>(ReadConfigName)));
+        }
+
+        private static void ConfigureLuceneDataProviders(IBindingRoot kernel)
+        {
+            kernel.Bind<ILuceneDataProvider>()
+                .ToMethod(x => new LuceneDataProvider(x.Kernel.Get<IDirectoryProvider>(ReadConfigName)))
+                .Named(ReadConfigName);
+        }
+
+        private static void ConfigureDirectoryProviders(IBindingRoot kernel, IConfigReader configReader)
         {
             kernel.Bind<IDirectoryProvider>()
                 .To<Read.FileSystemDirectoryProvider>()
-                .Named(ReadDirectoryProviderName)
+                .Named(ReadConfigName)
                 .WithConstructorArgument(configReader.Read(NblastIndexingDirectoryPath));
 
             kernel.Bind<IDirectoryProvider>()
                 .To<Write.FileSystemDirectoryProvider>()
-                .Named(WriteDirectoryProviderName)
+                .Named(WriteConfigName)
                 .WithConstructorArgument(configReader.Read(NblastIndexingDirectoryPath));
         }
     }
