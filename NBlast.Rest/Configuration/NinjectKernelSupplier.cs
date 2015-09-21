@@ -2,6 +2,7 @@
 using NBlast.Rest.Model.Read;
 using NBlast.Rest.Model.Write;
 using NBlast.Rest.Services.Read;
+using NBlast.Rest.Services.Write;
 using Read = NBlast.Rest.Index.Read;
 using Write = NBlast.Rest.Index.Write;
 using Ninject;
@@ -26,8 +27,8 @@ namespace NBlast.Rest.Configuration
             kernel.Bind<ILogHitMapperProvider>().ToConstant(new LogHitMapperProvider());
             kernel.Bind<ILogEntryMapperProvider>().ToConstant(new LogEntryMapperProvider());
 
-            ConfigureSearchServices(kernel);
             ConfigureLuceneDataProviders(kernel);
+            ConfigureSearchServices(kernel);
 
             return kernel;
         }
@@ -37,6 +38,10 @@ namespace NBlast.Rest.Configuration
             kernel.Bind<IStandardSearchService>()
                 .ToMethod(x => new StandardSearchService(x.Kernel.Get<ILogHitMapperProvider>(),
                                                          x.Kernel.Get<ILuceneDataProvider>(ReadConfigName)));
+
+            kernel.Bind<ILogEntryIndexationService>()
+                .ToMethod(x => new LogEntryIndexationService(x.Kernel.Get<ILuceneDataProvider>(WriteConfigName),
+                                                             x.Kernel.Get<ILogEntryMapperProvider>()));
         }
 
         private static void ConfigureLuceneDataProviders(IBindingRoot kernel)
@@ -44,6 +49,10 @@ namespace NBlast.Rest.Configuration
             kernel.Bind<ILuceneDataProvider>()
                 .ToMethod(x => new LuceneDataProvider(x.Kernel.Get<IDirectoryProvider>(ReadConfigName)))
                 .Named(ReadConfigName);
+
+            kernel.Bind<ILuceneDataProvider>()
+                .ToMethod(x => new LuceneDataProvider(x.Kernel.Get<IDirectoryProvider>(WriteConfigName)))
+                .Named(WriteConfigName);
         }
 
         private static void ConfigureDirectoryProviders(IBindingRoot kernel, IConfigReader configReader)
