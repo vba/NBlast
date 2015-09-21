@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Http;
 using NBlast.Rest.Configuration;
+using Ninject;
 using Ninject.WebApi.DependencyResolver;
 using Owin;
 using WebApiContrib.Formatting.Jsonp;
@@ -26,8 +27,10 @@ namespace NBlast.Rest
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
 
-            config.DependencyResolver = new NinjectDependencyResolver(NinjectKernelSupplier.Supply());
+            var kernel = NinjectKernelSupplier.Supply();
+            config.DependencyResolver = new NinjectDependencyResolver(kernel);
             config.EnsureInitialized();
+            SchedulerConfig.Configure(kernel);
 
             appBuilder.UseWebApi(config);
         }

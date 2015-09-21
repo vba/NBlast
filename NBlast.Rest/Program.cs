@@ -1,5 +1,5 @@
-﻿using Serilog;
-using Serilog.Enrichers;
+﻿using NBlast.Rest.Configuration;
+using Serilog;
 using Topshelf;
 
 namespace NBlast.Rest
@@ -10,9 +10,9 @@ namespace NBlast.Rest
         {
             HostFactory.Run(x =>
             {
-                x.Service<RestHoster>(s =>
+                x.Service<WebApiHosterService>(s =>
                 {
-                    s.ConstructUsing(n => new RestHoster());
+                    s.ConstructUsing(n => new WebApiHosterService());
                     s.WhenStarted(hs => hs.Start());
                     s.WhenStopped(hs => hs.Stop());
                 });

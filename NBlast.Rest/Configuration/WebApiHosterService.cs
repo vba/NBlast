@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Microsoft.Owin.Hosting;
-using NBlast.Rest.Configuration;
 using Serilog;
 
-namespace NBlast.Rest
+namespace NBlast.Rest.Configuration
 {
-    public class RestHoster
+    public class WebApiHosterService
     {
-        private static readonly ILogger Logger = Log.Logger.ForContext<RestHoster>();
+        private static readonly ILogger Logger = Log.Logger.ForContext<WebApiHosterService>();
         private static readonly ConcurrentQueue<IDisposable> AppsQueue = new ConcurrentQueue<IDisposable>();
         private static readonly IConfigReader ConfigReader = new ConfigReader();
 

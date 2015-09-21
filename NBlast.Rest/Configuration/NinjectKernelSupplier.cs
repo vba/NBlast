@@ -1,4 +1,5 @@
-﻿using NBlast.Rest.Index;
+﻿using NBlast.Rest.Async;
+using NBlast.Rest.Index;
 using NBlast.Rest.Model.Read;
 using NBlast.Rest.Model.Write;
 using NBlast.Rest.Services.Read;
@@ -26,6 +27,7 @@ namespace NBlast.Rest.Configuration
             ConfigureDirectoryProviders(kernel, configReader);
             kernel.Bind<ILogHitMapperProvider>().ToConstant(new LogHitMapperProvider());
             kernel.Bind<ILogEntryMapperProvider>().ToConstant(new LogEntryMapperProvider());
+            kernel.Bind<IQueueProcessingTask>().To<QueueProcessingTask>();
 
             ConfigureLuceneDataProviders(kernel);
             ConfigureSearchServices(kernel);
