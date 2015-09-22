@@ -157,6 +157,7 @@
     <Compile Include="Configuration\SchedulerConfig.cs" />
     <Compile Include="Configuration\SchedulerRegistry.cs" />
     <Compile Include="Configuration\TaskFactory.cs" />
+    <Compile Include="Controllers\Api\IndexerController.cs" />
     <Compile Include="Controllers\Api\ValuesController.cs" />
     <Compile Include="Index\IDocumentMapperProvider.cs" />
     <Compile Include="Index\Read\FileSystemDirectoryProvider.cs" />
@@ -167,6 +168,8 @@
     <Compile Include="Index\StorageUnlockFailedException.cs" />
     <Compile Include="Index\Write\FileSystemDirectoryProvider.cs" />
     <Compile Include="Model\Dto\LogModel.cs" />
+    <Compile Include="Model\Dto\LogModelProperty.cs" />
+    <Compile Include="Model\Dto\LogModelTemplateToken.cs" />
     <Compile Include="Model\Read\ILogHitMapperProvider.cs" />
     <Compile Include="Model\Read\LogHit.cs" />
     <Compile Include="Model\Read\LogHitMapperProvider.cs" />
