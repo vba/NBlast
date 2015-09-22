@@ -27,6 +27,7 @@ namespace NBlast.Rest.Configuration
             ConfigureDirectoryProviders(kernel, configReader);
             kernel.Bind<ILogHitMapperProvider>().ToConstant(new LogHitMapperProvider());
             kernel.Bind<ILogEntryMapperProvider>().ToConstant(new LogEntryMapperProvider());
+            kernel.Bind<IIndexingQueueKeeper>().ToConstant(new IndexingQueueKeeper());
             kernel.Bind<IQueueProcessingTask>().To<QueueProcessingTask>();
 
             ConfigureLuceneDataProviders(kernel);

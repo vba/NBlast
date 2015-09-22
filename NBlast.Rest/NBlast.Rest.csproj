@@ -105,6 +105,7 @@
       <HintPath>..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -146,6 +147,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Async\IIndexingQueueKeeper.cs" />
+    <Compile Include="Async\IndexingQueueKeeper.cs" />
+    <Compile Include="Async\IQueueKeeper.cs" />
     <Compile Include="Async\QueueProcessingTask.cs" />
     <Compile Include="Configuration\ConfigReader.cs" />
     <Compile Include="Configuration\IConfigReader.cs" />
@@ -162,6 +166,7 @@
     <Compile Include="Index\StorageLockedException.cs" />
     <Compile Include="Index\StorageUnlockFailedException.cs" />
     <Compile Include="Index\Write\FileSystemDirectoryProvider.cs" />
+    <Compile Include="Model\Dto\LogModel.cs" />
     <Compile Include="Model\Read\ILogHitMapperProvider.cs" />
     <Compile Include="Model\Read\LogHit.cs" />
     <Compile Include="Model\Read\LogHitMapperProvider.cs" />
