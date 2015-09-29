@@ -15,6 +15,9 @@ namespace NBlast.Rest.Model.Dto
         [JsonProperty("Timestamp")]
         public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 
+        [JsonProperty("Exception")]
+        public string Exception { get; set; }
+
         [JsonProperty("MessageTemplateTokens")]
         public IEnumerable<LogModelTemplateToken> TemplateTokens { get; set; } = Enumerable.Empty<LogModelTemplateToken>().ToImmutableList();
 

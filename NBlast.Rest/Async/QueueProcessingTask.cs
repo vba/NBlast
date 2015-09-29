@@ -36,13 +36,15 @@ namespace NBlast.Rest.Async
             var sw = new Stopwatch();
             sw.Start();
 
-            var logEntries = models.Select(x => /*Make transformation here*/ new LogEntry()).ToList();
+            var logEntries = models.Select(Transform).ToList();
             _logEntryIndexationService.IndexMany(logEntries);
 
             sw.Stop();
             Logger.Debug($"Import process has took ${sw.ElapsedMilliseconds} msec(s)");
             return unit;
         }
+
+        private LogEntry Transform(LogModel model) => new LogEntry();
 
         public void Execute()
         {

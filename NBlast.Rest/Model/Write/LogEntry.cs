@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NBlast.Rest.Model.Write
 {
@@ -9,5 +10,7 @@ namespace NBlast.Rest.Model.Write
         public DateTime CreationDate { get; set; } = DateTime.UtcNow;
         public string Data { get; set; }
         public string Content { get; set; }
+
+        public string Exception { get; set; }
     }
 }

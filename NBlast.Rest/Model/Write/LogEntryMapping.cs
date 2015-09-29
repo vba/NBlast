@@ -32,7 +32,6 @@ namespace NBlast.Rest.Model.Write
                 .AnalyzeWith(new CaseInsensitiveKeywordAnalyzer())
                 .AnalyzedNoNorms()
                 .Stored();
-
         }
 
         public IDocumentMapper<LogEntry> Provide()

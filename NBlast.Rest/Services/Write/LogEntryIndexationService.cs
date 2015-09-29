@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Policy;
 using LanguageExt;
 using Lucene.Net.Linq;
+using Lucene.Net.Linq.Mapping;
 using NBlast.Rest.Index;
 using NBlast.Rest.Model.Write;
 using static LanguageExt.Prelude;
@@ -25,6 +26,7 @@ namespace NBlast.Rest.Services.Write
 
         public Unit IndexOne(LogEntry entry)
         {
+//            var mapper = _logEntryMapperProvider.Provide();
             return Index(session => session.Add(entry));
         }
 
