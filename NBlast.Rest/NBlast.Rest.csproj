@@ -160,6 +160,7 @@
     <Compile Include="Controllers\Api\IndexerController.cs" />
     <Compile Include="Controllers\Api\ValuesController.cs" />
     <Compile Include="Index\IDocumentMapperProvider.cs" />
+    <Compile Include="Index\LogDocumentMapper.cs" />
     <Compile Include="Index\Read\FileSystemDirectoryProvider.cs" />
     <Compile Include="Index\IDirectoryProvider.cs" />
     <Compile Include="Index\ILuceneDataProvider.cs" />

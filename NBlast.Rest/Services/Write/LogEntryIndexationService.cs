@@ -26,8 +26,21 @@ namespace NBlast.Rest.Services.Write
 
         public Unit IndexOne(LogEntry entry)
         {
-//            var mapper = _logEntryMapperProvider.Provide();
+            var mapper = CompleteMapper(entry);
             return Index(session => session.Add(entry));
+        }
+
+        private IDocumentMapper<LogEntry> CompleteMapper(params LogEntry[] entries)
+        {
+            var mapper = _logEntryMapperProvider.Provide() as DocumentMapperBase<LogEntry>;
+            if (mapper == null)
+            {
+                throw new InvalidOperationException("Invalid mapper type");
+            }
+
+            //TODO: mapper.AddField();
+
+            return mapper;
         }
 
         public Unit IndexMany(IReadOnlyList<LogEntry> entries)
