@@ -50,11 +50,12 @@ namespace NBlast.Rest.Services.Write
 
         private Unit Index (Action<ISession<LogEntry>> closure)
         {
-            using (var session = _luceneDataProvider.OpenSession(_logEntryMapperProvider.Provide()))
-            {
-                closure(session);
-                return unit;
-            }
+//            using (var session = _luceneDataProvider.OpenSession(_logEntryMapperProvider.Provide()))
+//            {
+//                closure(session);
+//                return unit;
+//            }
+            return unit;
         }
     }
 

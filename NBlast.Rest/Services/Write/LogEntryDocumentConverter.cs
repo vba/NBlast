@@ -20,19 +20,7 @@ namespace NBlast.Rest.Services.Write
     {
         public Document Convert(LogEntry entry)
         {
-            var document = new Document();
-
-            document.Add(new Field(nameof(LogEntry.Id), entry.Id.ToString(), YES, NOT_ANALYZED_NO_NORMS));
-            document.Add(new Field(nameof(LogEntry.Level), entry.Level, YES, ANALYZED_NO_NORMS));
-            document.Add(new Field(nameof(LogEntry.Content), entry.Content, Store.NO, ANALYZED_NO_NORMS));
-            document.Add(new Field(nameof(LogEntry.Data), entry.Data, YES, NOT_ANALYZED_NO_NORMS));
-            document.Add(new Field(Type, typeof(LogEntry).Name, YES, NOT_ANALYZED_NO_NORMS));
-            document.Add(new Field(nameof(LogEntry.CreationDate), DateTools.DateToString(entry.CreationDate, DateTools.Resolution.SECOND), Store.NO, ANALYZED_NO_NORMS));
-
-            if (!IsNullOrEmpty(entry.Exception))
-            {
-                document.Add(new Field(nameof(LogEntry.Exception), entry.Exception, YES, ANALYZED_NO_NORMS));
-            }
+            var document = StartBuildDocument(entry);
 
             PrepareProperties(entry)
                 .Union(PrepareTemplateTexts(entry))
@@ -43,23 +31,41 @@ namespace NBlast.Rest.Services.Write
             return document;
         }
 
-        private static ImmutableList<Field> PrepareTemplateProperties(LogEntry entry)
+        private static Document StartBuildDocument(LogEntry entry)
+        {
+            var document = new Document();
+
+            document.Add(new Field(nameof(LogEntry.Id), entry.Id.ToString(), YES, NOT_ANALYZED_NO_NORMS));
+            document.Add(new Field(nameof(LogEntry.Level), entry.Level, YES, ANALYZED_NO_NORMS));
+            document.Add(new Field(nameof(LogEntry.Content), entry.Content, Store.NO, ANALYZED_NO_NORMS));
+            document.Add(new Field(nameof(LogEntry.Data), entry.Data, YES, NOT_ANALYZED_NO_NORMS));
+            document.Add(new Field(Type, typeof (LogEntry).Name, YES, NOT_ANALYZED_NO_NORMS));
+            document.Add(new Field(nameof(LogEntry.CreationDate), DateTools.DateToString(entry.CreationDate, DateTools.Resolution.SECOND), Store.NO, ANALYZED_NO_NORMS));
+
+            if (!IsNullOrEmpty(entry.Exception))
+            {
+                document.Add(new Field(nameof(LogEntry.Exception), entry.Exception, YES, ANALYZED_NO_NORMS));
+            }
+            return document;
+        }
+
+        private static IImmutableList<Field> PrepareTemplateProperties(LogEntry entry)
         {
             return entry.TemplateTokensProperties?
-                .Select(x => new Field($"{TemplateTokensProperty}", x.Item2, Store.NO, ANALYZED_NO_NORMS))
+                .Select(x => new Field($"{TemplateTokensProperty}", x, Store.NO, ANALYZED_NO_NORMS))
                 .ToImmutableList();
         }
-        private static ImmutableList<Field> PrepareTemplateTexts(LogEntry entry)
+        private static IImmutableList<Field> PrepareTemplateTexts(LogEntry entry)
         {
             return entry.TemplateTokensTexts?
-                .Select(x => new Field($"{TemplateTokensText}", x.Item2, Store.NO, ANALYZED_NO_NORMS))
+                .Select(x => new Field($"{TemplateTokensText}", x, Store.NO, ANALYZED_NO_NORMS))
                 .ToImmutableList();
         }
 
-        private static ImmutableList<Field> PrepareProperties(LogEntry entry)
+        private static IImmutableList<Field> PrepareProperties(LogEntry entry)
         {
             return entry.Properties?
-                .Select(x => new Field($"{Propertiy}.{x.Item1}", x.Item2?.ToString(), Store.NO, ANALYZED_NO_NORMS))
+                .Select(x => new Field($"{Propertiy}.{x.Name}", x.Value?.ToString(), Store.NO, ANALYZED_NO_NORMS))
                 .ToImmutableList();
         }
     }

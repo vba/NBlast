@@ -179,6 +179,7 @@
     <Compile Include="Model\Write\LogEntry.cs" />
     <Compile Include="Model\Write\LogEntryMapping.cs" />
     <Compile Include="Configuration\WebApiHosterService.cs" />
+    <Compile Include="Model\Write\LogEntryProperty.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MapperCompletionService.cs" />

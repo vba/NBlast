@@ -44,7 +44,7 @@ namespace NBlast.Rest.Async
             return unit;
         }
 
-        private LogEntry Transform(LogModel model) => new LogEntry();
+        private LogEntry Transform(LogModel model) => null; //new LogEntry();
 
         public void Execute()
         {
