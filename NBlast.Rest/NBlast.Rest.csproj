@@ -184,6 +184,7 @@
     <Compile Include="Services\MapperCompletionService.cs" />
     <Compile Include="Services\Read\IStandardSearchService.cs" />
     <Compile Include="Services\Read\StandardSearchService.cs" />
+    <Compile Include="Services\ServiceConstant.cs" />
     <Compile Include="Services\Write\IIndexationService.cs" />
     <Compile Include="Services\Write\ILogEntryIndexationService.cs" />
     <Compile Include="Services\Write\LogEntryDocumentConverter.cs" />
