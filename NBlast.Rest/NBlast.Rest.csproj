@@ -181,10 +181,12 @@
     <Compile Include="Configuration\WebApiHosterService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\MapperCompletionService.cs" />
     <Compile Include="Services\Read\IStandardSearchService.cs" />
     <Compile Include="Services\Read\StandardSearchService.cs" />
     <Compile Include="Services\Write\IIndexationService.cs" />
     <Compile Include="Services\Write\ILogEntryIndexationService.cs" />
+    <Compile Include="Services\Write\LogEntryDocumentConverter.cs" />
     <Compile Include="Services\Write\LogEntryIndexationService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

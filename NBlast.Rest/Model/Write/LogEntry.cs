@@ -10,7 +10,8 @@ namespace NBlast.Rest.Model.Write
         public DateTime CreationDate { get; set; } = DateTime.UtcNow;
         public string Data { get; set; }
         public string Content { get; set; }
-
         public string Exception { get; set; }
+
+        public ISet<Tuple<string, object>> Properties { get; set; }
     }
 }

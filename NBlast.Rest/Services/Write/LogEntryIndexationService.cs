@@ -30,6 +30,11 @@ namespace NBlast.Rest.Services.Write
             return Index(session => session.Add(entry));
         }
 
+
+        public Unit IndexMany(IReadOnlyList<LogEntry> entries)
+        {
+            return Index(session => entries.ToList().ForEach(entry => session.Add(entry)));
+        }
         private IDocumentMapper<LogEntry> CompleteMapper(params LogEntry[] entries)
         {
             var mapper = _logEntryMapperProvider.Provide() as DocumentMapperBase<LogEntry>;
@@ -41,11 +46,6 @@ namespace NBlast.Rest.Services.Write
             //TODO: mapper.AddField();
 
             return mapper;
-        }
-
-        public Unit IndexMany(IReadOnlyList<LogEntry> entries)
-        {
-            return Index(session => entries.ToList().ForEach(entry => session.Add(entry)));
         }
 
         private Unit Index (Action<ISession<LogEntry>> closure)
