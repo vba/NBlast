@@ -168,6 +168,7 @@
     <Compile Include="Index\StorageLockedException.cs" />
     <Compile Include="Index\StorageUnlockFailedException.cs" />
     <Compile Include="Index\Write\FileSystemDirectoryProvider.cs" />
+    <Compile Include="Model\Converters\LogModelEntryConverter.cs" />
     <Compile Include="Model\Dto\LogModel.cs" />
     <Compile Include="Model\Dto\LogModelProperty.cs" />
     <Compile Include="Model\Dto\LogModelTemplateToken.cs" />
@@ -186,11 +187,14 @@
     <Compile Include="Services\Read\IStandardSearchService.cs" />
     <Compile Include="Services\Read\StandardSearchService.cs" />
     <Compile Include="Services\ServiceConstant.cs" />
+    <Compile Include="Services\Write\IConverter.cs" />
+    <Compile Include="Services\Write\IDocumentConverter.cs" />
     <Compile Include="Services\Write\IIndexationService.cs" />
     <Compile Include="Services\Write\ILogEntryIndexationService.cs" />
     <Compile Include="Services\Write\LogEntryDocumentConverter.cs" />
     <Compile Include="Services\Write\LogEntryIndexationService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Tools\ObjectExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

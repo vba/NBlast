@@ -1,5 +1,6 @@
 ﻿using NBlast.Rest.Async;
 using NBlast.Rest.Index;
+using NBlast.Rest.Model.Converters;
 using NBlast.Rest.Model.Read;
 using NBlast.Rest.Model.Write;
 using NBlast.Rest.Services.Read;
@@ -30,10 +31,17 @@ namespace NBlast.Rest.Configuration
             kernel.Bind<IIndexingQueueKeeper>().ToConstant(new IndexingQueueKeeper());
             kernel.Bind<IQueueProcessingTask>().To<QueueProcessingTask>();
 
+            ConfigureConverters(kernel);
             ConfigureLuceneDataProviders(kernel);
             ConfigureSearchServices(kernel);
 
             return kernel;
+        }
+
+        private static void ConfigureConverters(StandardKernel kernel)
+        {
+            kernel.Bind<ILogModelEntryConverter>().To<LogModelEntryConverter>();
+            kernel.Bind<IDocumentConverter<LogEntry>>().To<LogEntryDocumentConverter>();
         }
 
         private static void ConfigureSearchServices(IBindingRoot kernel)

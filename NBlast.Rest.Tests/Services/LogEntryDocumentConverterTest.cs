@@ -77,18 +77,20 @@ namespace NBlast.Rest.Tests.Services
                                         {
                                             new LogEntryProperty("duplicate", "value"),
                                             new LogEntryProperty("duplicate", "value"),
-                                            new LogEntryProperty("key1", "value1"),
-                                            new LogEntryProperty("key2", "value2"),
+                                            new LogEntryProperty("key1", 300000000000000000.5m),
+                                            new LogEntryProperty("key2", creationDate),
+                                            new LogEntryProperty("key3", "some"),
                                         });
 
             // When
             var document = sut.Convert(logEntry);
 
             // Then
-            document.GetFields().Count.Should().Be(10);
+            document.GetFields().Count.Should().Be(11);
             document.Get($"{FieldNames.Propertiy}.duplicate").ShouldBeEquivalentTo("value");
-            document.Get($"{FieldNames.Propertiy}.key1").ShouldBeEquivalentTo("value1");
-            document.Get($"{FieldNames.Propertiy}.key2").ShouldBeEquivalentTo("value2");
+            document.Get($"{FieldNames.Propertiy}.key1").ShouldBeEquivalentTo("300000000000000000.5");
+            document.Get($"{FieldNames.Propertiy}.key2").ShouldBeEquivalentTo(DateTools.DateToString(creationDate, DateTools.Resolution.SECOND));
+            document.Get($"{FieldNames.Propertiy}.key3").ShouldBeEquivalentTo("some");
         }
 
         [Theory(DisplayName = "It should convert simple log entry to lucene document as expected without any data lost"), AutoData]

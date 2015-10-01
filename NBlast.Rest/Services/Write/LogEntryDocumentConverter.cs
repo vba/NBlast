@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Lucene.Net.Documents;
 using NBlast.Rest.Model.Write;
+using NBlast.Rest.Tools;
 using static System.String;
+using static Lucene.Net.Documents.DateTools;
 using static Lucene.Net.Documents.Field.Index;
 using static Lucene.Net.Documents.Field.Store;
 using static Lucene.Net.Documents.Field;
@@ -11,20 +14,15 @@ using static NBlast.Rest.Services.ServiceConstant.FieldNames;
 
 namespace NBlast.Rest.Services.Write
 {
-    public interface IDocumentConverter<in T>
-    {
-        Document Convert(T entry);
-    }
-
     public class LogEntryDocumentConverter : IDocumentConverter<LogEntry>
     {
-        public Document Convert(LogEntry entry)
+        public Document Convert(LogEntry logModel)
         {
-            var document = StartBuildDocument(entry);
+            var document = StartBuildDocument(logModel);
 
-            PrepareProperties(entry)
-                .Union(PrepareTemplateTexts(entry))
-                .Union(PrepareTemplateProperties(entry))
+            PrepareProperties(logModel)
+                .Union(PrepareTemplateTexts(logModel))
+                .Union(PrepareTemplateProperties(logModel))
                 .ToImmutableList()
                 .ForEach(x => document.Add(x));
 
@@ -39,8 +37,8 @@ namespace NBlast.Rest.Services.Write
             document.Add(new Field(nameof(LogEntry.Level), entry.Level, YES, ANALYZED_NO_NORMS));
             document.Add(new Field(nameof(LogEntry.Content), entry.Content, Store.NO, ANALYZED_NO_NORMS));
             document.Add(new Field(nameof(LogEntry.Data), entry.Data, YES, NOT_ANALYZED_NO_NORMS));
-            document.Add(new Field(Type, typeof (LogEntry).Name, YES, NOT_ANALYZED_NO_NORMS));
-            document.Add(new Field(nameof(LogEntry.CreationDate), DateTools.DateToString(entry.CreationDate, DateTools.Resolution.SECOND), Store.NO, ANALYZED_NO_NORMS));
+            document.Add(new Field(ServiceConstant.FieldNames.Type, typeof (LogEntry).Name, YES, NOT_ANALYZED_NO_NORMS));
+            document.Add(new Field(nameof(LogEntry.CreationDate), DateToString(entry.CreationDate, Resolution.SECOND), Store.NO, ANALYZED_NO_NORMS));
 
             if (!IsNullOrEmpty(entry.Exception))
             {
@@ -62,11 +60,45 @@ namespace NBlast.Rest.Services.Write
                 .ToImmutableList();
         }
 
-        private static IImmutableList<Field> PrepareProperties(LogEntry entry)
+        private static IImmutableList<IFieldable> PrepareProperties(LogEntry entry)
         {
             return entry.Properties?
-                .Select(x => new Field($"{Propertiy}.{x.Name}", x.Value?.ToString(), Store.NO, ANALYZED_NO_NORMS))
+                .Select(x =>
+                {
+                    var name = $"{Propertiy}.{x.Name}";
+
+                    if (x.Value is DateTime) // TODO add check for datetime offsets
+                    {
+                        return new Field(name, DateToString(entry.CreationDate, Resolution.SECOND), Store.NO, ANALYZED_NO_NORMS) as IFieldable;
+                    }
+                    return (x.Value.IsNumber() && !x.Value.IsDecimal())
+                        ? MakeNumericField(name, x) 
+                        : new Field(name, x.Value?.ToString(), Store.NO, ANALYZED_NO_NORMS);
+                })
                 .ToImmutableList();
+        }
+
+        private static IFieldable MakeNumericField(string name, LogEntryProperty x)
+        {
+            var field = new NumericField(name, Store.NO, true);
+
+            if (x.Value.IsLong())
+            {
+                field.SetLongValue((long) x.Value);
+            }
+            else if (x.Value.IsDouble())
+            {
+                field.SetDoubleValue((double) x.Value);
+            }
+            else if (x.Value.IsFloat())
+            {
+                field.SetFloatValue((float) x.Value);
+            }
+            else
+            {
+                field.SetIntValue((int) x.Value);
+            }
+            return field;
         }
     }
 }

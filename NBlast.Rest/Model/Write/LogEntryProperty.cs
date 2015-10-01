@@ -5,8 +5,8 @@ namespace NBlast.Rest.Model.Write
     public class LogEntryProperty
     {
         public string Name { get; }
-        public string Value { get; }
-        public LogEntryProperty(string name, string value)
+        public object Value { get; }
+        public LogEntryProperty(string name, object value)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (value == null) throw new ArgumentNullException(nameof(value));
@@ -16,7 +16,7 @@ namespace NBlast.Rest.Model.Write
 
         protected bool Equals(LogEntryProperty other)
         {
-            return string.Equals(Name, other.Name) && string.Equals(Value, other.Value);
+            return string.Equals(Name, other.Name) && Value == other.Value;
         }
 
         public override bool Equals(object obj)
