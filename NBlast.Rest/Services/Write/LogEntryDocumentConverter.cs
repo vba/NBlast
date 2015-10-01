@@ -78,25 +78,26 @@ namespace NBlast.Rest.Services.Write
                 .ToImmutableList();
         }
 
-        private static IFieldable MakeNumericField(string name, LogEntryProperty x)
+        private static IFieldable MakeNumericField(string name, LogEntryProperty property
+            )
         {
             var field = new NumericField(name, Store.NO, true);
 
-            if (x.Value.IsLong())
+            if (property.Value.IsLong())
             {
-                field.SetLongValue((long) x.Value);
+                field.SetLongValue((long) property.Value);
             }
-            else if (x.Value.IsDouble())
+            else if (property.Value.IsDouble())
             {
-                field.SetDoubleValue((double) x.Value);
+                field.SetDoubleValue((double) property.Value);
             }
-            else if (x.Value.IsFloat())
+            else if (property.Value.IsFloat())
             {
-                field.SetFloatValue((float) x.Value);
+                field.SetFloatValue((float) property.Value);
             }
             else
             {
-                field.SetIntValue((int) x.Value);
+                field.SetIntValue((int) property.Value);
             }
             return field;
         }

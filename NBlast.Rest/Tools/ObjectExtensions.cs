@@ -1,4 +1,6 @@
-﻿namespace NBlast.Rest.Tools
+﻿using System.Runtime.InteropServices;
+
+namespace NBlast.Rest.Tools
 {
     public static class ObjectExtensions
     {
@@ -41,4 +43,5 @@
             return value is sbyte || value is byte;
         }
     }
+
 }

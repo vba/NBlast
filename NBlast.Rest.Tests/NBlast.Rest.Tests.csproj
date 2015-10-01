@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LogEntryDocumentConverterTest.cs" />
+    <Compile Include="Tools\MonadExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

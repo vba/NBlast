@@ -194,6 +194,8 @@
     <Compile Include="Services\Write\LogEntryDocumentConverter.cs" />
     <Compile Include="Services\Write\LogEntryIndexationService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Tools\Monad.cs" />
+    <Compile Include="Tools\MonadExtensions.cs" />
     <Compile Include="Tools\ObjectExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
