@@ -52,13 +52,13 @@ namespace NBlast.Rest.Services.Write
         private static IImmutableList<Field> PrepareTemplateProperties(LogEntry entry)
         {
             return entry.TemplateTokensProperties?
-                .Select(x => new Field($"{TemplateTokensProperty}", x, Store.NO, ANALYZED_NO_NORMS))
+                .Select(x => new Field(TemplateTokensProperty, x, Store.NO, ANALYZED_NO_NORMS))
                 .ToImmutableList();
         }
         private static IImmutableList<Field> PrepareTemplateTexts(LogEntry entry)
         {
             return entry.TemplateTokensTexts?
-                .Select(x => new Field($"{TemplateTokensText}", x, Store.NO, ANALYZED_NO_NORMS))
+                .Select(x => new Field(TemplateTokensText, x, Store.NO, ANALYZED_NO_NORMS))
                 .ToImmutableList();
         }
 
