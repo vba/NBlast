@@ -3,39 +3,42 @@ using System;
 namespace NBlast.Rest.Tools
 {
     public static class MonadExtensions
-    {
-        public static T Value<T> (this Monad<T> me) where T : class => me.Value;
-
+    { 
         public static Monad<TOut> With<TIn, TOut>(this Monad<TIn> source,
-                                                  Func<TIn, TOut> action) where TIn : class
-            where TOut : class => 
-                source.Value != default(TIn) 
+                                                  Func<TIn, TOut> action) => 
+                source.HasValue
                     ? Monad.Bind(action(source.Value)) 
-                    : Monad.Bind(default(TOut));
+                    : Monad.Empty<TOut>();
 
-        public static Monad<T> Do<T>(this Monad<T> source, Action<T> action) where T : class
+        public static Monad<T> Do<T>(this Monad<T> source, Action<T> action)
         {
-            if (source.Value != default(T))
+            if (source.HasValue)
             {
                 action(source.Value);
             }
             return source;
         }
-        public static Monad<T> If<T>(this Monad<T> source, Func<T, bool> condition)
-            where T : class => 
-                (source.Value != default(T) && condition(source.Value)) 
+        public static Monad<T> If<T>(this Monad<T> source, Func<T, bool> condition) => 
+                (source.HasValue && condition(source.Value)) 
                     ? source 
-                    : Monad.Bind(default(T));
+                    : Monad.Empty<T>();
 
         public static Monad<TOut> If<TIn, TOut>(this Monad<TIn> source, 
                                                 Func<TIn, bool> condition,
                                                 Func<TIn, TOut> @true,
                                                 Func<TIn, TOut> @false)
-            where TIn : class where TOut : class =>
-                (source.Value != default(TIn) && condition(source.Value))
-                    ? @true(source.Value).Bind()
-                    : @false(source.Value).Bind();
+        {
+            if (!source.HasValue)
+            {
+                return Monad.Empty<TOut>();
+            }
 
-        public static Monad<T> Bind<T>(this T me) where T : class => Monad.Bind(me);
+            return (condition(source.Value))
+                ? @true(source.Value).ToMonad()
+                : @false(source.Value).ToMonad();
+        }
+
+
+        public static Monad<T> ToMonad<T>(this T me) => Monad.Bind(me);
     }
 }
