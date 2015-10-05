@@ -78,8 +78,7 @@ namespace NBlast.Rest.Services.Write
                 .ToImmutableList();
         }
 
-        private static IFieldable MakeNumericField(string name, LogEntryProperty property
-            )
+        private static IFieldable MakeNumericField(string name, LogEntryProperty property)
         {
             var field = new NumericField(name, Store.NO, true);
 

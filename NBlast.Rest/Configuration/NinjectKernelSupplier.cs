@@ -51,8 +51,8 @@ namespace NBlast.Rest.Configuration
                                                          x.Kernel.Get<ILuceneDataProvider>(ReadConfigName)));
 
             kernel.Bind<ILogEntryIndexationService>()
-                .ToMethod(x => new LogEntryIndexationService(x.Kernel.Get<ILuceneDataProvider>(WriteConfigName),
-                                                             x.Kernel.Get<ILogEntryMapperProvider>()));
+                .ToMethod(x => new LogEntryIndexationService(x.Kernel.Get<IDirectoryProvider>(WriteConfigName),
+                                                             x.Kernel.Get<IDocumentConverter<LogEntry>>()));
         }
 
         private static void ConfigureLuceneDataProviders(IBindingRoot kernel)

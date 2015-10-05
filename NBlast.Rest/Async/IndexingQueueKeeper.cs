@@ -29,7 +29,7 @@ namespace NBlast.Rest.Async
         public int Count() => _queue.Count;
 
         public IReadOnlyList<LogModel> ConsumeTop(int top = 10) =>
-            range(0, top - 1)
+            Range(0, top - 1)
                 .Select(x => Consume())
                 .Select(x => x.Match(Some: y => y,
                                      None: () => null))
