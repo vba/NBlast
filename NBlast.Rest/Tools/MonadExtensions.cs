@@ -25,8 +25,8 @@ namespace NBlast.Rest.Tools
 
         public static Monad<TOut> If<TIn, TOut>(this Monad<TIn> source, 
                                                 Func<TIn, bool> condition,
-                                                Func<TIn, TOut> @true,
-                                                Func<TIn, TOut> @false)
+                                                Func<TIn, TOut> follow,
+                                                Func<TIn, TOut> otherwise)
         {
             if (!source.HasValue)
             {
@@ -34,8 +34,8 @@ namespace NBlast.Rest.Tools
             }
 
             return (condition(source.Value))
-                ? @true(source.Value).ToMonad()
-                : @false(source.Value).ToMonad();
+                ? follow(source.Value).ToMonad()
+                : otherwise(source.Value).ToMonad();
         }
 
 

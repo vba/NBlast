@@ -17,8 +17,8 @@ namespace NBlast.Rest.Tests.Tools
             // when
             var actual = new object().ToMonad()
                 .If(_ => true,
-                    @true: x => @true,
-                    @false: x => @false
+                    follow: x => @true,
+                    otherwise: x => @false
                 ).Value;
 
             // then
@@ -35,8 +35,8 @@ namespace NBlast.Rest.Tests.Tools
             // when
             var actual = new object().ToMonad()
                 .If(_ => false,
-                    @true: x => @true,
-                    @false: x => @false
+                    follow: x => @true,
+                    otherwise: x => @false
                 ).Value;
 
             // then
@@ -54,8 +54,8 @@ namespace NBlast.Rest.Tests.Tools
             var actual = new object().ToMonad()
                 .If(_ => false)
                 .If(_ => false,
-                    @true: x => @true,
-                    @false: x => @false
+                    follow: x => @true,
+                    otherwise: x => @false
                 );
 
             // then
@@ -73,8 +73,8 @@ namespace NBlast.Rest.Tests.Tools
             var actual = new object().ToMonad()
                 .If(_ => true)
                 .If(_ => false,
-                    @true: x => @true,
-                    @false: x => @false
+                    follow: x => @true,
+                    otherwise: x => @false
                 );
 
             // then
