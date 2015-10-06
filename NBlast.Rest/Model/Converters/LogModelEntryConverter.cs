@@ -7,22 +7,22 @@ using Newtonsoft.Json;
 
 namespace NBlast.Rest.Model.Converters
 {
-    public interface ILogModelEntryConverter : IConverter<LogModel, LogEntry>
+    public interface ILogModelEntryConverter : IConverter<LogEvent, LogEntry>
     {
     }
 
     public class LogModelEntryConverter: ILogModelEntryConverter
     {
-        public LogEntry Convert(LogModel logModel)
+        public LogEntry Convert(LogEvent logEvent)
         {
             return new LogEntry(
-                level: logModel.Level,
-                data: JsonConvert.SerializeObject(logModel),
-                creationDate: logModel.CreationDate,
-                exception: logModel.Exception,
-                properties: logModel.Properties.Select(x => new LogEntryProperty(x.Name, x.Value)).ToImmutableHashSet(),
-                templateTokensTexts: logModel.TemplateTokens.Select(x => x.Text).ToImmutableHashSet(),
-                templateTokensProperties: logModel.TemplateTokens.Select(x => x.PropertyName).ToImmutableHashSet()
+                level: logEvent.Level,
+                data: JsonConvert.SerializeObject(logEvent),
+                creationDate: logEvent.CreationDate,
+                exception: logEvent.Exception,
+                properties: logEvent.Properties.Select(x => new LogEntryProperty(x.Name, x.Value)).ToImmutableHashSet(),
+                templateTokensTexts: logEvent.TemplateTokens.Select(x => x.Text).ToImmutableHashSet(),
+                templateTokensProperties: logEvent.TemplateTokens.Select(x => x.PropertyName).ToImmutableHashSet()
             );
         }
     }

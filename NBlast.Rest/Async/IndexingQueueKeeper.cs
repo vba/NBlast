@@ -12,23 +12,23 @@ namespace NBlast.Rest.Async
     public class IndexingQueueKeeper: IIndexingQueueKeeper
     {
         private static readonly ILogger Logger = Log.Logger.ForContext<IndexingQueueKeeper>();
-        private readonly ConcurrentQueue<LogModel> _queue = new ConcurrentQueue<LogModel>();
+        private readonly ConcurrentQueue<LogEvent> _queue = new ConcurrentQueue<LogEvent>();
 
-        public Option<LogModel> Consume()
+        public Option<LogEvent> Consume()
         {
-            LogModel result;
+            LogEvent result;
             return _queue.TryDequeue(out result) ? Some(result) : None;
         }
 
-        public Option<LogModel> Peek()
+        public Option<LogEvent> Peek()
         {
-            LogModel result;
+            LogEvent result;
             return _queue.TryPeek(out result) ? Some(result) : None;
         }
 
         public int Count() => _queue.Count;
 
-        public IReadOnlyList<LogModel> ConsumeTop(int top = 10) =>
+        public IReadOnlyList<LogEvent> ConsumeTop(int top = 10) =>
             Range(0, top - 1)
                 .Select(x => Consume())
                 .Select(x => x.Match(Some: y => y,
@@ -37,9 +37,9 @@ namespace NBlast.Rest.Async
                 .ToImmutableList();
         
 
-        public IReadOnlyList<LogModel> PeekTop(int top = 10) => _queue.Take(top).ToImmutableList();
+        public IReadOnlyList<LogEvent> PeekTop(int top = 10) => _queue.Take(top).ToImmutableList();
 
-        public Unit Enqueue(LogModel entry)
+        public Unit Enqueue(LogEvent entry)
         {
             Logger.Debug("Enqueuing model @{0}", entry);
             _queue.Enqueue(entry);

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace NBlast.Rest.Model.Dto
 {
-    public class LogModelProperty
+    public class LogEventProperty
     {
         [Required]
         [JsonProperty("Name")]
@@ -13,7 +13,7 @@ namespace NBlast.Rest.Model.Dto
         [JsonProperty("Value")]
         public object Value { get; set; }
 
-        protected bool Equals(LogModelProperty other)
+        protected bool Equals(LogEventProperty other)
         {
             return string.Equals(Name, other.Name) && Equals(Value, other.Value);
         }
@@ -22,7 +22,7 @@ namespace NBlast.Rest.Model.Dto
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == this.GetType() && Equals((LogModelProperty) obj);
+            return obj.GetType() == this.GetType() && Equals((LogEventProperty) obj);
         }
 
         public override int GetHashCode()
@@ -33,12 +33,12 @@ namespace NBlast.Rest.Model.Dto
             }
         }
 
-        public static bool operator ==(LogModelProperty left, LogModelProperty right)
+        public static bool operator ==(LogEventProperty left, LogEventProperty right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(LogModelProperty left, LogModelProperty right)
+        public static bool operator !=(LogEventProperty left, LogEventProperty right)
         {
             return !Equals(left, right);
         }

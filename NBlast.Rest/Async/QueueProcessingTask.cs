@@ -37,7 +37,7 @@ namespace NBlast.Rest.Async
             _logModelEntryConverter = logModelEntryConverter;
         }
 
-        private Unit ProcessModels(IReadOnlyList<LogModel> models)
+        private Unit ProcessModels(IReadOnlyList<LogEvent> models)
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -50,7 +50,7 @@ namespace NBlast.Rest.Async
             return unit;
         }
 
-        private LogEntry Transform(LogModel model) => _logModelEntryConverter.Convert(model);
+        private LogEntry Transform(LogEvent @event) => _logModelEntryConverter.Convert(@event);
 
         public void Execute()
         {

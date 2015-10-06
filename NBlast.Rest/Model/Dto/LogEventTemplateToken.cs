@@ -1,11 +1,11 @@
 namespace NBlast.Rest.Model.Dto
 {
-    public class LogModelTemplateToken
+    public class LogEventTemplateToken
     {
         public string PropertyName { get; set; }
         public string Text { get; set; }
 
-        protected bool Equals(LogModelTemplateToken other)
+        protected bool Equals(LogEventTemplateToken other)
         {
             return string.Equals(PropertyName, other.PropertyName) && string.Equals(Text, other.Text);
         }
@@ -14,7 +14,7 @@ namespace NBlast.Rest.Model.Dto
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == this.GetType() && Equals((LogModelTemplateToken) obj);
+            return obj.GetType() == this.GetType() && Equals((LogEventTemplateToken) obj);
         }
 
         public override int GetHashCode()
@@ -25,12 +25,12 @@ namespace NBlast.Rest.Model.Dto
             }
         }
 
-        public static bool operator ==(LogModelTemplateToken left, LogModelTemplateToken right)
+        public static bool operator ==(LogEventTemplateToken left, LogEventTemplateToken right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(LogModelTemplateToken left, LogModelTemplateToken right)
+        public static bool operator !=(LogEventTemplateToken left, LogEventTemplateToken right)
         {
             return !Equals(left, right);
         }

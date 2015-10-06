@@ -2,7 +2,7 @@
 
 namespace NBlast.Rest.Async
 {
-    public interface IIndexingQueueKeeper: IQueueKeeper<LogModel>
+    public interface IIndexingQueueKeeper: IQueueKeeper<LogEvent>
     {
     }
 }

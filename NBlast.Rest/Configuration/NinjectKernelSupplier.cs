@@ -26,8 +26,6 @@ namespace NBlast.Rest.Configuration
             var configReader = kernel.Get<IConfigReader>();
 
             ConfigureDirectoryProviders(kernel, configReader);
-            kernel.Bind<ILogHitMapperProvider>().ToConstant(new LogHitMapperProvider());
-            kernel.Bind<ILogEntryMapperProvider>().ToConstant(new LogEntryMapperProvider());
             kernel.Bind<IIndexingQueueKeeper>().ToConstant(new IndexingQueueKeeper());
             kernel.Bind<IQueueProcessingTask>().To<QueueProcessingTask>();
 
@@ -46,9 +44,9 @@ namespace NBlast.Rest.Configuration
 
         private static void ConfigureSearchServices(IBindingRoot kernel)
         {
-            kernel.Bind<IStandardSearchService>()
-                .ToMethod(x => new StandardSearchService(x.Kernel.Get<ILogHitMapperProvider>(),
-                                                         x.Kernel.Get<ILuceneDataProvider>(ReadConfigName)));
+//            kernel.Bind<IStandardSearchService>()
+//                .ToMethod(x => new StandardSearchService(x.Kernel.Get<ILogHitMapperProvider>(),
+//                                                         x.Kernel.Get<ILuceneDataProvider>(ReadConfigName)));
 
             kernel.Bind<ILogEntryIndexationService>()
                 .ToMethod(x => new LogEntryIndexationService(x.Kernel.Get<IDirectoryProvider>(WriteConfigName),
@@ -57,13 +55,13 @@ namespace NBlast.Rest.Configuration
 
         private static void ConfigureLuceneDataProviders(IBindingRoot kernel)
         {
-            kernel.Bind<ILuceneDataProvider>()
-                .ToMethod(x => new LuceneDataProvider(x.Kernel.Get<IDirectoryProvider>(ReadConfigName)))
-                .Named(ReadConfigName);
-
-            kernel.Bind<ILuceneDataProvider>()
-                .ToMethod(x => new LuceneDataProvider(x.Kernel.Get<IDirectoryProvider>(WriteConfigName)))
-                .Named(WriteConfigName);
+//            kernel.Bind<ILuceneDataProvider>()
+//                .ToMethod(x => new LuceneDataProvider(x.Kernel.Get<IDirectoryProvider>(ReadConfigName)))
+//                .Named(ReadConfigName);
+//
+//            kernel.Bind<ILuceneDataProvider>()
+//                .ToMethod(x => new LuceneDataProvider(x.Kernel.Get<IDirectoryProvider>(WriteConfigName)))
+//                .Named(WriteConfigName);
         }
 
         private static void ConfigureDirectoryProviders(IBindingRoot kernel, IConfigReader configReader)

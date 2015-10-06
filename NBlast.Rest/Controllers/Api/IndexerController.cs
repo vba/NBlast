@@ -25,15 +25,15 @@ namespace NBlast.Rest.Controllers.Api
 
         [HttpPost]
         [Route("index")]
-        public IHttpActionResult Index(LogModel model)
+        public IHttpActionResult Index(LogEvent @event)
         {
             if (!ModelState.IsValid)
             {
-                Logger.Debug($"Log model {model} is INVALID");
+                Logger.Debug($"Log model {@event} is INVALID");
                 return BadRequest(ModelState);
             }
-            _indexingQueueKeeper.Enqueue(model); // TODO Maybe clone it before
-            return Ok(model);
+            _indexingQueueKeeper.Enqueue(@event); // TODO Maybe clone it before
+            return Ok(@event);
         }
 
         [HttpGet]
@@ -42,7 +42,7 @@ namespace NBlast.Rest.Controllers.Api
 
         [HttpGet]
         [Route("queue-content/{top}")]
-        public IReadOnlyList<LogModel> QueueContent(int top)
+        public IReadOnlyList<LogEvent> QueueContent(int top)
             => _indexingQueueKeeper.PeekTop(top);
     }
 }

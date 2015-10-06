@@ -2,26 +2,29 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using Newtonsoft.Json;
+using static System.DateTime;
+using static System.Linq.Enumerable;
 
 namespace NBlast.Rest.Model.Dto
 {
-    public class LogModel
+    public class LogEvent
     {
         [Required]
         [JsonProperty("level")]
         public string Level { get; set; }
+
         [JsonProperty("Timestamp")]
-        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreationDate { get; set; } = UtcNow;
 
         [JsonProperty("Exception")]
         public string Exception { get; set; }
 
         [JsonProperty("MessageTemplateTokens")]
-        public IEnumerable<LogModelTemplateToken> TemplateTokens { get; set; } = Enumerable.Empty<LogModelTemplateToken>().ToImmutableList();
+        public IEnumerable<LogEventTemplateToken> TemplateTokens { get; set; } = Empty<LogEventTemplateToken>().ToImmutableList();
 
-        public IEnumerable<LogModelProperty> Properties { get; set; } = Enumerable.Empty<LogModelProperty>().ToImmutableList();
+        [JsonProperty("Properties")]
+        public IEnumerable<LogEventProperty> Properties { get; set; } = Empty<LogEventProperty>().ToImmutableList();
 
     }
 }
