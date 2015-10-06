@@ -171,6 +171,7 @@
     <Compile Include="Model\Converters\LogModelEntryConverter.cs" />
     <Compile Include="Model\Dto\LogEvent.cs" />
     <Compile Include="Model\Dto\LogEventProperty.cs" />
+    <Compile Include="Model\Dto\LogEvents.cs" />
     <Compile Include="Model\Dto\LogEventTemplateToken.cs" />
     <Compile Include="Model\Read\LogHit.cs" />
     <Compile Include="Model\Read\LogHits.cs" />

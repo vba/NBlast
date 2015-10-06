@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Results;
@@ -36,13 +37,25 @@ namespace NBlast.Rest.Controllers.Api
             return Ok(@event);
         }
 
+        [HttpPost]
+        [Route("index-events")]
+        public IHttpActionResult Index(LogEvents eventsKeeper)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            eventsKeeper.Events.ToList().ForEach(e => _indexingQueueKeeper.Enqueue(e));
+            return Ok();
+        }
+
         [HttpGet]
         [Route("queue-count")]
         public int QueueCount() => _indexingQueueKeeper.Count();
 
         [HttpGet]
         [Route("queue-content/{top}")]
-        public IReadOnlyList<LogEvent> QueueContent(int top)
-            => _indexingQueueKeeper.PeekTop(top);
+        public IReadOnlyList<LogEvent> QueueContent(int top) =>
+            _indexingQueueKeeper.PeekTop(top);
     }
 }
