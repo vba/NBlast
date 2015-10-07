@@ -55,15 +55,5 @@
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp\lib\net4-client\RestSharp.dll</HintPath>
     </Reference>
-    <ProjectReference Include="..\NBlast.Api\NBlast.Api.fsproj">
-      <Name>NBlast.Api</Name>
-      <Project>{096351ce-7e17-4d2d-a758-378e354fe977}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\NBlast.Storage.Core\NBlast.Storage.Core.fsproj">
-      <Name>NBlast.Storage.Core</Name>
-      <Project>{ccc4baec-229a-4676-a86a-df7da54ecfe7}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
 </Project>
