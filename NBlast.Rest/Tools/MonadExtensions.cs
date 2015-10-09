@@ -3,12 +3,31 @@ using System;
 namespace NBlast.Rest.Tools
 {
     public static class MonadExtensions
-    { 
+    {
         public static Monad<TOut> With<TIn, TOut>(this Monad<TIn> source,
-                                                  Func<TIn, TOut> action) => 
-                source.HasValue
-                    ? Monad.Bind(action(source.Value)) 
-                    : Monad.Empty<TOut>();
+                                                  Func<TIn, TOut> func) =>
+            source.HasValue
+                ? Monad.Result(func(source.Value))
+                : Monad.Empty<TOut>();
+
+        public static Monad<TOut> SelectMany<TIn, TOut>(this Monad<TIn> source,
+                                                        Func<TIn, Monad<TOut>> func) =>
+            source.HasValue
+                ? func(source.Value)
+                : Monad.Empty<TOut>();
+
+        public static Monad<TOut> SelectMany<TIn, TInter, TOut>(this Monad<TIn> source,
+                                                                Func<TIn, Monad<TInter>> intermediary,
+                                                                Func<TIn, TInter, TOut> final) => 
+            source.SelectMany(x => intermediary(x).SelectMany(y => final(x, y).ToMonad()));
+        public static Monad<TOut> SelectMany<TIn, TInter, TOut>(this TIn source,
+                                                                Func<TIn, TInter> intermediary,
+                                                                Func<TIn, TInter, TOut> final) => 
+            !source.ToMonad().HasValue 
+                ? Monad.Empty<TOut>()
+                : source
+                    .ToMonad()
+                    .SelectMany(x => intermediary(x).ToMonad().SelectMany(y => final(x, y).ToMonad()));
 
         public static Monad<T> Do<T>(this Monad<T> source, Action<T> action)
         {
@@ -39,6 +58,6 @@ namespace NBlast.Rest.Tools
         }
 
 
-        public static Monad<T> ToMonad<T>(this T me) => Monad.Bind(me);
+        public static Monad<T> ToMonad<T>(this T me) => Monad.Result(me);
     }
 }

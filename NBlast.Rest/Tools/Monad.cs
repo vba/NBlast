@@ -24,15 +24,10 @@ namespace NBlast.Rest.Tools
 
     public static class Monad
     {
-        public static Monad<T> Bind<T>(T value)
-        {
-            return new Monad<T>(value);
-        }
+        public static Monad<T> Result<T>(T value) => 
+            value != null ? new Monad<T>(value) : Empty<T>();
 
-        public static Monad<T> Empty<T> ()
-        {
-            return Monad<T>.Empty;
-        }
+        public static Monad<T> Empty<T> () => Monad<T>.Empty;
     }
 
 }

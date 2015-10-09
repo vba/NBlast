@@ -193,6 +193,7 @@
     <Compile Include="Tools\Monad.cs" />
     <Compile Include="Tools\MonadExtensions.cs" />
     <Compile Include="Tools\ObjectExtensions.cs" />
+    <Compile Include="Tools\QueryParserExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

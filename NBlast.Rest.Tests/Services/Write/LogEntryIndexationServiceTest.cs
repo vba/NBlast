@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FluentAssertions;
+using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
@@ -139,12 +140,14 @@ namespace NBlast.Rest.Tests.Services.Write
             ramdir.DisposeIt();
         }
 
-        private static TopDocs MakeSearch(StandardAnalyzer analyzer, IndexSearcher searcher, string field, string query)
+        private static TopDocs MakeSearch(Analyzer analyzer, IndexSearcher searcher, string field, string query)
         {
-            return new QueryParser(LUCENE_30, field, analyzer).ToMonad()
-                .With(x => x.Parse(query))
-                .With(x => searcher.Search(x, searcher.IndexReader.MaxDoc))
-                .Value;
+            var queryParser = new QueryParser(LUCENE_30, field, analyzer);
+            var result = from parsedQuery in query.ToLuceneQuery(queryParser)
+                         from docs in searcher.Search(parsedQuery, searcher.IndexReader.MaxDoc)
+                         select docs;
+
+            return result.Value;
         }
 
         private ILogEntryIndexationService MakeSut(IDirectoryProvider directoryProvider,

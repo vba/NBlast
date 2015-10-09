@@ -81,5 +81,30 @@ namespace NBlast.Rest.Tests.Tools
             actual.HasValue.Should().BeTrue();
             actual.Value.Should().Be(@false);
         }
+
+        [Fact(DisplayName = "It should get an empty monad when one of operands is nothing")]
+        public void Check_SelectMany_with_nothing()
+        {
+            // given
+            // when
+            var result = from x in 1
+                         from y in new int?()
+                         select x + y;
+            // then
+            result.HasValue.Should().BeFalse();
+        }
+
+        [Fact(DisplayName = "It should get a calculation result when all operands are the values")]
+        public void Check_SelectMany_with_values()
+        {
+            // given
+            // when
+            var result = from x in 1
+                         from y in 2
+                         select x + y;
+            // then
+            result.HasValue.Should().BeTrue();
+            result.Value.Should().Be(3);
+        }
     }
 }
