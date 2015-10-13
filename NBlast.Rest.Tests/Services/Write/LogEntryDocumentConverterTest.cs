@@ -15,7 +15,13 @@ namespace NBlast.Rest.Tests.Services.Write
     public class LogEntryDocumentConverterTest
     {
 
-        [Theory(DisplayName = "It should convert log entry's template properties to document multivalue field as expected"), AutoData]
+        //[Theory(DisplayName = "It should convert log entry's embedded properties as expected"), AutoData]
+        //public void Convert_check_embedded_properties()
+        //{
+
+        //}
+
+        [Theory(DisplayName = "It should convert log entry's template properties to document multivalued field as expected"), AutoData]
         public void Convert_check_template_properties(string level,
                                                       string data,
                                                       string exception,
@@ -37,7 +43,7 @@ namespace NBlast.Rest.Tests.Services.Write
             document.GetFields().Count.Should().Be(10);
             document.GetValues(ServiceConstant.FieldNames.TemplateTokensProperty).Should().HaveCount(values.Count());
         }
-        [Theory(DisplayName = "It should convert log entry's template texts to document multivalue field as expected"), AutoData]
+        [Theory(DisplayName = "It should convert log entry's template texts to document multivalued field as expected"), AutoData]
         public void Convert_check_template_texts(string level,
                                                  string data,
                                                  string exception,

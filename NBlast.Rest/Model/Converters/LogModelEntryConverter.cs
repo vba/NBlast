@@ -16,12 +16,12 @@ namespace NBlast.Rest.Model.Converters
         public LogEntry Convert(LogEvent logEvent)
         {
             return new LogEntry(
-                level: logEvent.Level,
-                data: JsonConvert.SerializeObject(logEvent),
-                creationDate: logEvent.CreationDate,
-                exception: logEvent.Exception,
-                properties: logEvent.Properties.Select(x => new LogEntryProperty(x.Name, x.Value)).ToImmutableHashSet(),
-                templateTokensTexts: logEvent.TemplateTokens.Select(x => x.Text).ToImmutableHashSet(),
+                level                   : logEvent.Level,
+                data                    : JsonConvert.SerializeObject(logEvent),
+                creationDate            : logEvent.CreationDate,
+                exception               : logEvent.Exception,
+                properties              : logEvent.Properties.Select(x => new LogEntryProperty(x.Name, x.Value)).ToImmutableHashSet(),
+                templateTokensTexts     : logEvent.TemplateTokens.Select(x => x.Text).ToImmutableHashSet(),
                 templateTokensProperties: logEvent.TemplateTokens.Select(x => x.PropertyName).ToImmutableHashSet()
             );
         }
