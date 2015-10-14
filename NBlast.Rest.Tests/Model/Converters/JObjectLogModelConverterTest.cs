@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using NBlast.Rest.Model.Converters;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,12 @@ namespace NBlast.Rest.Tests.Model.Converters
         public void Check_Convert_on_simple_embedded_object()
         {
             // given
-            var jobject = CreateSimpleEbeddedJsonObject();
+            var jObject = CreateSimpleEbeddedJsonObject();
+            var sut = new JObjectLogModelConverter();
 
-            // 
+            // when
+            var dictionary = sut.ConvertToMap(jObject);
+
         }
 
         private JObject CreateSimpleEbeddedJsonObject()
