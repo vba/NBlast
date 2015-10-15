@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Pair = System.Collections.Generic.KeyValuePair<string, object>;
+using static System.String;
 
 namespace NBlast.Rest.Model.Converters
 {
@@ -66,6 +67,31 @@ namespace NBlast.Rest.Model.Converters
             throw new NotImplementedException();
         }
 
+        public IImmutableList<LogEventItem> Deserialize(string json)
+        {
+            return ToObject(JToken.Parse(json));
+        }
+
+        public IImmutableList<LogEventItem> ToObject(JToken token, string prefix = "")
+        {
+            var keyPart = IsNullOrEmpty(prefix) ? "" : $"{prefix}.";
+            switch (token.Type)
+            {
+                case JTokenType.Object:
+                    return token.Children<JProperty>()
+                                .SelectMany(x => ToObject(x.Value, $"{keyPart}{x.Name}" ))
+                                .ToImmutableList();
+
+                case JTokenType.Array:
+                    return token.SelectMany( x => ToObject(x, prefix)).ToImmutableList();
+
+                default:
+                    return new[] {new LogEventItem(prefix, ((JValue)token).Value) }.ToImmutableList() ;
+            }
+        }
+
+
+
         public IImmutableList<LogEventItem> ConvertToMap(JObject jObject)
         {
             var list   = new List<LogEventItem>();
@@ -85,7 +111,10 @@ namespace NBlast.Rest.Model.Converters
                     newCursor.AddRange(
                         tuple.Item2
                             .Where(x => x.Value.HasValues)
-                            .Select(x => Tuple.Create($"{tuple.Item1}{x.Name}.", x.SelectMany(y => y.Children<JProperty>()).ToList() as IList<JProperty>)
+                            .Select(x => Tuple.Create($"{tuple.Item1}{x.Name}.", 
+                                                      x.SelectMany(y => {
+                                                        return y.Children<JProperty>().ToList();
+                                                      }).ToList() as IList<JProperty>)
                    ));
                 }
 

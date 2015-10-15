@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,12 +21,19 @@ namespace NBlast.Rest.Tests.Model.Converters
             var sut = new JObjectLogModelConverter();
 
             // when
-            var dictionary = sut.ConvertToMap(jObject);
+            //var dictionary = sut.ConvertToMap(jObject);
+            var lists = jObject["events"].Select(x => sut.ToObject(x)).ToList();
 
         }
 
         private JObject CreateSimpleEbeddedJsonObject()
         {
+            dynamic cyclicObject1 = new ExpandoObject();
+            var cyclicObject2 = new { Brother = cyclicObject1, Name = "Bob" };
+
+            cyclicObject1.Name = "Bill";
+            cyclicObject1.Brother = cyclicObject2;
+             
             var jsonString = JsonConvert.SerializeObject(new {
                 events = new[]
                 {
@@ -37,6 +45,7 @@ namespace NBlast.Rest.Tests.Model.Converters
                         Properties = new
                         {
                             id = 1,
+                            cyclics = new [] {cyclicObject1, cyclicObject2}, 
                             obj = new
                             {
                                 _typeTag = "Entity",
@@ -62,6 +71,9 @@ namespace NBlast.Rest.Tests.Model.Converters
                         }
                     }
                 }
+            }, 
+            new JsonSerializerSettings {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
                 
             return JsonConvert.DeserializeObject<JObject>(jsonString);
