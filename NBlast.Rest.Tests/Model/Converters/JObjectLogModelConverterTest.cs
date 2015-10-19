@@ -22,7 +22,7 @@ namespace NBlast.Rest.Tests.Model.Converters
 
             // when
             //var dictionary = sut.ConvertToMap(jObject);
-            var lists = jObject["events"].Select(x => sut.ToObject(x)).ToList();
+            var logEvent = sut.Convert(jObject);
 
         }
 

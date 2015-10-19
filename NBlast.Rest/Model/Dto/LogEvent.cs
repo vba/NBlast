@@ -12,19 +12,33 @@ namespace NBlast.Rest.Model.Dto
     {
         [Required]
         [JsonProperty("level")]
-        public string Level { get; set; }
+        public string Level { get; }
 
         [JsonProperty("Timestamp")]
-        public DateTime CreationDate { get; set; } = UtcNow;
+        public DateTime CreationDate { get; } = UtcNow;
 
         [JsonProperty("Exception")]
-        public string Exception { get; set; }
+        public string Exception { get; }
 
-        [JsonProperty("MessageTemplateTokens")]
-        public IEnumerable<LogEventTemplateToken> TemplateTokens { get; set; } = Empty<LogEventTemplateToken>().ToImmutableList();
+        [Obsolete]
+        [JsonProperty("MessageTemplate")]
+        public IEnumerable<LogEventTemplateToken> _OldTemplateTokens { get; set; } = Empty<LogEventTemplateToken>().ToImmutableList();
 
+        [Obsolete]
         [JsonProperty("Properties")]
-        public IEnumerable<LogEventProperty> Properties { get; set; } = Empty<LogEventProperty>().ToImmutableList();
+        public IEnumerable<LogEventProperty> _OldProperties { get; set; } = Empty<LogEventProperty>().ToImmutableList();
+
+        public string MessageTemplate { get; }
+
+        public IImmutableList<LogEventItem> Properties { get; }
+
+        public LogEvent(string level, string exception, DateTime? creationDate, params LogEventItem[] items)
+        {
+            Level        = level;
+            Exception    = exception;
+            CreationDate = creationDate ?? UtcNow;
+            Properties   = items.ToImmutableList();
+        }
 
     }
 }
