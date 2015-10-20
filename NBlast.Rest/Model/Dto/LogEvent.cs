@@ -15,7 +15,7 @@ namespace NBlast.Rest.Model.Dto
         public string Level { get; }
 
         [JsonProperty("Timestamp")]
-        public DateTime CreationDate { get; } = UtcNow;
+        public DateTime Timestamp { get; } = UtcNow;
 
         [JsonProperty("Exception")]
         public string Exception { get; }
@@ -32,12 +32,17 @@ namespace NBlast.Rest.Model.Dto
 
         public IImmutableList<LogEventItem> Properties { get; }
 
-        public LogEvent(string level, string exception, DateTime? creationDate, params LogEventItem[] items)
+        public LogEvent(string level,
+                        string exception,
+                        string messageTemplate,
+                        DateTime? creationDate,
+                        params LogEventItem[] items)
         {
-            Level        = level;
-            Exception    = exception;
-            CreationDate = creationDate ?? UtcNow;
-            Properties   = items.ToImmutableList();
+            Level           = level;
+            Exception       = exception;
+            MessageTemplate = messageTemplate;
+            Timestamp    = creationDate ?? UtcNow;
+            Properties      = items.ToImmutableList();
         }
 
     }

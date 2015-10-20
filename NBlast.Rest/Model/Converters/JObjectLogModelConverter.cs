@@ -23,11 +23,13 @@ namespace NBlast.Rest.Model.Converters
             // TODO: Stop using dictionary and migrate to custom type with duplicated keys -> FieldsMap 
 
             var deserialized = Deserialize(jObject);
-            //var result = new LogEvent(deserialized.FirstOrDefault(x => x.Key == nameof(LogEvent.Level)).Value,
-            //                          deserialized.FirstOrDefault(x => x.Key == nameof(LogEvent.Exception))?.Value,
-            //                          deserialized.FirstOrDefault(x => x.Key == nameof(LogEvent.MessageTemplate))?.Value,
-            //                          )
-            return null;
+            Func<string, object> getValue = (key) => deserialized.FirstOrDefault(x => x.Key == key)?.Value;
+            var result = new LogEvent(getValue(nameof(LogEvent.Level)) as string,
+                                      getValue(nameof(LogEvent.Exception)) as string,
+                                      getValue(nameof(LogEvent.MessageTemplate)) as string,
+                                      getValue(nameof(LogEvent.Timestamp)) as DateTime?,
+                                      deserialized.Where(x => x.Key.StartsWith(nameof(LogEvent.Properties))).ToArray());
+            return result;
         }
 
         private IImmutableList<LogEventItem> Deserialize(string json)

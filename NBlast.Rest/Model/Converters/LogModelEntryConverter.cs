@@ -18,7 +18,7 @@ namespace NBlast.Rest.Model.Converters
             return new LogEntry(
                 level                   : logEvent.Level,
                 data                    : JsonConvert.SerializeObject(logEvent),
-                creationDate            : logEvent.CreationDate,
+                creationDate            : logEvent.Timestamp,
                 exception               : logEvent.Exception,
                 properties              : logEvent._OldProperties.Select(x => new LogEntryProperty(x.Name, x.Value)).ToImmutableHashSet(),
                 templateTokensTexts     : logEvent._OldTemplateTokens.Select(x => x.Text).ToImmutableHashSet(),

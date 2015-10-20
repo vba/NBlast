@@ -16,7 +16,6 @@ namespace NBlast.Rest.Model.Dto
         public LogEventItem(string key, object value)
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
-            if (value == null) throw new ArgumentNullException(nameof(value));
 
             Key = key;
             Value = value;
