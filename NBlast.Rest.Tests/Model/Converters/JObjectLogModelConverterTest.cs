@@ -4,12 +4,9 @@ using NBlast.Rest.Model.Dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace NBlast.Rest.Tests.Model.Converters
@@ -32,24 +29,19 @@ namespace NBlast.Rest.Tests.Model.Converters
             logEvent.Level.Should().Be("Debug");
             logEvent.Timestamp.Should().BeCloseTo(new DateTime(2015, 10, 8, 13, 37, 12, 948));
             logEvent.MessageTemplate.Should().Be("Some {id} {@obj},");
-            logEvent.Properties.First(x => x.Key == $"{propsKey}.name").Value.Should().Be("Bob");
-            logEvent.Properties.First(x => x.Key == $"{propsKey}.prop2").Value.Should().BeNull();
-            guidRegex.IsMatch(logEvent.Properties.First(x => x.Key == $"{propsKey}.id").Value.ToString())
-                .Should()
-                .BeTrue();
-            (logEvent.Properties.First(x => x.Key == $"{propsKey}.prop1").Value as DateTime?)
-                .Should()
-                .BeCloseTo(new DateTime(1970, 1, 1));
 
+            GetPropValue<string>(logEvent, "name").Should().Be("Bob");
+            GetPropValue<object>(logEvent, "prop2").Should().BeNull();
+            GetPropValue<DateTime?>(logEvent, "prop1").Should().BeCloseTo(new DateTime(1970, 1, 1));
+            guidRegex.IsMatch(GetPropValue<string>(logEvent, "id")).Should().BeTrue();
         }
 
-         [Fact(DisplayName ="It should covert an embedded object with cyclic references to its valid log event representation")]
+        [Fact(DisplayName ="It should covert an embedded object with cyclic references to its valid log event representation")]
         public void Check_Convert_with_cyclic_references()
         {
             // given
             var jObject   = CreateEbeddedJsonObjectWithCyclicReferences();
             var sut       = new JObjectLogModelConverter();
-            var propsKey  = nameof(LogEvent.Properties);
             var guidRegex = new Regex(@"\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b", RegexOptions.IgnoreCase);
 
             // when
@@ -57,29 +49,86 @@ namespace NBlast.Rest.Tests.Model.Converters
 
             // then
             logEvent.Properties.Any().Should().BeTrue();
-            logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.Name").Value.Should().Be("Bill");
-            logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.Brother.Name").Value.Should().Be("Bob");
-            logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.$ref").Value.Should()
-                .Be(logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.Brother.$id").Value);
-            logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.Brother.Brother.$ref").Value.Should()
-                .Be(logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.$id").Value);
+            GetPropValue<string>(logEvent, "cyclics.Name").Should().Be("Bill");
+            GetPropValue<string>(logEvent, "cyclics.Brother.Name").Should().Be("Bob");
+            GetPropValue<string>(logEvent, "cyclics.$ref").Should()
+                .Be(GetPropValue<string>(logEvent, "cyclics.Brother.$id"));
+            GetPropValue<string>(logEvent, "cyclics.Brother.Brother.$ref").Should()
+                .Be(GetPropValue<string>(logEvent, "cyclics.$id"));
         }
 
         [Fact(DisplayName ="It should covert a complex embedded object to its valid log event representation")]
         public void Check_Convert_with_complex_embedded_object()
         {
             // given
-            var jObject   = CreateComplexEmbeddedJsonObject();
+            var obj = new
+            {
+                _typeTag = "Entity",
+                Id = "Level2",
+                Parent = new
+                {
+                    _typeTag = "Entity",
+                    Id = "first",
+                    Parent = new { },
+                    Children = new object[0]
+                },
+                Children = new[]
+                {
+                    new
+                    {
+                        _typeTag = "Entity1",
+                        Id = "level1",
+                        Parent = new object(),
+                        Children = new object[0]
+                    },
+                    new
+                    {
+                        _typeTag = "Entity2",
+                        Id = "level2",
+                        Parent = new object(),
+                        Children = new object[0]
+                    },
+                    new
+                    {
+                        _typeTag = "Entity3",
+                        Id = "level3",
+                        Parent = new object(),
+                        Children = new object[0]
+                    },
+                }
+            };
             var sut       = new JObjectLogModelConverter();
             var propsKey  = nameof(LogEvent.Properties);
             var guidRegex = new Regex(@"\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b", RegexOptions.IgnoreCase);
+            var jObject   = CreateEmbeddedJsonObject(obj);
 
             // when
             var logEvent = sut.Convert(jObject);
 
             // then
             logEvent.Properties.Any().Should().BeTrue();
-       }
+            GetPropValue<long>(logEvent, "id").Should().Be(1);
+            GetPropValue<string>(logEvent, "obj._typeTag").Should().Be(obj._typeTag);
+            GetPropValue<string>(logEvent, "obj.Id").Should().Be(obj.Id);
+            GetPropValue<string>(logEvent, "obj.Parent._typeTag").Should().Be("Entity");
+            GetPropValue<string>(logEvent, "obj.Parent.Id").Should().Be("first");
+            GetPropValue<string>(logEvent, "obj.Parent._typeTag").Should().Be("Entity");
+            logEvent.Properties.Where(x => x.Key.EndsWith("Children.Id"))
+                .Select(x => x.Value.ToString())
+                .SequenceEqual(obj.Children.Select(x => x.Id)).Should()
+                .BeTrue();
+            logEvent.Properties.Where(x => x.Key.EndsWith("Children._typeTag"))
+                .Select(x => x.Value.ToString())
+                .SequenceEqual(obj.Children.Select(x => x._typeTag)).Should()
+                .BeTrue();
+        }
+
+        private static T GetPropValue<T>(LogEvent logEvent, string key) =>
+            (T)logEvent
+                .Properties
+                .FirstOrDefault(x => x.Key == $"{nameof(LogEvent.Properties)}.{key}")?.Value;
+
+
         private JObject CreateSimpleEbeddedJsonObject()
         {
             var jsonString = JsonConvert.SerializeObject(new
@@ -136,7 +185,7 @@ namespace NBlast.Rest.Tests.Model.Converters
             return JsonConvert.DeserializeObject<JObject>(jsonString); ;
         }
 
-        private JObject CreateComplexEmbeddedJsonObject()
+        private JObject CreateEmbeddedJsonObject(object obj)
         {
             var jsonString = JsonConvert.SerializeObject(new {
                 events = new[]
@@ -149,42 +198,7 @@ namespace NBlast.Rest.Tests.Model.Converters
                         Properties = new
                         {
                             id = 1,
-                            obj = new
-                            {
-                                _typeTag = "Entity",
-                                Id = "Level2",
-                                Parent = new
-                                {
-                                    _typeTag = "Entity",
-                                    Id = "first",
-                                    Parent = new { },
-                                    Children = new object[0]
-                                },
-                                Children = new [] 
-                                {
-                                    new
-                                    {
-                                	    _typeTag = "Entity1",
-                                	    Id = "level3",
-                                	    Parent = new object(),
-                                	    Children = new object[0]
-                                	},
-                                    new
-                                    {
-                                	    _typeTag = "Entity2",
-                                	    Id = "level3",
-                                	    Parent = new object(),
-                                	    Children = new object[0]
-                                	},
-                                    new
-                                    {
-                                	    _typeTag = "Entity3",
-                                	    Id = "level3",
-                                	    Parent = new object(),
-                                	    Children = new object[0]
-                                	},
-                                }
-                            }
+                            obj = obj
                         }
                     }
                 }
