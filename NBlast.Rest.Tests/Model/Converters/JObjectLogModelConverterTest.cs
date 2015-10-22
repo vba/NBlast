@@ -16,13 +16,13 @@ namespace NBlast.Rest.Tests.Model.Converters
 {
     public class JObjectLogModelConverterTest
     {
-        [Fact]
+        [Fact(DisplayName ="It should covert a simple embedded object to its valid log event representation")]
         public void Check_Convert_on_simple_embedded_object()
         {
             // given
-            var jObject = CreateSimpleEbeddedJsonObject();
-            var sut = new JObjectLogModelConverter();
-            var propsKey = nameof(LogEvent.Properties);
+            var jObject   = CreateSimpleEbeddedJsonObject();
+            var sut       = new JObjectLogModelConverter();
+            var propsKey  = nameof(LogEvent.Properties);
             var guidRegex = new Regex(@"\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b", RegexOptions.IgnoreCase);
 
             // when
@@ -43,6 +43,43 @@ namespace NBlast.Rest.Tests.Model.Converters
 
         }
 
+         [Fact(DisplayName ="It should covert an embedded object with cyclic references to its valid log event representation")]
+        public void Check_Convert_with_cyclic_references()
+        {
+            // given
+            var jObject   = CreateEbeddedJsonObjectWithCyclicReferences();
+            var sut       = new JObjectLogModelConverter();
+            var propsKey  = nameof(LogEvent.Properties);
+            var guidRegex = new Regex(@"\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b", RegexOptions.IgnoreCase);
+
+            // when
+            var logEvent = sut.Convert(jObject);
+
+            // then
+            logEvent.Properties.Any().Should().BeTrue();
+            logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.Name").Value.Should().Be("Bill");
+            logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.Brother.Name").Value.Should().Be("Bob");
+            logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.$ref").Value.Should()
+                .Be(logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.Brother.$id").Value);
+            logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.Brother.Brother.$ref").Value.Should()
+                .Be(logEvent.Properties.First(x => x.Key == $"{propsKey}.cyclics.$id").Value);
+        }
+
+        [Fact(DisplayName ="It should covert a complex embedded object to its valid log event representation")]
+        public void Check_Convert_with_complex_embedded_object()
+        {
+            // given
+            var jObject   = CreateComplexEmbeddedJsonObject();
+            var sut       = new JObjectLogModelConverter();
+            var propsKey  = nameof(LogEvent.Properties);
+            var guidRegex = new Regex(@"\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b", RegexOptions.IgnoreCase);
+
+            // when
+            var logEvent = sut.Convert(jObject);
+
+            // then
+            logEvent.Properties.Any().Should().BeTrue();
+       }
         private JObject CreateSimpleEbeddedJsonObject()
         {
             var jsonString = JsonConvert.SerializeObject(new
@@ -67,15 +104,40 @@ namespace NBlast.Rest.Tests.Model.Converters
 
             return JsonConvert.DeserializeObject<JObject>(jsonString);
         }
-
-        private JObject _CreateSimpleEbeddedJsonObject()
+        private JObject CreateEbeddedJsonObjectWithCyclicReferences()
         {
             dynamic cyclicObject1 = new ExpandoObject();
             var cyclicObject2 = new { Brother = cyclicObject1, Name = "Bob" };
 
             cyclicObject1.Name = "Bill";
             cyclicObject1.Brother = cyclicObject2;
-             
+
+
+            var jsonString = JsonConvert.SerializeObject(new
+            {
+                events = new[]
+                {
+                    new
+                    {
+                        Timestamp = "2015-10-08T13:37:12.9486666+02:00",
+                        Level = "Debug",
+                        MessageTemplate = "Some {id} {@obj},",
+                        Properties = new {
+                            cyclics = new [] {cyclicObject1, cyclicObject2},
+                        }
+                    }
+                }
+            },
+            new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            });
+
+            return JsonConvert.DeserializeObject<JObject>(jsonString); ;
+        }
+
+        private JObject CreateComplexEmbeddedJsonObject()
+        {
             var jsonString = JsonConvert.SerializeObject(new {
                 events = new[]
                 {
@@ -87,7 +149,6 @@ namespace NBlast.Rest.Tests.Model.Converters
                         Properties = new
                         {
                             id = 1,
-                            cyclics = new [] {cyclicObject1, cyclicObject2}, 
                             obj = new
                             {
                                 _typeTag = "Entity",
@@ -103,11 +164,25 @@ namespace NBlast.Rest.Tests.Model.Converters
                                 {
                                     new
                                     {
-                                	    _typeTag = "Entity",
+                                	    _typeTag = "Entity1",
                                 	    Id = "level3",
                                 	    Parent = new object(),
                                 	    Children = new object[0]
-                                	}
+                                	},
+                                    new
+                                    {
+                                	    _typeTag = "Entity2",
+                                	    Id = "level3",
+                                	    Parent = new object(),
+                                	    Children = new object[0]
+                                	},
+                                    new
+                                    {
+                                	    _typeTag = "Entity3",
+                                	    Id = "level3",
+                                	    Parent = new object(),
+                                	    Children = new object[0]
+                                	},
                                 }
                             }
                         }
