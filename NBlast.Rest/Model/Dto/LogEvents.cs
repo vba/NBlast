@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using static System.Linq.Enumerable;
 
-namespace NBlast.Rest.Model.Dto
+namespace NBlast.Rest.Model.Write
 {
     public class LogEvents
     {

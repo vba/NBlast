@@ -1,5 +1,4 @@
-﻿using Equ;
-using NBlast.Rest.Model.Dto;
+﻿using NBlast.Rest.Model.Write;
 using NBlast.Rest.Services.Write;
 using Newtonsoft.Json.Linq;
 using System;
@@ -32,12 +31,12 @@ namespace NBlast.Rest.Model.Converters
             return result;
         }
 
-        private IImmutableList<LogEventItem> Deserialize(string json)
+        private IImmutableList<LogEventProperty> Deserialize(string json)
         {
             return Deserialize(JToken.Parse(json));
         }
 
-        private IImmutableList<LogEventItem> Deserialize(JToken token)
+        private IImmutableList<LogEventProperty> Deserialize(JToken token)
         {
             const string eventsKey = "events";
             return token.Children<JProperty>().Any(x => x.Name == eventsKey)
@@ -45,7 +44,7 @@ namespace NBlast.Rest.Model.Converters
                 : ToObject(token);
         }
 
-        private IImmutableList<LogEventItem> ToObject(JToken token, string prefix = "")
+        private IImmutableList<LogEventProperty> ToObject(JToken token, string prefix = "")
         {
             var keyPart = IsNullOrEmpty(prefix) ? "" : $"{prefix}.";
             switch (token.Type)
@@ -59,7 +58,7 @@ namespace NBlast.Rest.Model.Converters
                     return token.SelectMany( x => ToObject(x, prefix)).ToImmutableList();
 
                 default:
-                    return new[] {new LogEventItem(prefix, ((JValue)token).Value) }.ToImmutableList() ;
+                    return new[] {new LogEventProperty(prefix, ((JValue)token).Value) }.ToImmutableList() ;
             }
         }
     }

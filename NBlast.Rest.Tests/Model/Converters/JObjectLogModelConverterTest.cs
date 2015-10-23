@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NBlast.Rest.Model.Converters;
-using NBlast.Rest.Model.Dto;
+using NBlast.Rest.Model.Write;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -19,7 +19,6 @@ namespace NBlast.Rest.Tests.Model.Converters
             // given
             var jObject   = CreateSimpleEbeddedJsonObject();
             var sut       = new JObjectLogModelConverter();
-            var propsKey  = nameof(LogEvent.Properties);
             var guidRegex = new Regex(@"\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b", RegexOptions.IgnoreCase);
 
             // when
@@ -98,7 +97,6 @@ namespace NBlast.Rest.Tests.Model.Converters
                 }
             };
             var sut       = new JObjectLogModelConverter();
-            var propsKey  = nameof(LogEvent.Properties);
             var guidRegex = new Regex(@"\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b", RegexOptions.IgnoreCase);
             var jObject   = CreateEmbeddedJsonObject(obj);
 

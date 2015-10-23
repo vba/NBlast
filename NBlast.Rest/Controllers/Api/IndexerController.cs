@@ -5,7 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Results;
 using NBlast.Rest.Async;
-using NBlast.Rest.Model.Dto;
+using NBlast.Rest.Model.Write;
 using Serilog;
 
 namespace NBlast.Rest.Controllers.Api

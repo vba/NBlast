@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using FluentScheduler;
 using LanguageExt;
-using NBlast.Rest.Model.Converters;
-using NBlast.Rest.Model.Dto;
 using NBlast.Rest.Model.Write;
 using NBlast.Rest.Services.Write;
 using Serilog;
@@ -20,37 +17,30 @@ namespace NBlast.Rest.Async
     public class QueueProcessingTask: IQueueProcessingTask
     {
         private readonly IIndexingQueueKeeper _indexingQueueKeeper;
-        private readonly ILogEntryIndexationService _logEntryIndexationService;
-        private readonly ILogModelEntryConverter _logModelEntryConverter;
+        private readonly ILogEventIndexationService _logEntryIndexationService;
         private static readonly ILogger Logger = Log.Logger.ForContext<QueueProcessingTask>();
 
         public QueueProcessingTask(IIndexingQueueKeeper indexingQueueKeeper,
-                                   ILogEntryIndexationService logEntryIndexationService,
-                                   ILogModelEntryConverter logModelEntryConverter)
+                                   ILogEventIndexationService logEntryIndexationService)
         {
             if (indexingQueueKeeper == null) throw new ArgumentNullException(nameof(indexingQueueKeeper));
             if (logEntryIndexationService == null) throw new ArgumentNullException(nameof(logEntryIndexationService));
-            if (logModelEntryConverter == null) throw new ArgumentNullException(nameof(logModelEntryConverter));
 
             _indexingQueueKeeper = indexingQueueKeeper;
             _logEntryIndexationService = logEntryIndexationService;
-            _logModelEntryConverter = logModelEntryConverter;
         }
 
-        private Unit ProcessModels(IReadOnlyList<LogEvent> models)
+        private Unit ProcessModels(IReadOnlyList<LogEvent> events)
         {
             var sw = new Stopwatch();
             sw.Start();
 
-            var logEntries = models.Select(Transform).ToList();
-            _logEntryIndexationService.IndexMany(logEntries);
+            _logEntryIndexationService.IndexMany(events);
 
             sw.Stop();
             Logger.Debug($"Import process has took ${sw.ElapsedMilliseconds} msec(s)");
             return unit;
         }
-
-        private LogEntry Transform(LogEvent @event) => _logModelEntryConverter.Convert(@event);
 
         public void Execute()
         {

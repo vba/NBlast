@@ -14,13 +14,13 @@ using static Lucene.Net.Util.Version;
 
 namespace NBlast.Rest.Services.Write
 {
-    public class LogEntryIndexationService: ILogEntryIndexationService
+    public class LogEventIndexationService: ILogEventIndexationService
     {
-        private static readonly ILogger Logger = Log.Logger.ForContext<LogEntryIndexationService>();
+        private static readonly ILogger Logger = Log.Logger.ForContext<LogEventIndexationService>();
         private readonly IDirectoryProvider _directoryProvider;
-        private readonly IDocumentConverter<LogEntry> _logEntryDocumentConverter;
+        private readonly IDocumentConverter<LogEvent> _logEntryDocumentConverter;
 
-        public LogEntryIndexationService(IDirectoryProvider directoryProvider, IDocumentConverter<LogEntry> logEntryDocumentConverter)
+        public LogEventIndexationService(IDirectoryProvider directoryProvider, IDocumentConverter<LogEvent> logEntryDocumentConverter)
         {
             if (directoryProvider == null) throw new ArgumentNullException(nameof(directoryProvider));
             if (logEntryDocumentConverter == null) throw new ArgumentNullException(nameof(logEntryDocumentConverter));
@@ -28,20 +28,20 @@ namespace NBlast.Rest.Services.Write
             _logEntryDocumentConverter = logEntryDocumentConverter;
         }
 
-        public Unit IndexOne(LogEntry entry)
+        public Unit IndexOne(LogEvent @event)
         {
-            return IndexMany(new[] { entry }.ToImmutableList());
+            return IndexMany(new[] { @event }.ToImmutableList());
         }
 
-        public Unit IndexMany(IReadOnlyList<LogEntry> entries)
+        public Unit IndexMany(IReadOnlyList<LogEvent> events)
         {
-            Logger.Debug("Indexing {count} documents", entries.Count);
+            Logger.Debug("Indexing {count} documents", events.Count);
 
             using (var directory = _directoryProvider.Provide())
             using (var analyzer = new StandardAnalyzer(LUCENE_30))
             using (var writer = new IndexWriter(directory, analyzer, UNLIMITED))
             {
-                entries.ToList().ForEach(entry => writer.AddDocument(_logEntryDocumentConverter.Convert(entry)));
+                events.ToList().ForEach(entry => writer.AddDocument(_logEntryDocumentConverter.Convert(entry)));
                 return unit;
             }
         }

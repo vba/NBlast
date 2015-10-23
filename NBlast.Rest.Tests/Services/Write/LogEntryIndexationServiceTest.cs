@@ -29,9 +29,9 @@ namespace NBlast.Rest.Tests.Services.Write
         public void Check_IndexMany_end_to_end_conversion()
         {
             // Given
-            var logEntries        = new[] { new LogEntry("info", "{}"), new LogEntry("debug", "{}"), new LogEntry("error", "{}") };
+            var logEntries        = new[] { new LogEvent("info", "{}"), new LogEvent("debug", "{}"), new LogEvent("error", "{}") };
             var ramdir            = new FakeDirectoryProvider().Provide();
-            var documentConverter = new LogEntryDocumentConverter();
+            var documentConverter = new LogEventDocumentConverter();
             var directoryProvider = new Mock<IDirectoryProvider>(Strict);
             var sut               = MakeSut(directoryProvider.Object, documentConverter);
 
@@ -44,10 +44,10 @@ namespace NBlast.Rest.Tests.Services.Write
             using (var analyzer = new StandardAnalyzer(LUCENE_30))
             using (var searcher = new IndexSearcher(ramdir, false))
             {
-                MakeSearch(analyzer, searcher, $"{nameof(LogEntry.Level)}", "info OR debuG OR Error").TotalHits.Should().Be(3);
-                MakeSearch(analyzer, searcher, $"{nameof(LogEntry.Level)}", "Error").TotalHits.Should().Be(1);
-                MakeSearch(analyzer, searcher, $"{nameof(LogEntry.Level)}", "Err*").TotalHits.Should().Be(1);
-                MakeSearch(analyzer, searcher, $"{nameof(LogEntry.Level)}", "Luck").TotalHits.Should().Be(0);
+                MakeSearch(analyzer, searcher, $"{nameof(LogEvent.Level)}", "info OR debuG OR Error").TotalHits.Should().Be(3);
+                MakeSearch(analyzer, searcher, $"{nameof(LogEvent.Level)}", "Error").TotalHits.Should().Be(1);
+                MakeSearch(analyzer, searcher, $"{nameof(LogEvent.Level)}", "Err*").TotalHits.Should().Be(1);
+                MakeSearch(analyzer, searcher, $"{nameof(LogEvent.Level)}", "Luck").TotalHits.Should().Be(0);
             }
             ramdir.DisposeIt();
         }
@@ -56,9 +56,9 @@ namespace NBlast.Rest.Tests.Services.Write
         public void Check_IndexOne_end_to_end_conversion()
         {
             // Given
-            var logEntry          = new LogEntry("info", "{}");
+            var logEntry          = new LogEvent("info", "{}");
             var ramdir            = new FakeDirectoryProvider().Provide();
-            var documentConverter = new LogEntryDocumentConverter();
+            var documentConverter = new LogEventDocumentConverter();
             var directoryProvider = new Mock<IDirectoryProvider>(Strict);
             var sut               = MakeSut(directoryProvider.Object, documentConverter);
 
@@ -71,7 +71,7 @@ namespace NBlast.Rest.Tests.Services.Write
             using (var analyzer = new StandardAnalyzer(LUCENE_30))
             using (var searcher = new IndexSearcher(ramdir, false))
             {
-                MakeSearch(analyzer, searcher, $"{nameof(LogEntry.Level)}", "info")
+                MakeSearch(analyzer, searcher, $"{nameof(LogEvent.Level)}", "info")
                     .TotalHits
                     .Should().Be(1);
             }
@@ -82,9 +82,9 @@ namespace NBlast.Rest.Tests.Services.Write
         public void Check_IndexOne_same_standard_analyzer()
         {
             // Given
-            var logEntry          = new LogEntry("", "");
+            var logEntry          = new LogEvent("", "");
             var ramdir            = new FakeDirectoryProvider().Provide();
-            var documentConverter = new Mock<IDocumentConverter<LogEntry>>(Strict);
+            var documentConverter = new Mock<IDocumentConverter<LogEvent>>(Strict);
             var directoryProvider = new Mock<IDirectoryProvider>(Strict);
             var sut               = MakeSut(directoryProvider.Object, documentConverter.Object);
             var document          = new Document().ToMonad()
@@ -112,9 +112,9 @@ namespace NBlast.Rest.Tests.Services.Write
         public void Check_IndexOne_simple_document()
         {
             // Given
-            var logEntry          = new LogEntry("", "");
+            var logEntry          = new LogEvent("", "");
             var ramdir            = new FakeDirectoryProvider().Provide();
-            var documentConverter = new Mock<IDocumentConverter<LogEntry>>(Strict);
+            var documentConverter = new Mock<IDocumentConverter<LogEvent>>(Strict);
             var directoryProvider = new Mock<IDirectoryProvider>(Strict);
             var sut               = MakeSut(directoryProvider.Object, documentConverter.Object);
             var document          = new Document().ToMonad()
@@ -150,11 +150,11 @@ namespace NBlast.Rest.Tests.Services.Write
             return result.Value;
         }
 
-        private ILogEntryIndexationService MakeSut(IDirectoryProvider directoryProvider,
-                                                   IDocumentConverter<LogEntry> logEntryDocumentConverter = null)
+        private ILogEventIndexationService MakeSut(IDirectoryProvider directoryProvider,
+                                                   IDocumentConverter<LogEvent> logEntryDocumentConverter = null)
         {
-            return new LogEntryIndexationService(directoryProvider,
-                                                 logEntryDocumentConverter ?? new Mock<IDocumentConverter<LogEntry>>(Strict).Object);
+            return new LogEventIndexationService(directoryProvider,
+                                                 logEntryDocumentConverter ?? new Mock<IDocumentConverter<LogEvent>>(Strict).Object);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using LanguageExt;
-using NBlast.Rest.Model.Dto;
+using NBlast.Rest.Model.Write;
 using Serilog;
 using static LanguageExt.Prelude;
 

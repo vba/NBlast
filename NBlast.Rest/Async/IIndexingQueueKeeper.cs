@@ -1,4 +1,4 @@
-﻿using NBlast.Rest.Model.Dto;
+﻿using NBlast.Rest.Model.Write;
 
 namespace NBlast.Rest.Async
 {

@@ -38,8 +38,7 @@ namespace NBlast.Rest.Configuration
 
         private static void ConfigureConverters(StandardKernel kernel)
         {
-            kernel.Bind<ILogModelEntryConverter>().To<LogModelEntryConverter>();
-            kernel.Bind<IDocumentConverter<LogEntry>>().To<LogEntryDocumentConverter>();
+            kernel.Bind<IDocumentConverter<LogEvent>>().To<LogEventDocumentConverter>();
         }
 
         private static void ConfigureSearchServices(IBindingRoot kernel)
@@ -48,9 +47,9 @@ namespace NBlast.Rest.Configuration
 //                .ToMethod(x => new StandardSearchService(x.Kernel.Get<ILogHitMapperProvider>(),
 //                                                         x.Kernel.Get<ILuceneDataProvider>(ReadConfigName)));
 
-            kernel.Bind<ILogEntryIndexationService>()
-                .ToMethod(x => new LogEntryIndexationService(x.Kernel.Get<IDirectoryProvider>(WriteConfigName),
-                                                             x.Kernel.Get<IDocumentConverter<LogEntry>>()));
+            kernel.Bind<ILogEventIndexationService>()
+                .ToMethod(x => new LogEventIndexationService(x.Kernel.Get<IDirectoryProvider>(WriteConfigName),
+                                                             x.Kernel.Get<IDocumentConverter<LogEvent>>()));
         }
 
         private static void ConfigureLuceneDataProviders(IBindingRoot kernel)
