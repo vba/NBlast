@@ -31,9 +31,9 @@ namespace NBlast.Rest.Services.Write
         {
             var document = new Document();
 
-            //document.Add(new Field(nameof(LogEvent.Id), @event.Id.ToString(), YES, NOT_ANALYZED_NO_NORMS));
+            document.Add(new Field(nameof(LogEvent.Id), @event.Id.ToString(), YES, NOT_ANALYZED_NO_NORMS));
             document.Add(new Field(nameof(LogEvent.Level), @event.Level, YES, ANALYZED_NO_NORMS));
-            //document.Add(new Field(nameof(LogEvent.Content), @event.Content, Store.NO, ANALYZED_NO_NORMS));
+            document.Add(new Field("content", @event.GetContent(), Store.NO, ANALYZED_NO_NORMS));
             //document.Add(new Field(nameof(LogEvent.Data), @event.Data, YES, NOT_ANALYZED_NO_NORMS));
             document.Add(new Field(ServiceConstant.FieldNames.Type, typeof (LogEvent).Name, YES, NOT_ANALYZED_NO_NORMS));
             document.Add(new Field(nameof(LogEvent.Timestamp), DateToString(@event.Timestamp, Resolution.SECOND), Store.NO, ANALYZED_NO_NORMS));
