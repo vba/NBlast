@@ -16,128 +16,94 @@ namespace NBlast.Rest.Tests.Services.Write
     {
 
 
-        //[Theory(DisplayName = "It should convert log entry's template properties to document multivalued field as expected"), AutoData]
-        //public void Convert_check_template_properties(string level,
-        //                                              string data,
-        //                                              string exception,
-        //                                              DateTime creationDate)
-        //{
-        //    // Given
-        //    var values = new Fixture().CreateMany<string>(3).ToArray();
-        //    var sut = MakeSut();
-        //    var logEntry = new LogEntry(level,
-        //                                data,
-        //                                creationDate,
-        //                                exception,
-        //                                templateTokensProperties: new HashSet<string>(values));
+        [Theory(DisplayName = "It should convert log entry's template property to document field as expected"), AutoData]
+        public void Convert_check_template_propertie(string level,
+                                                     string messageTemplate,
+                                                     string exception,
+                                                     DateTime creationDate)
+        {
+            // Given
+            var sut = MakeSut();
+            var logEntry = new LogEvent(level,
+                                        exception,
+                                        messageTemplate,
+                                        creationDate);
 
-        //    // When
-        //    var document = sut.Convert(logEntry);
+            // When
+            var document = sut.Convert(logEntry);
 
-        //    // Then
-        //    document.GetFields().Count.Should().Be(10);
-        //    document.GetValues(ServiceConstant.FieldNames.TemplateTokensProperty).Should().HaveCount(values.Count());
-        //}
-        //[Theory(DisplayName = "It should convert log entry's template texts to document multivalued field as expected"), AutoData]
-        //public void Convert_check_template_texts(string level,
-        //                                         string data,
-        //                                         string exception,
-        //                                         DateTime creationDate)
-        //{
-        //    // Given
-        //    var values = new Fixture().CreateMany<string>(3).ToArray();
-        //    var sut = MakeSut();
-        //    var logEntry = new LogEntry(level,
-        //                                data,
-        //                                creationDate,
-        //                                exception,
-        //                                templateTokensTexts: new HashSet<string>(values));
+            // Then
+            document.GetFields().Count.Should().Be(6);
+            document.GetValues(nameof(LogEvent.MessageTemplate)).Should().HaveCount(1).And.BeEquivalentTo(messageTemplate);
+        }
 
-        //    // When
-        //    var document = sut.Convert(logEntry);
+        [Theory(DisplayName = "It should convert log entry's properties to document fields as expected"), AutoData]
+        public void Convert_check_properties(string level,
+                                             string messageTemplate,
+                                             string exception,
+                                             DateTime creationDate)
+        {
+            // Given
+            var sut = MakeSut();
+            var logEntry = new LogEvent(level,
+                                        exception,
+                                        messageTemplate,
+                                        creationDate,
+                                        new LogEventProperty("duplicate", "value"),
+                                        new LogEventProperty("duplicate", "value"),
+                                        new LogEventProperty("key1", 300000000000000000.5m),
+                                        new LogEventProperty("key2", creationDate),
+                                        new LogEventProperty("key3", "some"));
 
-        //    // Then
-        //    document.GetFields().Count.Should().Be(10);
-        //    document.GetValues(ServiceConstant.FieldNames.TemplateTokensText).Should().HaveCount(values.Count());
-        //}
+            // When
+            var document = sut.Convert(logEntry);
 
+            // Then
+            document.GetFields().Count.Should().Be(11);
+            document.Get($"{nameof(LogEvent.Properties)}.duplicate").ShouldBeEquivalentTo("value");
+            document.Get($"{nameof(LogEvent.Properties)}.key1").ShouldBeEquivalentTo("300000000000000000.5");
+            document.Get($"{nameof(LogEvent.Properties)}.key2").ShouldBeEquivalentTo(DateTools.DateToString(creationDate, DateTools.Resolution.SECOND));
+            document.Get($"{nameof(LogEvent.Properties)}.key3").ShouldBeEquivalentTo("some");
+        }
 
-        //[Theory(DisplayName = "It should convert log entry's properties to document fields as expected"), AutoData]
-        //public void Convert_check_properties(string level,
-        //                                     string data,
-        //                                     string exception,
-        //                                     DateTime creationDate)
-        //{
-        //    // Given
-        //    var sut = MakeSut();
-        //    var logEntry = new LogEntry(level,
-        //                                data,
-        //                                creationDate,
-        //                                exception,
-        //                                new HashSet<LogEntryProperty>
-        //                                {
-        //                                    new LogEntryProperty("duplicate", "value"),
-        //                                    new LogEntryProperty("duplicate", "value"),
-        //                                    new LogEntryProperty("key1", 300000000000000000.5m),
-        //                                    new LogEntryProperty("key2", creationDate),
-        //                                    new LogEntryProperty("key3", "some"),
-        //                                });
+        [Theory(DisplayName = "It should convert simple log entry to lucene document as expected without any data lost"), AutoData]
+        public void Convert_check_basic_operation(string level, string exception, DateTime creationDate)
+        {
+            // Given
+            var sut = MakeSut();
+            var logEntry = new LogEvent(level, exception, creationDate: creationDate);
 
-        //    // When
-        //    var document = sut.Convert(logEntry);
+            // When
+            var document = sut.Convert(logEntry);
 
-        //    // Then
-        //    document.GetFields().Count.Should().Be(11);
-        //    document.Get($"{ServiceConstant.FieldNames.Propertiy}.duplicate").ShouldBeEquivalentTo("value");
-        //    document.Get($"{ServiceConstant.FieldNames.Propertiy}.key1").ShouldBeEquivalentTo("300000000000000000.5");
-        //    document.Get($"{ServiceConstant.FieldNames.Propertiy}.key2").ShouldBeEquivalentTo(DateTools.DateToString(creationDate, DateTools.Resolution.SECOND));
-        //    document.Get($"{ServiceConstant.FieldNames.Propertiy}.key3").ShouldBeEquivalentTo("some");
-        //}
+            // Then
+            document.GetFields().Count.Should().Be(5);
+            document.Get(nameof(LogEvent.Level)).ShouldBeEquivalentTo(level);
+            document.Get(nameof(LogEvent.Exception)).ShouldBeEquivalentTo(exception);
+            document.Get(nameof(LogEvent.Timestamp)).ShouldBeEquivalentTo(DateTools.DateToString(creationDate, DateTools.Resolution.SECOND));
+        }
 
-        //[Theory(DisplayName = "It should convert simple log entry to lucene document as expected without any data lost"), AutoData]
-        //public void Convert_check_basic_operation(string level,
-        //                                          string data,
-        //                                          string exception,
-        //                                          DateTime creationDate)
-        //{
-        //    // Given
-        //    var sut = MakeSut();
-        //    var logEntry = new LogEntry(level, data, creationDate, exception);
+        [Theory(DisplayName = "It should convert simple log entry to lucene document without exception"),
+         InlineData("debug", "{}", "", null),
+         InlineData("debug", "{}", null, null)]
+        public void Convert_check_without_exception(string level,
+                                                    string messageTemplate,
+                                                    string exception,
+                                                    DateTime? creationDate)
+        {
+            // Given
+            var sut = MakeSut();
+            var logEntry = new LogEvent(level, exception, messageTemplate, creationDate);
 
-        //    // When
-        //    var document = sut.Convert(logEntry);
+            // When
+            var document = sut.Convert(logEntry);
 
-        //    // Then
-        //    document.GetFields().Count.Should().Be(7);
-        //    document.Get(nameof(LogEntry.Level)).ShouldBeEquivalentTo(level);
-        //    document.Get(nameof(LogEntry.Data)).ShouldBeEquivalentTo(data);
-        //    document.Get(nameof(LogEntry.Exception)).ShouldBeEquivalentTo(exception);
-        //    document.Get(nameof(LogEntry.CreationDate)).ShouldBeEquivalentTo(DateTools.DateToString(creationDate, DateTools.Resolution.SECOND));
-        //    document.Get(ServiceConstant.FieldNames.Type).ShouldBeEquivalentTo(typeof(LogEntry).Name);
-        //}
-
-        //[Theory(DisplayName = "It should convert simple log entry to lucene document without exception"),
-        // InlineData("debug", "{}", "", null),
-        // InlineData("debug", "{}", null, null)]
-        //public void Convert_check_without_exception(string level,
-        //                                            string data,
-        //                                            string exception,
-        //                                            DateTime? creationDate)
-        //{
-        //    // Given
-        //    var sut = MakeSut();
-        //    var logEntry = new LogEntry(level, data, creationDate, exception);
-
-        //    // When
-        //    var document = sut.Convert(logEntry);
-
-        //    // Then
-        //    document.GetFields().Count.Should().Be(6);
-        //    document.Get(nameof(LogEntry.Level)).ShouldBeEquivalentTo(level);
-        //    document.Get(nameof(LogEntry.Data)).ShouldBeEquivalentTo(data);
-        //    document.Get(nameof(LogEntry.Exception)).Should().BeNull();
-        //    document.Get(nameof(LogEntry.CreationDate)).Should().NotBeNull();
-        //}
+            // Then
+            document.GetFields().Count.Should().Be(5);
+            document.Get(nameof(LogEvent.Level)).ShouldBeEquivalentTo(level);
+            document.Get(nameof(LogEvent.Exception)).Should().BeNull();
+            document.Get(nameof(LogEvent.Timestamp)).Should().NotBeNull();
+        }
 
         private LogEventDocumentConverter MakeSut()
         {

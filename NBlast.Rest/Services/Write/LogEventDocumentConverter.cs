@@ -35,8 +35,12 @@ namespace NBlast.Rest.Services.Write
             document.Add(new Field(nameof(LogEvent.Level), @event.Level, YES, ANALYZED_NO_NORMS));
             document.Add(new Field("content", @event.GetContent(), Store.NO, ANALYZED_NO_NORMS));
             //document.Add(new Field(nameof(LogEvent.Data), @event.Data, YES, NOT_ANALYZED_NO_NORMS));
-            document.Add(new Field(ServiceConstant.FieldNames.Type, typeof (LogEvent).Name, YES, NOT_ANALYZED_NO_NORMS));
             document.Add(new Field(nameof(LogEvent.Timestamp), DateToString(@event.Timestamp, Resolution.SECOND), Store.NO, ANALYZED_NO_NORMS));
+
+            if (!IsNullOrEmpty(@event.MessageTemplate))
+            {
+                document.Add(new Field(nameof(LogEvent.MessageTemplate), @event.MessageTemplate, YES, NOT_ANALYZED_NO_NORMS));
+            }
 
             if (!IsNullOrEmpty(@event.Exception))
             {
@@ -50,7 +54,7 @@ namespace NBlast.Rest.Services.Write
             return entry.Properties?
                 .Select(x =>
                 {
-                    var name = $"{Propertiy}.{x.Key}";
+                    var name = $"{nameof(LogEvent.Properties)}.{x.Key}";
 
                     if (x.Value is DateTime) // TODO add check for datetime offsets
                     {
