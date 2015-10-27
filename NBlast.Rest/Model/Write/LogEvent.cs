@@ -1,21 +1,9 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Linq;
 using static System.DateTime;
 
 namespace NBlast.Rest.Model.Write
 {
-    public static class LogEventExtensions
-    {
-        public static string GetContent(this LogEvent me) =>
-            me.Properties
-                .Aggregate(GetPrimaryFields(me), 
-                           (aggregated, x) => $"{aggregated} {x.Value}");
-
-        private static string GetPrimaryFields(LogEvent me) =>
-            $"{me.Level} {me.Exception} {me.MessageTemplate}";
-        
-    }
     public class LogEvent
     {
         public Guid Id { get; } = Guid.NewGuid();
@@ -28,17 +16,21 @@ namespace NBlast.Rest.Model.Write
 
         public string MessageTemplate { get; }
 
+        public string Message { get; set; }
+
         public IImmutableList<LogEventProperty> Properties { get; }
 
         public LogEvent(string level,
-                        string exception,
+                        string exception = null,
                         string messageTemplate = null,
+                        string message = null,
                         DateTime? creationDate = null,
                         params LogEventProperty[] items)
         {
             Level           = level;
             Exception       = exception;
             MessageTemplate = messageTemplate;
+            Message         = message;
             Timestamp       = creationDate ?? UtcNow;
             Properties      = items.ToImmutableList();
         }

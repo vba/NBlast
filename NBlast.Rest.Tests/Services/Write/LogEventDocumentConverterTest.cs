@@ -24,10 +24,10 @@ namespace NBlast.Rest.Tests.Services.Write
         {
             // Given
             var sut = MakeSut();
-            var logEntry = new LogEvent(level,
-                                        exception,
-                                        messageTemplate,
-                                        creationDate);
+            var logEntry = new LogEvent(level: level,
+                                        exception: exception,
+                                        messageTemplate: messageTemplate,
+                                        creationDate: creationDate);
 
             // When
             var document = sut.Convert(logEntry);
@@ -45,15 +45,17 @@ namespace NBlast.Rest.Tests.Services.Write
         {
             // Given
             var sut = MakeSut();
-            var logEntry = new LogEvent(level,
-                                        exception,
-                                        messageTemplate,
-                                        creationDate,
-                                        new LogEventProperty("duplicate", "value"),
-                                        new LogEventProperty("duplicate", "value"),
-                                        new LogEventProperty("key1", 300000000000000000.5m),
-                                        new LogEventProperty("key2", creationDate),
-                                        new LogEventProperty("key3", "some"));
+            var logEntry = new LogEvent(level: level,
+                                        exception: exception,
+                                        messageTemplate: messageTemplate,
+                                        creationDate: creationDate,
+                                        items: new[] {
+                                            new LogEventProperty("duplicate", "value"),
+                                        	new LogEventProperty("duplicate", "value"),
+                                        	new LogEventProperty("key1", 300000000000000000.5m),
+                                        	new LogEventProperty("key2", creationDate),
+                                        	new LogEventProperty("key3", "some")
+                                        });
 
             // When
             var document = sut.Convert(logEntry);
@@ -93,7 +95,7 @@ namespace NBlast.Rest.Tests.Services.Write
         {
             // Given
             var sut = MakeSut();
-            var logEntry = new LogEvent(level, exception, messageTemplate, creationDate);
+            var logEntry = new LogEvent(level, exception, messageTemplate, creationDate: creationDate);
 
             // When
             var document = sut.Convert(logEntry);

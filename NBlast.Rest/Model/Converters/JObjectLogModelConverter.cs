@@ -26,6 +26,7 @@ namespace NBlast.Rest.Model.Converters
             var result = new LogEvent(getValue(nameof(LogEvent.Level)) as string,
                                       getValue(nameof(LogEvent.Exception)) as string,
                                       getValue(nameof(LogEvent.MessageTemplate)) as string,
+                                      getValue(nameof(LogEvent.Message)) as string,
                                       getValue(nameof(LogEvent.Timestamp)) as DateTime?,
                                       deserialized.Where(x => x.Key.StartsWith(nameof(LogEvent.Properties))).ToArray());
             return result;

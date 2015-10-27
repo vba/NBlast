@@ -169,6 +169,7 @@
     <Compile Include="Index\StorageUnlockFailedException.cs" />
     <Compile Include="Index\Write\FileSystemDirectoryProvider.cs" />
     <Compile Include="Model\Converters\JObjectLogModelConverter.cs" />
+    <Compile Include="Model\Write\LogEventExtensions.cs" />
     <Compile Include="Model\Write\LogEventProperty.cs" />
     <Compile Include="Model\Write\LogEvent.cs" />
     <Compile Include="Model\Dto\LogEvents.cs" />
