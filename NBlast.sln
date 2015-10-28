@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBlast.Rest.Tests", "NBlast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBlast.Rest.Console", "NBlast.Rest.Console\NBlast.Rest.Console.csproj", "{E1741570-3776-4896-BB5F-C2D9EA269F86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBlast.Serilog.Sink", "NBlast.Serilog.Sink\NBlast.Serilog.Sink.csproj", "{FC50AF60-FAF0-4187-8210-C0382222112C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,22 @@ Global
 		{E1741570-3776-4896-BB5F-C2D9EA269F86}.Release|x64.Build.0 = Release|Any CPU
 		{E1741570-3776-4896-BB5F-C2D9EA269F86}.Release|x86.ActiveCfg = Release|Any CPU
 		{E1741570-3776-4896-BB5F-C2D9EA269F86}.Release|x86.Build.0 = Release|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Debug|ARM.Build.0 = Debug|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Debug|x64.Build.0 = Debug|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Debug|x86.Build.0 = Debug|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Release|ARM.Build.0 = Release|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Release|x64.ActiveCfg = Release|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Release|x64.Build.0 = Release|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Release|x86.ActiveCfg = Release|Any CPU
+		{FC50AF60-FAF0-4187-8210-C0382222112C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
